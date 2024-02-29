@@ -1,0 +1,9 @@
+.escalation-matrix-table {
+  height: 100%;
+  overflow: auto;
+  width: 100%;
+}
+
+.escalation-matrix-table-container {
+  width: 70%;
+}
