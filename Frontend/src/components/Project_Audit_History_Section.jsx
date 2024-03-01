@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Table,
@@ -18,7 +18,6 @@ let operational_rows = [
   { level: "Level-1", name: "Ajay", designation: "project manager" },
 ];
 const Project_Audit_History_Section = () => {
-
   const [auditHistory, setAuditHistory] = useState([]);
 
   const fetchData = async () => {
@@ -26,7 +25,8 @@ const Project_Audit_History_Section = () => {
       const response = await fetch(
         "http://localhost:8000/project/audit_history"
       );
-      console.log(response);
+      const data = await response.json();
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -35,7 +35,6 @@ const Project_Audit_History_Section = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
 
   return (
     <div>

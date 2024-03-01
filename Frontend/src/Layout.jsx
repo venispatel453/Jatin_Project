@@ -18,6 +18,7 @@ const Layout = () => {
         <Box className="top-bar-container">
           <TopBar />
         </Box>
+
         <Box className="main-content-wrapper">
           <Flex justify="SpaceBetween">
             <Box className="sidebar-container">

@@ -25,7 +25,8 @@ const Project_Sprint_Details_Section = () => {
       const response = await fetch(
         "http://localhost:8000/project/sprint_details"
       );
-      console.log(response);
+      const data = await response.json();
+      console.log(data);
     } catch (error) {
       console.log(error);
     }

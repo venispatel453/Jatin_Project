@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Table,
@@ -25,7 +25,8 @@ const Project_Risk_Profiling_Section = () => {
       const response = await fetch(
         "http://localhost:8000/project/risk_profiling"
       );
-      console.log(response);
+      const data = await response.json();
+      console.log(data);
     } catch (error) {
       console.log(error);
     }

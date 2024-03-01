@@ -25,7 +25,8 @@ const Project_Version_History_Section = () => {
       const response = await fetch(
         "http://localhost:8000/project/version_history"
       );
-      console.log(response);
+      const data = await response.json();
+      console.log(data);
     } catch (error) {
       console.log(error);
     }

@@ -71,3 +71,9 @@
   height: 4.2rem;
   resize: none;
 }
+
+.save-button-container {
+  display: flex;
+  justify-content: flex-end;
+  width: 90%;
+}

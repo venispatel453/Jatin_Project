@@ -49,9 +49,10 @@ const Project = () => {
             <Tab>Risk Profiling</Tab>
             <Tab>Stakeholders</Tab>
             <Tab>Version History</Tab>
-            <Tab>Audit History</Tab>
+            <Tab>Audit History</Tab> 
           </TabList>
         </Box>
+
         <Box className="project-section-box">
           <TabPanels activeTabId={activeTab}>
             <TabPanel>

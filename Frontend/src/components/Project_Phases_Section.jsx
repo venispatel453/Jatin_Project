@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Table,
@@ -22,10 +22,9 @@ const Project_Phases_Section = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:8000/project/phases"
-      );
-      console.log(response);
+      const response = await fetch("http://localhost:8000/project/phases");
+      const data = await response.json();
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
