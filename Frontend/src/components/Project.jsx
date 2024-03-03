@@ -49,7 +49,7 @@ const Project = () => {
             <Tab>Risk Profiling</Tab>
             <Tab>Stakeholders</Tab>
             <Tab>Version History</Tab>
-            <Tab>Audit History</Tab> 
+            <Tab>Audit History</Tab>
           </TabList>
         </Box>
 
@@ -62,7 +62,7 @@ const Project = () => {
               <Project_Scope_and_Stack_Section />
             </TabPanel>
             <TabPanel>
-              <Project_Escalation_Matrix_Section />
+              <Project_Escalation_Matrix_Section active={activeTab == 2} />
             </TabPanel>
             <TabPanel>
               <Project_Phases_Section />

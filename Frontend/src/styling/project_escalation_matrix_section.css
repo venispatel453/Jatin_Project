@@ -6,5 +6,8 @@
 
 .escalation-matrix-table-container {
   margin: 10px;
-  width: 60%;
+}
+
+.table-container {
+  width: 100%;
 }

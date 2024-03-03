@@ -12,31 +12,181 @@ const getProjectDetails = async (req, res) => {
 };
 
 const getVersionHistory = async (req, res) => {
-  res.json({ msg: "get version history" });
+  try {
+    const default_version_history = [
+      {
+        project_id: "",
+        version: "",
+        type: "",
+        change: "",
+        change_reason: "",
+        created_by: "",
+        revision_date: "",
+        approval_date: "",
+        approved_by: "",
+      },
+    ];
+
+    let data = await version_history.find();
+
+    if (data.length === 0) {
+      data = default_version_history;
+    }
+    console.log(data);
+    res.json({ status: "success", data: data });
+  } catch (error) {
+    res.json({ status: "error", msg: error });
+  }
 };
 
 const getAuditHistory = async (req, res) => {
-  res.json({ msg: "get audit history" });
+  try {
+    const default_audit_history = [
+      {
+        project_id: "",
+        date_of_audit: "",
+        reviewed_by: "",
+        status: "",
+        reviewed_section: "",
+        comment: "",
+        action_item: "",
+      },
+    ];
+
+    let data = await audit_history.find();
+    if (data.length == 0) {
+      data = default_audit_history;
+    }
+    console.log(data);
+    res.json({ status: "success", data: data });
+  } catch (error) {
+    res.json({ status: "error", msg: error });
+  }
 };
 
 const getStakeholders = async (req, res) => {
-  res.json({ msg: "get stakeholders" });
+  try {
+    const default_stakeholders = [
+      {
+        project_id: "",
+        title: "",
+        name: "",
+        contact: "",
+      },
+    ];
+
+    let data = await stakeholders.find();
+
+    if (data.length == 0) {
+      data = default_stakeholders;
+    }
+
+    res.json({ status: "success", data: data });
+  } catch (error) {
+    res.json({ status: "error", msg: error });
+  }
 };
 
 const getEscalationMatrix = async (req, res) => {
-  res.json({ msg: "get escalation matrix" });
+  try {
+    const default_escalation_matrix = [
+      {
+        project_id: "",
+        level: "",
+        escalation_type: "",
+        member: "",
+        designation: "",
+      },
+    ];
+    //console.log("in get escalation matrix");
+    let data = await escalation_matrix.find();
+
+    if (data.length == 0) {
+      data = default_escalation_matrix;
+    }
+    res.json({ status: "success", data: data });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error", msg: error });
+  }
 };
 
 const getRiskProfiling = async (req, res) => {
-  res.json({ msg: "get risk profiling" });
+  try {
+    const default_risk_profiling = [
+      {
+        project_id: "",
+        risk_type: "",
+        description: "",
+        severity: "",
+        impact: "",
+        remedial_steps: "",
+        status: "",
+        closure_date: "",
+      },
+    ];
+
+    let data = await risk_profiling.find();
+
+    if (data.length == 0) {
+      data = default_risk_profiling;
+    }
+    res.json({ status: "success", data: data });
+  } catch (error) {
+    res.json({ status: "error", msg: error });
+  }
 };
 
 const getPhases = async (req, res) => {
-  res.json({ msg: "get phases" });
+  try {
+    const defaultPhase = [
+      {
+        project_id: "",
+        title: "",
+        start_date: "",
+        completion_date: "",
+        approval_date: "",
+        status: "",
+        revised_completion_date: "",
+        comments: "",
+      },
+    ];
+    console.log("here");
+    let data = await phases.find();
+    console.log(data);
+
+    if (data.length == 0) {
+      data = defaultPhase;
+    }
+    res.json({ status: "success", data: data });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error", msg: error });
+  }
 };
 
 const getSprintDetails = async (req, res) => {
-  res.json({ msg: "get sprint details" });
+  try {
+    const default_sprint_details = [
+      {
+        project_id: "",
+        sprint: "",
+        start_date: "",
+        end_date: "",
+        status: "",
+        comments: "",
+      },
+    ];
+    let data = await sprint_details.find();
+
+    if (data.length == 0) {
+      data = default_sprint_details;
+    }
+
+    res.json({ status: "success", data: data });
+  } catch (error) {
+    res.json({ status: "error", msg: error });
+  }
 };
 
 const alterProjectDetails = async (req, res) => {
@@ -59,31 +209,143 @@ const alterProjectDetails = async (req, res) => {
 };
 
 const alterVersionHistory = async (req, res) => {
-  res.json({ msg: "get version history" });
+  try {
+    console.log("here", req.body);
+    const arr = req.body;
+    const operations = arr.map((obj) => ({
+      updateOne: {
+        filter: { _id: obj._id },
+        update: { $set: obj },
+        upsert: true,
+      },
+    }));
+    const result = await version_history.bulkWrite(operations);
+    console.log(result);
+    res.json({ status: "success", msg: "Data updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error", msg: error });
+  }
 };
 
 const alterAuditHistory = async (req, res) => {
-  res.json({ msg: "get audit history" });
+  try {
+    console.log("here", req.body);
+    const arr = req.body;
+    const operations = arr.map((obj) => ({
+      updateOne: {
+        filter: { _id: obj._id },
+        update: { $set: obj },
+        upsert: true,
+      },
+    }));
+    const result = await audit_history.bulkWrite(operations);
+    console.log(result);
+    res.json({ status: "success", msg: "Data updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error", msg: error });
+  }
 };
 
 const alterStakeholders = async (req, res) => {
-  res.json({ msg: "get stakeholders" });
+  try {
+    console.log("here", req.body);
+    const arr = req.body;
+    const operations = arr.map((obj) => ({
+      updateOne: {
+        filter: { _id: obj._id },
+        update: { $set: obj },
+        upsert: true,
+      },
+    }));
+    const result = await stakeholders.bulkWrite(operations);
+    console.log(result);
+    res.json({ status: "success", msg: "Data updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error", msg: error });
+  }
 };
 
 const alterEscalationMatrix = async (req, res) => {
-  res.json({ msg: "get escalation matrix" });
+  try {
+    console.log("here", req.body);
+    const arr = req.body;
+    const operations = arr.map((obj) => ({
+      updateOne: {
+        filter: { _id: obj._id },
+        update: { $set: obj },
+        upsert: true,
+      },
+    }));
+    const result = await escalation_matrix.bulkWrite(operations);
+    console.log(result);
+    res.json({ status: "success", msg: "Data updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error", msg: error });
+  }
 };
 
 const alterRiskProfiling = async (req, res) => {
-  res.json({ msg: "get risk profiling" });
+  try {
+    console.log("here", req.body);
+    const arr = req.body;
+    const operations = arr.map((obj) => ({
+      updateOne: {
+        filter: { _id: obj._id },
+        update: { $set: obj },
+        upsert: true,
+      },
+    }));
+    const result = await risk_profiling.bulkWrite(operations);
+    console.log(result);
+    res.json({ status: "success", msg: "Data updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error", msg: error });
+  }
 };
 
 const alterPhases = async (req, res) => {
-  res.json({ msg: "get phases" });
+  try {
+    console.log("here", req.body);
+    const arr = req.body;
+    const operations = arr.map((obj) => ({
+      updateOne: {
+        filter: { _id: obj._id },
+        update: { $set: obj },
+        upsert: true,
+      },
+    }));
+    const result = await phases.bulkWrite(operations);
+    console.log(result);
+    res.json({ status: "success", msg: "Data updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error", msg: error });
+  }
 };
 
 const alterSprintDetails = async (req, res) => {
-  res.json({ msg: "get sprint details" });
+  try {
+    console.log("here", req.body);
+    const arr = req.body;
+    const operations = arr.map((obj) => ({
+      updateOne: {
+        filter: { _id: obj._id },
+        update: { $set: obj },
+        upsert: true,
+      },
+    }));
+    const result = await sprint_details.bulkWrite(operations);
+    console.log(result);
+    res.json({ status: "success", msg: "Data updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error", msg: error });
+  }
 };
 
 module.exports = {
