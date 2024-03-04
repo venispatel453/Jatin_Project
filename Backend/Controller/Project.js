@@ -6,9 +6,16 @@ const stakeholders = require("../Model/Stakeholders");
 const phases = require("../Model/Phases");
 const escalation_matrix = require("../Model/Escalation_Matrix");
 const risk_profiling = require("../Model/Risk_Profiling");
+const { reorderArrayOfObject } = require("../Utilities/utility.js");
 
 const getProjectDetails = async (req, res) => {
-  res.json({ msg: "get project details" });
+  try {
+    let response = await project.find();
+    res.json({ status: "success", data: response });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error", msg: error });
+  }
 };
 
 const getVersionHistory = async (req, res) => {
@@ -24,6 +31,8 @@ const getVersionHistory = async (req, res) => {
         revision_date: "",
         approval_date: "",
         approved_by: "",
+        _id: "",
+        __v: "",
       },
     ];
 
@@ -31,7 +40,10 @@ const getVersionHistory = async (req, res) => {
 
     if (data.length === 0) {
       data = default_version_history;
+    } else {
+      data = reorderArrayOfObject(data, default_version_history);
     }
+
     console.log(data);
     res.json({ status: "success", data: data });
   } catch (error) {
@@ -50,14 +62,17 @@ const getAuditHistory = async (req, res) => {
         reviewed_section: "",
         comment: "",
         action_item: "",
+        _id: "",
+        __v: "",
       },
     ];
 
     let data = await audit_history.find();
     if (data.length == 0) {
       data = default_audit_history;
+    } else {
+      data = reorderArrayOfObject(data, default_audit_history);
     }
-    console.log(data);
     res.json({ status: "success", data: data });
   } catch (error) {
     res.json({ status: "error", msg: error });
@@ -72,6 +87,8 @@ const getStakeholders = async (req, res) => {
         title: "",
         name: "",
         contact: "",
+        _id: "",
+        __v: "",
       },
     ];
 
@@ -79,8 +96,9 @@ const getStakeholders = async (req, res) => {
 
     if (data.length == 0) {
       data = default_stakeholders;
+    } else {
+      data = reorderArrayOfObject(data, default_stakeholders);
     }
-
     res.json({ status: "success", data: data });
   } catch (error) {
     res.json({ status: "error", msg: error });
@@ -91,19 +109,22 @@ const getEscalationMatrix = async (req, res) => {
   try {
     const default_escalation_matrix = [
       {
-        project_id: "",
         level: "",
         escalation_type: "",
         member: "",
         designation: "",
+        _id: "",
+        __v: "",
       },
     ];
     //console.log("in get escalation matrix");
     let data = await escalation_matrix.find();
-
     if (data.length == 0) {
       data = default_escalation_matrix;
+    } else {
+      data = reorderArrayOfObject(data, default_escalation_matrix);
     }
+    console.log(data);
     res.json({ status: "success", data: data });
   } catch (error) {
     console.log(error);
@@ -123,6 +144,8 @@ const getRiskProfiling = async (req, res) => {
         remedial_steps: "",
         status: "",
         closure_date: "",
+        _id: "",
+        __v: "",
       },
     ];
 
@@ -130,6 +153,8 @@ const getRiskProfiling = async (req, res) => {
 
     if (data.length == 0) {
       data = default_risk_profiling;
+    } else {
+      data = reorderArrayOfObject(data, default_risk_profiling);
     }
     res.json({ status: "success", data: data });
   } catch (error) {
@@ -149,6 +174,8 @@ const getPhases = async (req, res) => {
         status: "",
         revised_completion_date: "",
         comments: "",
+        _id: "",
+        __v: "",
       },
     ];
     console.log("here");
@@ -157,6 +184,8 @@ const getPhases = async (req, res) => {
 
     if (data.length == 0) {
       data = defaultPhase;
+    } else {
+      data = reorderArrayOfObject(data, defaultPhase);
     }
     res.json({ status: "success", data: data });
   } catch (error) {
@@ -175,12 +204,16 @@ const getSprintDetails = async (req, res) => {
         end_date: "",
         status: "",
         comments: "",
+        _id: "",
+        __v: "",
       },
     ];
     let data = await sprint_details.find();
 
     if (data.length == 0) {
       data = default_sprint_details;
+    } else {
+      data = reorderArrayOfObject(data, default_sprint_details);
     }
 
     res.json({ status: "success", data: data });
@@ -191,17 +224,16 @@ const getSprintDetails = async (req, res) => {
 
 const alterProjectDetails = async (req, res) => {
   try {
-    console.log("here");
-    const response = await project.create({
-      overview: "this is view",
-      stack: "stack",
-      scope: "scope",
-      budget: { key: "vlaue" },
-      timeline: "ss",
-    });
-    console.log("after response");
-    console.log(response);
-    res.json({ msg: "alter project details" });
+    console.log("here is the body", req.body);
+    const { projectDetails } = req.body;
+    let response = await project.updateOne(
+      { _id: projectDetails._id },
+      { $set: projectDetails }
+    );
+
+    console.log("updated");
+
+    res.json({ status: "success", msg: "details updated successfully" });
   } catch (error) {
     console.log(error);
     res.json({ msg: "some error" });

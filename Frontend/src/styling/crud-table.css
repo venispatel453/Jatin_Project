@@ -16,6 +16,7 @@
 
 .crud-table th {
   background-color: #f2f2f2;
+  text-transform: capitalize;
 }
 
 .crud-table tbody tr:nth-child(even) {
@@ -77,4 +78,10 @@ button:hover {
 /* Adjust column names width */
 .crud-table-container .column-names span {
   width: calc(100% / (var(--column-count) + 1));
+}
+
+.action-cell {
+  display: flex;
+  padding: 0 7px;
+  gap: 16px;
 }

@@ -2,21 +2,39 @@ import React, { useEffect, useState } from "react";
 import { Dropdown } from "monday-ui-react-core";
 import "monday-ui-react-core/tokens";
 import "../styling/project_scope_and_stack_section.css";
+import axios from "axios";
 
 const Scope_and_Stack_Section = () => {
   const [projectDetails, setProjectDetails] = useState({});
   const [changesMade, setChangesMade] = useState(false);
 
-  const handleSubmit = () => {};
+  const handleSubmit = async () => {
+    try {
+      const { data } = await axios.post(
+        "http://localhost:8000/project/project_details",
+        {
+          projectDetails,
+        }
+      );
+      setChangesMade(false);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleInputChange = (e, field) => {
     console.log(e, field);
     const newProjectDetails = { ...projectDetails };
     if (field === "stack") {
+      console.log(e);
       if (e == null) {
         delete newProjectDetails[field];
       } else {
-        newProjectDetails[field] = e.value;
+        newProjectDetails[field] = {};
+        newProjectDetails[field]["label"] = e.label;
+        newProjectDetails[field]["value"] = e.value;
+        console.log(newProjectDetails);
       }
     } else {
       newProjectDetails[field] = e.target.value;
@@ -24,6 +42,7 @@ const Scope_and_Stack_Section = () => {
 
     console.log(newProjectDetails);
     setProjectDetails(newProjectDetails);
+    setChangesMade(true);
   };
 
   const fetchData = async () => {
@@ -31,7 +50,8 @@ const Scope_and_Stack_Section = () => {
       const response = await fetch(
         "http://localhost:8000/project/project_details"
       );
-      const data = await response.json();
+      const { data } = await response.json();
+      setProjectDetails(data[0]);
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -46,7 +66,9 @@ const Scope_and_Stack_Section = () => {
     <>
       {changesMade && (
         <div className="save-button-container">
-          <button onClick={handleSubmit}>save</button>
+          <button onClick={handleSubmit} className="save-button">
+            save
+          </button>
         </div>
       )}
       <div className="scope-and-stack-wrapper">
@@ -55,6 +77,10 @@ const Scope_and_Stack_Section = () => {
           <Dropdown
             searchable={false}
             className="dropdown"
+            value={{
+              label: projectDetails?.stack?.label,
+              value: projectDetails?.stack?.value,
+            }}
             onChange={(item) => handleInputChange(item, "stack")}
             options={[
               { label: "Backend", value: "backend" },

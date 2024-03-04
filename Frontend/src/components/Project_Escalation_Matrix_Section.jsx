@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Flex } from "monday-ui-react-core";
+import { Box, Flex, Button } from "monday-ui-react-core";
 import CrudTable from "./Table.jsx";
 import "../styling/project_escalation_matrix_section.css";
 import axios from "axios";
@@ -12,8 +12,8 @@ let data = [
 
 const Project_Escalation_Matrix_Section = ({ active }) => {
   const [escalationMatrix, setEscalationMatrix] = useState([]);
-  const [changesMade, setChangesMade] = useState(false);
   const [changedTableRows, setChangedtableRows] = useState([]);
+  const [showSaveButton, setShowSaveButton] = useState(false);
 
   const handleSubmit = async () => {
     try {
@@ -23,11 +23,12 @@ const Project_Escalation_Matrix_Section = ({ active }) => {
         [...changedTableRows]
       );
       console.log(response);
+      setShowSaveButton(false);
+      setChangedtableRows([]);
     } catch (error) {
       console.log(error);
     }
   };
-
 
   const fetchData = async () => {
     try {
@@ -61,15 +62,14 @@ const Project_Escalation_Matrix_Section = ({ active }) => {
   // generateColumn();
   return (
     <>
-      {changesMade && (
+      {showSaveButton && (
         <div className="save-button-container">
-          <button onClick={handleSubmit}>save</button>
+          <button onClick={handleSubmit} className="save-button">
+            Save
+          </button>
         </div>
       )}
       <Box className="escalation-matrix-table">
-        <div className="save-btn">
-          <button onClick={handleSubmit}>Save</button>
-        </div>
         <Flex direction="Column" align="Start" gap={20}>
           {escalationMatrix.length > 0 && (
             <>
@@ -79,7 +79,9 @@ const Project_Escalation_Matrix_Section = ({ active }) => {
                 );
                 return (
                   <div key={type} className="table-container">
-                    <h3>{type}</h3>
+                    <h3 className="table-heading">
+                      {`${type} Escalation Matrix`}{" "}
+                    </h3>
                     <CrudTable
                       changedTableRows={changedTableRows}
                       data={filteredData}
@@ -91,6 +93,7 @@ const Project_Escalation_Matrix_Section = ({ active }) => {
                       ]}
                       defaultValues={{ escalation_type: type }}
                       columnType={[]}
+                      setShowSaveButton={setShowSaveButton}
                     />
                   </div>
                 );

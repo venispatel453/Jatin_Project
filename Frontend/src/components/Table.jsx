@@ -8,6 +8,7 @@ const CrudTable = ({
   columnType,
   changedTableRows,
   defaultValues = {},
+  setShowSaveButton,
 }) => {
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -45,16 +46,22 @@ const CrudTable = ({
     setRows(updatedRows);
   };
 
+  const handleColumnName = (column_name) => {
+    return column_name.split("_").join(" ");
+  };
+
   const handleSave = (id) => {
     const updatedRows = rows.map((row) => {
       if (row._id === id) {
         let changedRow = { ...row, ...defaultValues };
         delete changedRow["editable"];
         changedTableRows.push(changedRow);
+        console.log("changed rows", changedTableRows);
       }
       return row._id === id ? { ...row, editable: false } : row;
     });
     // console.log("saved");
+    setShowSaveButton(true);
     setRows(updatedRows);
   };
 
@@ -125,7 +132,7 @@ const CrudTable = ({
           <tr>
             {columns.map((column, index) => (
               <th key={index} rowSpan={2}>
-                {column}
+                {handleColumnName(column)}
               </th>
             ))}
             <th>Actions</th>
@@ -143,23 +150,23 @@ const CrudTable = ({
               ))}
               <td>
                 {row.editable ? (
-                  <>
+                  <div className="action-cell">
                     <button onClick={() => handleSave(row._id)}>
                       <i className="fas fa-save"></i>
                     </button>
                     <button onClick={() => handleCancel(row._id)}>
                       <i className="fas fa-times"></i>
                     </button>
-                  </>
+                  </div>
                 ) : (
-                  <>
+                  <div className="action-cell">
                     <button onClick={() => handleEdit(row._id)}>
                       <i className="fas fa-edit"></i>
                     </button>
                     <button onClick={() => handleDelete(row._id)}>
                       <i className="fas fa-trash-alt"></i>
                     </button>
-                  </>
+                  </div>
                 )}
               </td>
             </tr>

@@ -3,6 +3,7 @@ import { Box } from "monday-ui-react-core";
 import Table from "./Table.jsx";
 import "monday-ui-react-core/tokens";
 import axios from "axios";
+import "../styling/project_phases_section.css";
 
 let operational_column = ["Escalation Level", "Name", "Role"];
 let operational_rows = [
@@ -13,6 +14,7 @@ let operational_rows = [
 const Project_Phases_Section = () => {
   const [phaseHistory, setPhaseHistory] = useState([{}]);
   const [changedTableRows, setChangedtableRows] = useState([]);
+  const [showSaveButton, setShowSaveButton] = useState(false);
 
   const handleSubmit = async () => {
     try {
@@ -22,6 +24,8 @@ const Project_Phases_Section = () => {
         [...changedTableRows]
       );
       console.log(response);
+      setShowSaveButton(false);
+      setChangedtableRows([]);
     } catch (error) {
       console.log(error);
     }
@@ -57,14 +61,19 @@ const Project_Phases_Section = () => {
 
   return (
     <div>
-      <div className="save-btn">
-        <button onClick={handleSubmit}>save</button>
-      </div>
+      {showSaveButton && (
+        <div className="save-button-container">
+          <button onClick={handleSubmit} className="save-button">
+            Save
+          </button>
+        </div>
+      )}
       <Box className="escalation-matrix-table-container">
         {console.log("phase", phaseHistory)}
         <div className="table-container">
           {phaseHistory.length > 0 ? (
             <Table
+              setShowSaveButton={setShowSaveButton}
               columnType={[
                 {
                   key: "start_date",
@@ -89,7 +98,7 @@ const Project_Phases_Section = () => {
                 },
               ]}
               data={phaseHistory}
-              invalidColumns={["project_id"]}
+              invalidColumns={["project_id", "_id", "__v"]}
               changedTableRows={changedTableRows}
             />
           ) : (

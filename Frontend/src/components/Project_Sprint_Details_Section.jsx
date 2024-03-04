@@ -3,6 +3,7 @@ import { Box } from "monday-ui-react-core";
 import "monday-ui-react-core/tokens";
 import Table from "./Table";
 import axios from "axios";
+import '../styling/project_sprint_details_section.css'
 
 let operational_column = ["Escalation Level", "Name", "Role"];
 let operational_rows = [
@@ -13,6 +14,7 @@ let operational_rows = [
 const Project_Sprint_Details_Section = () => {
   const [sprintDetails, setSprintDetails] = useState([]);
   const [changedTableRows, setChangedtableRows] = useState([]);
+  const [showSaveButton, setShowSaveButton] = useState(false);
 
   const handleSubmit = async () => {
     try {
@@ -22,6 +24,8 @@ const Project_Sprint_Details_Section = () => {
         [...changedTableRows]
       );
       console.log(response);
+      setShowSaveButton(false);
+      setChangedtableRows([]);
     } catch (error) {
       console.log(error);
     }
@@ -46,15 +50,18 @@ const Project_Sprint_Details_Section = () => {
 
   return (
     <div>
-      <div className="save-btn">
-        <button onClick={handleSubmit}>save</button>
-      </div>
+      {showSaveButton && (
+        <div className="save-button-container">
+          <button onClick={handleSubmit} className="save-button">Save</button>
+        </div>
+      )}
       <Box className="escalation-matrix-table-container">
         {sprintDetails.length > 0 && (
           <Table
+            setShowSaveButton={setShowSaveButton}
             changedTableRows={changedTableRows}
             data={sprintDetails}
-            invalidColumns={["project_id"]}
+            invalidColumns={["project_id","_id","__v"]}
             columnType={[
               { key: "start_date", type: "date" },
               { key: "end_date", type: "date" },

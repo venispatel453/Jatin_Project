@@ -3,6 +3,7 @@ import { Box } from "monday-ui-react-core";
 import "monday-ui-react-core/tokens";
 import Table from "./Table";
 import axios from "axios";
+import '../styling/project_version_history_section.css'
 
 let operational_column = ["Escalation Level", "Name", "Role"];
 let operational_rows = [
@@ -13,6 +14,7 @@ let operational_rows = [
 const Project_Version_History_Section = () => {
   const [versionHistory, setVersionHistory] = useState([]);
   const [changedTableRows, setChangedtableRows] = useState([]);
+  const [showSaveButton, setShowSaveButton] = useState(false);
 
   const handleSubmit = async () => {
     try {
@@ -21,6 +23,8 @@ const Project_Version_History_Section = () => {
         "http://localhost:8000/project/version_history",
         [...changedTableRows]
       );
+      setShowSaveButton(false);
+      setChangedtableRows([]);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -46,15 +50,20 @@ const Project_Version_History_Section = () => {
 
   return (
     <div>
-      <div className="save-btn">
-        <button onClick={handleSubmit}>save</button>
-      </div>
+      {showSaveButton && (
+        <div className="save-button-container">
+          <button onClick={handleSubmit} className="save-button">
+            save
+          </button>
+        </div>
+      )}
       <Box className="escalation-matrix-table-container">
         {versionHistory.length > 0 && (
           <Table
+            setShowSaveButton={setShowSaveButton}
             changedTableRows={changedTableRows}
             data={versionHistory}
-            invalidColumns={["project_id"]}
+            invalidColumns={["project_id", "_id", "__v"]}
             columnType={[
               {
                 key: "revision_date",

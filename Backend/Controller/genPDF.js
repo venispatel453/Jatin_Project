@@ -1,33 +1,73 @@
-const project = require("../Model/Project");
-const audit_history = require("../Model/Audit_History");
-const version_history = require("../Model/Version_History");
-const sprint_details = require("../Model/Sprint_Details");
-const stakeholders = require("../Model/Stakeholders");
-const phases = require("../Model/Phases");
-const escalation_matrix = require("../Model/Escalation_Matrix");
-const risk_profiling = require("../Model/Risk_Profiling");
-const { response } = require("express");
 const { jsPDF } = require("jspdf");
+const path = require("path");
 require("jspdf-autotable");
+
+const doc = new jsPDF();
+
+const formatColumnName = (column_name) => {
+  let name_arr = column_name.split("_");
+  name_arr = name_arr.map((name) => {
+    return `${name[0].toUpperCase() + name.substring(1)}`;
+  });
+  return name_arr.join(" ");
+};
+
+const addProjectDetailsPage = async () => {
+  let response = await fetch(`http:localhost:8000/project/project_details`);
+  let { data } = await response.json();
+  data = data[0];
+  // console.log("response", response);
+  // console.log("data ", data);
+  const html = `
+  Project Details
+
+    Overview:
+    ${data.overview}
+
+    Budget:
+    ${
+      data.budget.type === "monthly"
+        ? `Budget Type:${data.budget.type}
+    Projected Hours:${data.budget.type_value}`
+        : `Budget Type:${data.budget.type}
+    Duration(in Months):${data.budget.type_value}`
+    }
+
+    Timeline:
+    ${data.timeline}
+
+    Stack:
+    ${data.stack}
+
+    Scope:
+    ${data.scope}
+
+  `;
+
+  doc.text(html, 10, 10);
+  doc.save("report.pdf");
+
+  doc.addPage();
+};
 
 const generatePDF = async (req, res) => {
   try {
+    addProjectDetailsPage();
     let routes = [
       "project/escalation_matrix",
       "project/version_history",
       "project/stakeholders",
       "project/sprint_details",
       "project/risk_profiling",
-      "project/escalation_matrix",
       "project/audit_history",
     ];
-    const doc = new jsPDF();
+
     routes.forEach(async (path) => {
       let response = await fetch(`http:localhost:8000/${path}`);
       let { data } = await response.json();
-      let validColumns = ["_id", "__v", "project_id"];
+      let invalidColumns = ["_id", "__v", "project_id"];
       let objKeys = Object.keys(data[0]).filter(
-        (column) => !validColumns.includes(column)
+        (column) => !invalidColumns.includes(column)
       );
 
       let objValues = [];
@@ -40,17 +80,25 @@ const generatePDF = async (req, res) => {
         objValues.push(row);
       });
 
+      doc.text(`${formatColumnName(path.split("/")[1])} Table`, 10, 10);
+
+      objKeys = objKeys.map((key) => {
+        return formatColumnName(key);
+      });
+
       doc.autoTable({
         head: [objKeys],
         body: objValues,
       });
 
-      doc.save("table.pdf");
-      console.log("./table.pdf generated");
+      doc.save("report.pdf");
+      doc.addPage();
+      console.log("./report.pdf generated");
     });
-    res.json({ msg: "generated" });
+    res.download(path.join(__dirname, "../", "report.pdf"));
   } catch (error) {
     console.log(error);
+    res.json({ msg: "generated" });
   }
 };
 

@@ -22,6 +22,7 @@ const Project_Overview_Section = () => {
           projectDetails,
         }
       );
+      setChangesMade(false);
       console.log(data);
     } catch (error) {}
   };
@@ -29,8 +30,8 @@ const Project_Overview_Section = () => {
   const handleInputChange = (e, field) => {
     // console.log(e);
     const newProjectDetails = { ...projectDetails };
-    if (field === "duration" || field === "budgeted-hours") {
-      newProjectDetails["budget"] = { type: field, value: e.target.value };
+    if (field === "Fixed" || field === "Monthly") {
+      newProjectDetails["budget"] = { type: field, type_value: e.target.value };
     } else {
       newProjectDetails[field] = e.target.value;
     }
@@ -45,8 +46,9 @@ const Project_Overview_Section = () => {
         "http://localhost:8000/project/project_details"
       );
 
-      const data = await response.json();
-      console.log(data);
+      const { data } = await response.json();
+      setProjectDetails(data[0]);
+      console.log("overview", data);
     } catch (error) {
       console.log(error);
     }
@@ -60,7 +62,9 @@ const Project_Overview_Section = () => {
     <>
       {changesMade && (
         <div className="save-button-container">
-          <button onClick={handleSubmit}>save</button>
+          <button onClick={handleSubmit} className="save-button">
+            save
+          </button>
         </div>
       )}
       <div className="overview-section-wrapper">
@@ -76,25 +80,36 @@ const Project_Overview_Section = () => {
             <label> Project Budget</label>
             <Dropdown
               className="dropdown"
+              value={{
+                label: projectDetails.budget.type,
+                value: projectDetails.budget.type,
+              }}
               searchable={false}
-              onChange={(budgetMode) => setBudgetMode(budgetMode)}
+              onChange={(budgetMode) => {
+                console.log(budgetMode);
+                const budget = {
+                  type: budgetMode.label,
+                  type_value: "",
+                };
+                setProjectDetails({ ...projectDetails, budget: budget });
+              }}
               options={[
-                { label: "Fixed", value: "fixed" },
-                { label: "Monthly", value: "monthly" },
+                { label: "Fixed", value: "Fixed" },
+                { label: "Monthly", value: "Monthly" },
               ]}
             />
           </div>
           <div className="dropdown-input-div">
-            {budgetMode?.label &&
-              (budgetMode.label === "Fixed" ? (
+            {projectDetails?.budget.type &&
+              (projectDetails.budget.type === "Fixed" ? (
                 <>
                   <label> Duration (in Months)</label>
                   <input
                     type="text"
                     onChange={(e) => handleInputChange(e, "duration")}
                     value={
-                      projectDetails.budget?.type == "duration"
-                        ? projectDetails.budget?.value
+                      projectDetails.budget?.type == "Fixed"
+                        ? projectDetails.budget?.type_value
                         : ""
                     }
                   />
@@ -106,8 +121,8 @@ const Project_Overview_Section = () => {
                     type="text"
                     onChange={(e) => handleInputChange(e, "budgeted-hours")}
                     value={
-                      projectDetails.budget?.type === "budgeted-hours"
-                        ? projectDetails.budget?.value
+                      projectDetails.budget?.type === "Monthly"
+                        ? projectDetails.budget?.type_value
                         : ""
                     }
                   />
@@ -118,6 +133,7 @@ const Project_Overview_Section = () => {
         <div className="timeline-div">
           <label> Timeline </label>
           <input
+            value={projectDetails.timeline}
             type="text"
             onChange={(e) => handleInputChange(e, "timeline")}
           />
