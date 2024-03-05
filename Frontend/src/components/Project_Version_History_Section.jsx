@@ -60,6 +60,7 @@ const Project_Version_History_Section = () => {
       <Box className="escalation-matrix-table-container">
         {versionHistory.length > 0 && (
           <Table
+            sectionTab={"version_history"}
             setShowSaveButton={setShowSaveButton}
             setChangedTableRows={setChangedTableRows}
             data={versionHistory}

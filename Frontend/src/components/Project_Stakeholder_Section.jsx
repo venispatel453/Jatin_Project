@@ -59,6 +59,7 @@ const Project_Stakeholder_Section = () => {
       <Box className="escalation-matrix-table-container">
         {stakeholders.length > 0 && (
           <Table
+          sectionTab={"stakeholder"}
             setShowSaveButton={setShowSaveButton}
             setChangedTableRows={setChangedTableRows}
             data={stakeholders}

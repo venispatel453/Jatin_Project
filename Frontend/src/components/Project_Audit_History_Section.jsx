@@ -66,6 +66,7 @@ const Project_Audit_History_Section = () => {
       <Box className="escalation-matrix-table-container">
         {auditHistory.length > 0 && (
           <Table
+            sectionTab={"audit_history"}
             setShowSaveButton={setShowSaveButton}
             data={auditHistory}
             columnType={[{ key: "date_of_audit", type: "date" }]}

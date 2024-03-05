@@ -9,6 +9,7 @@ const CrudTable = ({
   setChangedTableRows,
   defaultValues = {},
   setShowSaveButton,
+  sectionTab,
 }) => {
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -27,7 +28,8 @@ const CrudTable = ({
     }));
     console.log("data= ", newData);
     setRows(newData);
-  }, [data]);
+    console.log(sectionTab, " and data is ", newData);
+  }, [sectionTab]);
 
   // useEffect(() => {
   //   alert("updated rows");

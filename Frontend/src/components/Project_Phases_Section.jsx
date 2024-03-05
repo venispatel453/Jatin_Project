@@ -12,7 +12,7 @@ let operational_rows = [
   { level: "Level-1", name: "Ajay", designation: "project manager" },
 ];
 const Project_Phases_Section = () => {
-  const [phaseHistory, setPhaseHistory] = useState([{}]);
+  const [phaseHistory, setPhaseHistory] = useState([]);
   const [changedTableRows, setChangedTableRows] = useState([]);
   const [showSaveButton, setShowSaveButton] = useState(false);
 
@@ -36,7 +36,7 @@ const Project_Phases_Section = () => {
       const response = await fetch("http://localhost:8000/project/phases");
       const { data } = await response.json();
       setPhaseHistory(data);
-      console.log(data);
+      console.log("phases", data);
     } catch (error) {
       console.log(error);
     }
@@ -73,6 +73,7 @@ const Project_Phases_Section = () => {
         <div className="table-container">
           {phaseHistory.length > 0 ? (
             <Table
+              sectionTab={"phases"}
               setShowSaveButton={setShowSaveButton}
               columnType={[
                 {

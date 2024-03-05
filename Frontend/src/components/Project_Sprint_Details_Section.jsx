@@ -58,6 +58,7 @@ const Project_Sprint_Details_Section = () => {
       <Box className="escalation-matrix-table-container">
         {sprintDetails.length > 0 && (
           <Table
+          sectionTab={"sprint_details"}
             setShowSaveButton={setShowSaveButton}
             setChangedTableRows={setChangedTableRows}
             data={sprintDetails}

@@ -60,6 +60,7 @@ const Project_Risk_Profiling_Section = () => {
       <Box className="escalation-matrix-table-container">
         {riskProfiling.length > 0 && (
           <Table
+          sectionTab={"risk_profilling"}
             setShowSaveButton={setShowSaveButton}
             data={riskProfiling}
             setChangedTableRows={setChangedTableRows}
