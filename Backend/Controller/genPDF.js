@@ -1,16 +1,16 @@
 const { jsPDF } = require("jspdf");
 const path = require("path");
 require("jspdf-autotable");
-
+const { formatColumnName } = require("../Utilities/utility.js");
 const doc = new jsPDF();
 
-const formatColumnName = (column_name) => {
-  let name_arr = column_name.split("_");
-  name_arr = name_arr.map((name) => {
-    return `${name[0].toUpperCase() + name.substring(1)}`;
-  });
-  return name_arr.join(" ");
-};
+// const formatColumnName = (column_name) => {
+//   let name_arr = column_name.split("_");
+//   name_arr = name_arr.map((name) => {
+//     return `${name[0].toUpperCase() + name.substring(1)}`;
+//   });
+//   return name_arr.join(" ");
+// };
 
 const addProjectDetailsPage = async () => {
   let response = await fetch(`http:localhost:8000/project/project_details`);

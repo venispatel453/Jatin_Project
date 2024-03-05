@@ -55,7 +55,7 @@ router
   .get(getVersionHistory)
   .post(alterVersionHistory);
 
-router.route("/project/sendEmail").get(sendMail);
+router.route("/project/sendEmail").post(sendMail);
 
 router.route("/project/genPDF").get(generatePDF);
 

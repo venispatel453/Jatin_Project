@@ -242,17 +242,37 @@ const alterProjectDetails = async (req, res) => {
 
 const alterVersionHistory = async (req, res) => {
   try {
-    console.log("here", req.body);
-    const arr = req.body;
-    const operations = arr.map((obj) => ({
+    const updatedRecords = req.body.filter((record) => {
+      return record.action === "added/updated";
+    });
+    const deletedRecords = req.body.filter((record) => {
+      return record.action === "delete";
+    });
+
+    //console.log(updatedRecords, deletedRecords);
+
+    const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
         filter: { _id: obj._id },
         update: { $set: obj },
         upsert: true,
       },
     }));
-    const result = await version_history.bulkWrite(operations);
-    console.log(result);
+
+    const deleteRecordOperations = deletedRecords.map((obj) => ({
+      deleteOne: {
+        filter: { _id: obj._id },
+        update: { $set: obj },
+        upsert: true,
+      },
+    }));
+
+    const updateRecordResult = await version_history.bulkWrite(
+      updateRecordOperations
+    );
+    const deleteRecordResult = await version_history.bulkWrite(
+      deleteRecordOperations
+    );
     res.json({ status: "success", msg: "Data updated successfully" });
   } catch (error) {
     console.log(error);
@@ -262,17 +282,37 @@ const alterVersionHistory = async (req, res) => {
 
 const alterAuditHistory = async (req, res) => {
   try {
-    console.log("here", req.body);
-    const arr = req.body;
-    const operations = arr.map((obj) => ({
+    const updatedRecords = req.body.filter((record) => {
+      return record.action === "added/updated";
+    });
+    const deletedRecords = req.body.filter((record) => {
+      return record.action === "delete";
+    });
+
+    //console.log(updatedRecords, deletedRecords);
+
+    const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
         filter: { _id: obj._id },
         update: { $set: obj },
         upsert: true,
       },
     }));
-    const result = await audit_history.bulkWrite(operations);
-    console.log(result);
+
+    const deleteRecordOperations = deletedRecords.map((obj) => ({
+      deleteOne: {
+        filter: { _id: obj._id },
+        update: { $set: obj },
+        upsert: true,
+      },
+    }));
+
+    const updateRecordResult = await audit_history.bulkWrite(
+      updateRecordOperations
+    );
+    const deleteRecordResult = await audit_history.bulkWrite(
+      deleteRecordOperations
+    );
     res.json({ status: "success", msg: "Data updated successfully" });
   } catch (error) {
     console.log(error);
@@ -282,17 +322,40 @@ const alterAuditHistory = async (req, res) => {
 
 const alterStakeholders = async (req, res) => {
   try {
-    console.log("here", req.body);
-    const arr = req.body;
-    const operations = arr.map((obj) => ({
+    //console.log("here", req.body);
+    const updatedRecords = req.body.filter((record) => {
+      return record.action === "added/updated";
+    });
+    const deletedRecords = req.body.filter((record) => {
+      return record.action === "delete";
+    });
+
+    //console.log(updatedRecords, deletedRecords);
+
+    const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
         filter: { _id: obj._id },
         update: { $set: obj },
         upsert: true,
       },
     }));
-    const result = await stakeholders.bulkWrite(operations);
-    console.log(result);
+
+    const deleteRecordOperations = deletedRecords.map((obj) => ({
+      deleteOne: {
+        filter: { _id: obj._id },
+        update: { $set: obj },
+        upsert: true,
+      },
+    }));
+
+    const updateRecordResult = await stakeholders.bulkWrite(
+      updateRecordOperations
+    );
+    const deleteRecordResult = await stakeholders.bulkWrite(
+      deleteRecordOperations
+    );
+
+    //console.log(updateRecordResult, deleteRecordResult);
     res.json({ status: "success", msg: "Data updated successfully" });
   } catch (error) {
     console.log(error);
@@ -303,16 +366,37 @@ const alterStakeholders = async (req, res) => {
 const alterEscalationMatrix = async (req, res) => {
   try {
     console.log("here", req.body);
-    const arr = req.body;
-    const operations = arr.map((obj) => ({
+    const updatedRecords = req.body.filter((record) => {
+      return record.action === "added/updated";
+    });
+    const deletedRecords = req.body.filter((record) => {
+      return record.action === "delete";
+    });
+
+    //console.log(updatedRecords, deletedRecords);
+
+    const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
         filter: { _id: obj._id },
         update: { $set: obj },
         upsert: true,
       },
     }));
-    const result = await escalation_matrix.bulkWrite(operations);
-    console.log(result);
+
+    const deleteRecordOperations = deletedRecords.map((obj) => ({
+      deleteOne: {
+        filter: { _id: obj._id },
+        update: { $set: obj },
+        upsert: true,
+      },
+    }));
+
+    const updateRecordResult = await escalation_matrix.bulkWrite(
+      updateRecordOperations
+    );
+    const deleteRecordResult = await escalation_matrix.bulkWrite(
+      deleteRecordOperations
+    );
     res.json({ status: "success", msg: "Data updated successfully" });
   } catch (error) {
     console.log(error);
@@ -322,17 +406,37 @@ const alterEscalationMatrix = async (req, res) => {
 
 const alterRiskProfiling = async (req, res) => {
   try {
-    console.log("here", req.body);
-    const arr = req.body;
-    const operations = arr.map((obj) => ({
+    const updatedRecords = req.body.filter((record) => {
+      return record.action === "added/updated";
+    });
+    const deletedRecords = req.body.filter((record) => {
+      return record.action === "delete";
+    });
+
+    //console.log(updatedRecords, deletedRecords);
+
+    const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
         filter: { _id: obj._id },
         update: { $set: obj },
         upsert: true,
       },
     }));
-    const result = await risk_profiling.bulkWrite(operations);
-    console.log(result);
+
+    const deleteRecordOperations = deletedRecords.map((obj) => ({
+      deleteOne: {
+        filter: { _id: obj._id },
+        update: { $set: obj },
+        upsert: true,
+      },
+    }));
+
+    const updateRecordResult = await risk_profiling.bulkWrite(
+      updateRecordOperations
+    );
+    const deleteRecordResult = await risk_profiling.bulkWrite(
+      deleteRecordOperations
+    );
     res.json({ status: "success", msg: "Data updated successfully" });
   } catch (error) {
     console.log(error);
@@ -342,17 +446,37 @@ const alterRiskProfiling = async (req, res) => {
 
 const alterPhases = async (req, res) => {
   try {
-    console.log("here", req.body);
-    const arr = req.body;
-    const operations = arr.map((obj) => ({
+    const updatedRecords = req.body.filter((record) => {
+      return record.action === "added/updated";
+    });
+    const deletedRecords = req.body.filter((record) => {
+      return record.action === "delete";
+    });
+
+    //console.log(updatedRecords, deletedRecords);
+
+    const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
         filter: { _id: obj._id },
         update: { $set: obj },
         upsert: true,
       },
     }));
-    const result = await phases.bulkWrite(operations);
-    console.log(result);
+
+    const deleteRecordOperations = deletedRecords.map((obj) => ({
+      deleteOne: {
+        filter: { _id: obj._id },
+        update: { $set: obj },
+        upsert: true,
+      },
+    }));
+
+    const updateRecordResult = await risk_profiling.bulkWrite(
+      updateRecordOperations
+    );
+    const deleteRecordResult = await risk_profiling.bulkWrite(
+      deleteRecordOperations
+    );
     res.json({ status: "success", msg: "Data updated successfully" });
   } catch (error) {
     console.log(error);
@@ -362,17 +486,37 @@ const alterPhases = async (req, res) => {
 
 const alterSprintDetails = async (req, res) => {
   try {
-    console.log("here", req.body);
-    const arr = req.body;
-    const operations = arr.map((obj) => ({
+    const updatedRecords = req.body.filter((record) => {
+      return record.action === "added/updated";
+    });
+    const deletedRecords = req.body.filter((record) => {
+      return record.action === "delete";
+    });
+
+    //console.log(updatedRecords, deletedRecords);
+
+    const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
         filter: { _id: obj._id },
         update: { $set: obj },
         upsert: true,
       },
     }));
-    const result = await sprint_details.bulkWrite(operations);
-    console.log(result);
+
+    const deleteRecordOperations = deletedRecords.map((obj) => ({
+      deleteOne: {
+        filter: { _id: obj._id },
+        update: { $set: obj },
+        upsert: true,
+      },
+    }));
+
+    const updateRecordResult = await sprint_details.bulkWrite(
+      updateRecordOperations
+    );
+    const deleteRecordResult = await sprint_details.bulkWrite(
+      deleteRecordOperations
+    );
     res.json({ status: "success", msg: "Data updated successfully" });
   } catch (error) {
     console.log(error);
