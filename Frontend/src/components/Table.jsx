@@ -6,7 +6,7 @@ const CrudTable = ({
   data,
   invalidColumns,
   columnType,
-  changedTableRows,
+  setChangedTableRows,
   defaultValues = {},
   setShowSaveButton,
 }) => {
@@ -28,6 +28,22 @@ const CrudTable = ({
     console.log("data= ", newData);
     setRows(newData);
   }, [data]);
+
+  // useEffect(() => {
+  //   alert("updated rows");
+  //   console.log(rows);
+  // }, [rows]);
+
+  const handleInputValidation = (id) => {
+    const requiredRow = rows.filter((row) => row._id === id)[0];
+    console.log(requiredRow);
+    for (let key in requiredRow) {
+      if (requiredRow[key] === "") {
+        return true;
+      }
+    }
+    return false;
+  };
 
   const handleChange = (id, key, value) => {
     //console.log("change", id, key, value);
@@ -51,17 +67,28 @@ const CrudTable = ({
   };
 
   const handleSave = (id) => {
+    if (handleInputValidation(id)) {
+      alert("fill all fields");
+      return;
+    }
     const updatedRows = rows.map((row) => {
       if (row._id === id) {
-        let changedRow = { ...row, ...defaultValues };
+        let changedRow = { ...row, ...defaultValues, action: "added/updated" };
         delete changedRow["editable"];
-        changedTableRows.push(changedRow);
-        console.log("changed rows", changedTableRows);
+        delete changedRow["prevState"];
+        setChangedTableRows((prevChangedRows) => [
+          ...prevChangedRows,
+          changedRow,
+        ]);
       }
       return row._id === id ? { ...row, editable: false } : row;
     });
     // console.log("saved");
+    //console.log("after validation");
     setShowSaveButton(true);
+    //alert("before record updated");
+    //console.log(updatedRows);
+    // alert("after record updated");
     setRows(updatedRows);
   };
 
@@ -73,7 +100,18 @@ const CrudTable = ({
   };
 
   const handleDelete = (id) => {
-    const updatedRows = rows.filter((row) => row._id !== id);
+    const updatedRows = rows.filter((row) => {
+      if (row._id === id) {
+        let changedRow = { ...row, action: "delete" };
+        setChangedTableRows((prevChangedRows) => [
+          ...prevChangedRows,
+          changedRow,
+        ]);
+      }
+
+      return row._id !== id;
+    });
+    setShowSaveButton(true);
     setRows(updatedRows);
   };
 

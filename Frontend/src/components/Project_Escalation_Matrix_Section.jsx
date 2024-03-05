@@ -12,7 +12,7 @@ let data = [
 
 const Project_Escalation_Matrix_Section = ({ active }) => {
   const [escalationMatrix, setEscalationMatrix] = useState([]);
-  const [changedTableRows, setChangedtableRows] = useState([]);
+  const [changedTableRows, setChangedTableRows] = useState([]);
   const [showSaveButton, setShowSaveButton] = useState(false);
 
   const handleSubmit = async () => {
@@ -24,7 +24,7 @@ const Project_Escalation_Matrix_Section = ({ active }) => {
       );
       console.log(response);
       setShowSaveButton(false);
-      setChangedtableRows([]);
+      setChangedTableRows([]);
     } catch (error) {
       console.log(error);
     }
@@ -73,31 +73,26 @@ const Project_Escalation_Matrix_Section = ({ active }) => {
         <Flex direction="Column" align="Start" gap={20}>
           {escalationMatrix.length > 0 && (
             <>
-              {Array.from(uniqueTypes()).map((type) => {
-                const filteredData = escalationMatrix.filter(
-                  (item) => item.escalation_type === type
-                );
-                return (
-                  <div key={type} className="table-container">
-                    <h3 className="table-heading">
-                      {`${type} Escalation Matrix`}{" "}
-                    </h3>
-                    <CrudTable
-                      changedTableRows={changedTableRows}
-                      data={filteredData}
-                      invalidColumns={[
-                        "_id",
-                        "__v",
-                        "escalation_type",
-                        "project_id",
-                      ]}
-                      defaultValues={{ escalation_type: type }}
-                      columnType={[]}
-                      setShowSaveButton={setShowSaveButton}
-                    />
-                  </div>
-                );
-              })}
+              
+              <div className="table-container">
+                <h3 className="table-heading">Operational Escalation Matrix</h3>
+                <CrudTable
+                  setChangedTableRows={setChangedTableRows}
+                  data={escalationMatrix.filter(
+                    (item) => item.escalation_type === "operational"
+                  )}
+                  invalidColumns={[
+                    "_id",
+                    "__v",
+                    "escalation_type",
+                    "project_id",
+                  ]}
+                  defaultValues={{ escalation_type: "operational" }}
+                  columnType={[]}
+                  setShowSaveButton={setShowSaveButton}
+                />
+              </div>
+            
             </>
           )}
           <div className="financial-matrix-table"></div>

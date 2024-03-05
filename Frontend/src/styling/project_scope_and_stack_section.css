@@ -38,3 +38,7 @@
   justify-content: flex-end;
   width: 90%;
 }
+
+.save-button:hover {
+  background-color: #636668;
+}

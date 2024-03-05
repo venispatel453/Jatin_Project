@@ -3,7 +3,7 @@ import { Box } from "monday-ui-react-core";
 import "monday-ui-react-core/tokens";
 import Table from "./Table";
 import axios from "axios";
-import '../styling/project_audit_history_section.css'
+import "../styling/project_audit_history_section.css";
 
 let operational_column = ["Escalation Level", "Name", "Role"];
 let operational_rows = [
@@ -13,7 +13,7 @@ let operational_rows = [
 ];
 const Project_Audit_History_Section = () => {
   const [auditHistory, setAuditHistory] = useState([]);
-  const [changedTableRows, setChangedtableRows] = useState([]);
+  const [changedTableRows, setChangedTableRows] = useState([]);
   const [showSaveButton, setShowSaveButton] = useState(false);
 
   const handleSubmit = async () => {
@@ -24,8 +24,14 @@ const Project_Audit_History_Section = () => {
         [...changedTableRows]
       );
       setShowSaveButton(false);
-      setChangedtableRows([]);
-      console.log(response);
+      setChangedTableRows([]);
+
+      const sendmail_response = await axios.post(
+        "http://localhost:8000/project/sendEmail",
+        [...changedTableRows]
+      );
+
+      console.log(sendmail_response);
     } catch (error) {
       console.log(error);
     }
@@ -52,7 +58,9 @@ const Project_Audit_History_Section = () => {
     <div>
       {showSaveButton && (
         <div className="save-button-container">
-          <button onClick={handleSubmit} className="save-button">save</button>
+          <button onClick={handleSubmit} className="save-button">
+            save
+          </button>
         </div>
       )}
       <Box className="escalation-matrix-table-container">
@@ -61,8 +69,8 @@ const Project_Audit_History_Section = () => {
             setShowSaveButton={setShowSaveButton}
             data={auditHistory}
             columnType={[{ key: "date_of_audit", type: "date" }]}
-            invalidColumns={["project_id","_id","__v"]}
-            changedTableRows={changedTableRows}
+            invalidColumns={["project_id", "_id", "__v"]}
+            setChangedTableRows={setChangedTableRows}
           />
         )}
       </Box>

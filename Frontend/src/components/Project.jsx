@@ -23,6 +23,15 @@ import Project_Phases_Section from "./Project_Phases_Section";
 const Project = () => {
   const [activeTab, setActiveTab] = useState(0);
 
+  const handleExportButton = async () => {
+    try {
+      const response = await fetch("http://localhost:8000/project/genPDF");
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Box className="project-component-wrapper">
       <Flex
@@ -32,9 +41,14 @@ const Project = () => {
         justify="Start"
         align="Start"
       >
-        <Box className="project-navigation-box">navigation box</Box>
-        <Box className="project-detail-box">project name and members box</Box>
-        <Box className="project-tab-box">
+        <div className="export-button-container">
+          <a href="http://localhost:8000/project/genPDF">
+            <button className="export-button" onClick={handleExportButton}>
+              Export as PDF
+            </button>
+          </a>
+        </div>
+        <div className="project-tab-box">
           <TabList
             tabType="stretched"
             onTabChange={(tabId) => {
@@ -51,7 +65,7 @@ const Project = () => {
             <Tab>Version History</Tab>
             <Tab>Audit History</Tab>
           </TabList>
-        </Box>
+        </div>
 
         <Box className="project-section-box">
           <TabPanels activeTabId={activeTab}>

@@ -13,7 +13,7 @@ let operational_rows = [
 ];
 const Project_Sprint_Details_Section = () => {
   const [sprintDetails, setSprintDetails] = useState([]);
-  const [changedTableRows, setChangedtableRows] = useState([]);
+  const [changedTableRows, setChangedTableRows] = useState([]);
   const [showSaveButton, setShowSaveButton] = useState(false);
 
   const handleSubmit = async () => {
@@ -25,7 +25,7 @@ const Project_Sprint_Details_Section = () => {
       );
       console.log(response);
       setShowSaveButton(false);
-      setChangedtableRows([]);
+      setChangedTableRows([]);
     } catch (error) {
       console.log(error);
     }
@@ -59,7 +59,7 @@ const Project_Sprint_Details_Section = () => {
         {sprintDetails.length > 0 && (
           <Table
             setShowSaveButton={setShowSaveButton}
-            changedTableRows={changedTableRows}
+            setChangedTableRows={setChangedTableRows}
             data={sprintDetails}
             invalidColumns={["project_id","_id","__v"]}
             columnType={[

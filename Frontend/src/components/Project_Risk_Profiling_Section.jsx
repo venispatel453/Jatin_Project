@@ -13,7 +13,7 @@ let operational_rows = [
 ];
 const Project_Risk_Profiling_Section = () => {
   const [riskProfiling, setRiskProfiling] = useState([]);
-  const [changedTableRows, setChangedtableRows] = useState([]);
+  const [changedTableRows, setChangedTableRows] = useState([]);
   const [showSaveButton, setShowSaveButton] = useState(false);
 
   const handleSubmit = async () => {
@@ -24,7 +24,7 @@ const Project_Risk_Profiling_Section = () => {
         [...changedTableRows]
       );
       setShowSaveButton(false);
-      setChangedtableRows([]);
+      setChangedTableRows([]);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -62,7 +62,7 @@ const Project_Risk_Profiling_Section = () => {
           <Table
             setShowSaveButton={setShowSaveButton}
             data={riskProfiling}
-            changedTableRows={changedTableRows}
+            setChangedTableRows={setChangedTableRows}
             invalidColumns={["project_id", "_id", "__v"]}
             columnType={[
               {

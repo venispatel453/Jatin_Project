@@ -13,7 +13,7 @@ let operational_rows = [
 ];
 const Project_Phases_Section = () => {
   const [phaseHistory, setPhaseHistory] = useState([{}]);
-  const [changedTableRows, setChangedtableRows] = useState([]);
+  const [changedTableRows, setChangedTableRows] = useState([]);
   const [showSaveButton, setShowSaveButton] = useState(false);
 
   const handleSubmit = async () => {
@@ -25,7 +25,7 @@ const Project_Phases_Section = () => {
       );
       console.log(response);
       setShowSaveButton(false);
-      setChangedtableRows([]);
+      setChangedTableRows([]);
     } catch (error) {
       console.log(error);
     }
@@ -99,7 +99,7 @@ const Project_Phases_Section = () => {
               ]}
               data={phaseHistory}
               invalidColumns={["project_id", "_id", "__v"]}
-              changedTableRows={changedTableRows}
+              setChangedTableRows={setChangedTableRows}
             />
           ) : (
             //""

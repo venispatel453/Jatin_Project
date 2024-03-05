@@ -51,12 +51,12 @@
   background-color: #9fa2a5;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
 }
 
 .crud-table tfoot button:hover {
-  background-color: #a3a4a5;
+  background-color: #636668;
 }
 
 input[type="text"] {

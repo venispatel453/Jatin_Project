@@ -31,7 +31,10 @@ const Project_Overview_Section = () => {
     // console.log(e);
     const newProjectDetails = { ...projectDetails };
     if (field === "Fixed" || field === "Monthly") {
-      newProjectDetails["budget"] = { type: field, type_value: e.target.value };
+      newProjectDetails["budget"] = {
+        type: field,
+        type_value: e.target.value,
+      };
     } else {
       newProjectDetails[field] = e.target.value;
     }
@@ -53,6 +56,10 @@ const Project_Overview_Section = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    console.log(projectDetails);
+  }, [projectDetails]);
 
   useEffect(() => {
     fetchData();
@@ -80,10 +87,12 @@ const Project_Overview_Section = () => {
             <label> Project Budget</label>
             <Dropdown
               className="dropdown"
-              value={{
-                label: projectDetails.budget.type,
-                value: projectDetails.budget.type,
-              }}
+              value={[
+                {
+                  value: projectDetails?.budget?.type,
+                  label: projectDetails?.budget?.type,
+                },
+              ]}
               searchable={false}
               onChange={(budgetMode) => {
                 console.log(budgetMode);
@@ -106,7 +115,7 @@ const Project_Overview_Section = () => {
                   <label> Duration (in Months)</label>
                   <input
                     type="text"
-                    onChange={(e) => handleInputChange(e, "duration")}
+                    onChange={(e) => handleInputChange(e, "Fixed")}
                     value={
                       projectDetails.budget?.type == "Fixed"
                         ? projectDetails.budget?.type_value
@@ -119,7 +128,7 @@ const Project_Overview_Section = () => {
                   <label> Budgeted Hours</label>
                   <input
                     type="text"
-                    onChange={(e) => handleInputChange(e, "budgeted-hours")}
+                    onChange={(e) => handleInputChange(e, "Monthly")}
                     value={
                       projectDetails.budget?.type === "Monthly"
                         ? projectDetails.budget?.type_value
