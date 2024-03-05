@@ -18,4 +18,12 @@ function reorderObjectKeys(obj, refObj) {
   return orderedObj;
 }
 
-module.exports = { reorderArrayOfObject };
+const formatColumnName = (column_name) => {
+  let name_arr = column_name.split("_");
+  name_arr = name_arr.map((name) => {
+    return `${name[0].toUpperCase() + name.substring(1)}`;
+  });
+  return name_arr.join(" ");
+};
+
+module.exports = { reorderArrayOfObject, formatColumnName };
