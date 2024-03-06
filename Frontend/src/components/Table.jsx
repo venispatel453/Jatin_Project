@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import "../styling/crud-table.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CrudTable = ({
   data,
@@ -13,7 +15,6 @@ const CrudTable = ({
 }) => {
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
-  console.log(defaultValues);
 
   useEffect(() => {
     const extractedColumns = Object.keys(data[0]).filter(
@@ -26,19 +27,11 @@ const CrudTable = ({
       _id: record._id ? record._id : uuidv4(),
       editable: false,
     }));
-    console.log("data= ", newData);
     setRows(newData);
-    console.log(sectionTab, " and data is ", newData);
   }, [sectionTab]);
-
-  // useEffect(() => {
-  //   alert("updated rows");
-  //   console.log(rows);
-  // }, [rows]);
 
   const handleInputValidation = (id) => {
     const requiredRow = rows.filter((row) => row._id === id)[0];
-    console.log(requiredRow);
     for (let key in requiredRow) {
       if (requiredRow[key] === "") {
         return true;
@@ -48,11 +41,9 @@ const CrudTable = ({
   };
 
   const handleChange = (id, key, value) => {
-    //console.log("change", id, key, value);
     const updatedRows = rows.map((row) =>
       row._id === id ? { ...row, [key]: value } : row
     );
-    console.log(updatedRows);
     setRows(updatedRows);
   };
 
@@ -60,7 +51,6 @@ const CrudTable = ({
     const updatedRows = rows.map((row) =>
       row._id === id ? { ...row, editable: true, prevState: { ...row } } : row
     );
-    console.log(updatedRows);
     setRows(updatedRows);
   };
 
@@ -70,7 +60,7 @@ const CrudTable = ({
 
   const handleSave = (id) => {
     if (handleInputValidation(id)) {
-      alert("fill all fields");
+      toast.error("Please Fill All Fields");
       return;
     }
     const updatedRows = rows.map((row) => {
@@ -85,12 +75,8 @@ const CrudTable = ({
       }
       return row._id === id ? { ...row, editable: false } : row;
     });
-    // console.log("saved");
-    //console.log("after validation");
+
     setShowSaveButton(true);
-    //alert("before record updated");
-    //console.log(updatedRows);
-    // alert("after record updated");
     setRows(updatedRows);
   };
 
@@ -124,14 +110,12 @@ const CrudTable = ({
     setRows([...rows, { ...newRow, _id: newId, editable: true }]);
   };
 
-  const renderInputField = (column_key, column_value, row) => {
-    //console.log("render", row, column_key);
+  const renderInputField = (column_key, row) => {
     const {
       type,
       options,
       value = row[column_key],
     } = columnType.find((item) => item.key === column_key) || {};
-    // console.log(type, options);
     switch (type) {
       case "date":
         return (
@@ -179,13 +163,11 @@ const CrudTable = ({
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, rowIndex) => (
+          {rows.map((row) => (
             <tr key={row._id}>
               {columns.map((column, cellIndex) => (
                 <td key={cellIndex}>
-                  {row.editable
-                    ? renderInputField(column, row[column], row)
-                    : row[column]}
+                  {row.editable ? renderInputField(column, row) : row[column]}
                 </td>
               ))}
               <td>

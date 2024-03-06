@@ -3,32 +3,46 @@ import { Dropdown } from "monday-ui-react-core";
 import "monday-ui-react-core/tokens";
 import "../styling/project_overview_section.css";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Project_Overview_Section = () => {
   const [changesMade, setChangesMade] = useState(false);
-  const [budgetMode, setBudgetMode] = useState({});
   const [projectDetails, setProjectDetails] = useState({
     overview: "",
     budget: {},
     timeline: "",
   });
 
+  const handleInputFieldValidation = () => {
+    console.log(projectDetails);
+    for (const key of projectDetails) {
+      if (projectDetails[key] === "") {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const handleSubmit = async () => {
     try {
-      console.log("submit clicked");
+      if (handleInputFieldValidation) {
+        toast.error("Please Fill All Fields");
+        return;
+      }
       const { data } = await axios.post(
         "http://localhost:8000/project/project_details",
         {
           projectDetails,
         }
       );
+      toast.success("Data Saved Successfully");
       setChangesMade(false);
-      console.log(data);
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Some Error");
+    }
   };
 
   const handleInputChange = (e, field) => {
-    // console.log(e);
     const newProjectDetails = { ...projectDetails };
     if (field === "Fixed" || field === "Monthly") {
       newProjectDetails["budget"] = {
@@ -38,7 +52,6 @@ const Project_Overview_Section = () => {
     } else {
       newProjectDetails[field] = e.target.value;
     }
-    console.log(newProjectDetails);
     setProjectDetails(newProjectDetails);
     setChangesMade(true);
   };
@@ -51,15 +64,11 @@ const Project_Overview_Section = () => {
 
       const { data } = await response.json();
       setProjectDetails(data[0]);
-      console.log("overview", data);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 
-  useEffect(() => {
-    console.log(projectDetails);
-  }, [projectDetails]);
 
   useEffect(() => {
     fetchData();
@@ -70,7 +79,7 @@ const Project_Overview_Section = () => {
       {changesMade && (
         <div className="save-button-container">
           <button onClick={handleSubmit} className="save-button">
-            save
+            Save
           </button>
         </div>
       )}
@@ -97,10 +106,11 @@ const Project_Overview_Section = () => {
               onChange={(budgetMode) => {
                 console.log(budgetMode);
                 const budget = {
-                  type: budgetMode.label,
+                  type: budgetMode?.label,
                   type_value: "",
                 };
                 setProjectDetails({ ...projectDetails, budget: budget });
+                setChangesMade(true);
               }}
               options={[
                 { label: "Fixed", value: "Fixed" },

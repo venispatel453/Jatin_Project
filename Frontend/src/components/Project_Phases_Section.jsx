@@ -4,13 +4,8 @@ import Table from "./Table.jsx";
 import "monday-ui-react-core/tokens";
 import axios from "axios";
 import "../styling/project_phases_section.css";
+import { toast } from "react-toastify";
 
-let operational_column = ["Escalation Level", "Name", "Role"];
-let operational_rows = [
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-];
 const Project_Phases_Section = () => {
   const [phaseHistory, setPhaseHistory] = useState([]);
   const [changedTableRows, setChangedTableRows] = useState([]);
@@ -18,16 +13,15 @@ const Project_Phases_Section = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log(changedTableRows);
       const response = await axios.post(
         "http://localhost:8000/project/phases",
         [...changedTableRows]
       );
-      console.log(response);
+      toast.success("Data Saved Successfully");
       setShowSaveButton(false);
       setChangedTableRows([]);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 
@@ -36,28 +30,14 @@ const Project_Phases_Section = () => {
       const response = await fetch("http://localhost:8000/project/phases");
       const { data } = await response.json();
       setPhaseHistory(data);
-      console.log("phases", data);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 
   useEffect(() => {
     fetchData();
   }, []);
-
-  let column_type = [
-    {
-      key: "date_column",
-      type: "date",
-      value: "12-24-2024",
-    },
-    {
-      key: "dropdown_column",
-      type: "dropdown",
-      options: ["option 1", "option 2"],
-    },
-  ];
 
   return (
     <div>
@@ -69,7 +49,6 @@ const Project_Phases_Section = () => {
         </div>
       )}
       <Box className="escalation-matrix-table-container">
-        {console.log("phase", phaseHistory)}
         <div className="table-container">
           {phaseHistory.length > 0 ? (
             <Table
@@ -103,7 +82,6 @@ const Project_Phases_Section = () => {
               setChangedTableRows={setChangedTableRows}
             />
           ) : (
-            //""
             ""
           )}
         </div>

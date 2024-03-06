@@ -76,7 +76,7 @@ const Project = () => {
               <Project_Scope_and_Stack_Section />
             </TabPanel>
             <TabPanel>
-              <Project_Escalation_Matrix_Section active={activeTab == 2} />
+              <Project_Escalation_Matrix_Section />
             </TabPanel>
             <TabPanel>
               <Project_Phases_Section />

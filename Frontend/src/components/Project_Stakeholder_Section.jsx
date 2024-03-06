@@ -4,13 +4,8 @@ import "monday-ui-react-core/tokens";
 import Table from "./Table";
 import axios from "axios";
 import '../styling/project_stakeholder_section.css'
+import {toast} from 'react-toastify'
 
-let operational_column = ["Escalation Level", "Name", "Role"];
-let operational_rows = [
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-];
 const Project_Stakeholder_Section = () => {
   const [stakeholders, setStakeholders] = useState([]);
   const [changedTableRows, setChangedTableRows] = useState([]);
@@ -23,11 +18,11 @@ const Project_Stakeholder_Section = () => {
         "http://localhost:8000/project/stakeholders",
         [...changedTableRows]
       );
-      console.log(response);
+      toast.success("Data Saved Successfully");
       setShowSaveButton(false);
       setChangedTableRows([]);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 
@@ -37,16 +32,16 @@ const Project_Stakeholder_Section = () => {
         "http://localhost:8000/project/stakeholders"
       );
       const { data } = await response.json();
-      console.log(data);
       setStakeholders(data);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+  
   return (
     <div>
       {showSaveButton && (

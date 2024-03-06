@@ -3,14 +3,9 @@ import { Box } from "monday-ui-react-core";
 import "monday-ui-react-core/tokens";
 import Table from "./Table";
 import axios from "axios";
+import {toast} from 'react-toastify'
 import '../styling/project_sprint_details_section.css'
 
-let operational_column = ["Escalation Level", "Name", "Role"];
-let operational_rows = [
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-];
 const Project_Sprint_Details_Section = () => {
   const [sprintDetails, setSprintDetails] = useState([]);
   const [changedTableRows, setChangedTableRows] = useState([]);
@@ -18,16 +13,15 @@ const Project_Sprint_Details_Section = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log(changedTableRows);
       const response = await axios.post(
         "http://localhost:8000/project/sprint_details",
         [...changedTableRows]
       );
-      console.log(response);
+      toast.success("Data Saved Successfully");
       setShowSaveButton(false);
       setChangedTableRows([]);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 
@@ -37,10 +31,9 @@ const Project_Sprint_Details_Section = () => {
         "http://localhost:8000/project/sprint_details"
       );
       const { data } = await response.json();
-      console.log(data);
       setSprintDetails(data);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 

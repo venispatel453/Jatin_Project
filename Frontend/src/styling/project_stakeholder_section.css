@@ -1,11 +1,11 @@
 .save-button {
   border: 0.5px solid black;
-  background-color: #9fa2a5;
-  color: #fff;
+  background-color: #007bff;
   border-radius: 5px;
   cursor: pointer;
   padding: 10px;
 }
+
 .save-button:hover {
-  background-color: #636668;
+  background-color: #0056b3;
 }

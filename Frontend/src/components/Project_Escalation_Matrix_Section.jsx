@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Box, Flex, Button } from "monday-ui-react-core";
+import { Box, Flex } from "monday-ui-react-core";
 import CrudTable from "./Table.jsx";
 import "../styling/project_escalation_matrix_section.css";
 import axios from "axios";
+import {toast} from 'react-toastify'
 
-let data = [
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-];
-
-const Project_Escalation_Matrix_Section = ({ active }) => {
+const Project_Escalation_Matrix_Section = () => {
   const [escalationMatrix, setEscalationMatrix] = useState([]);
   const [changedTableRows, setChangedTableRows] = useState([]);
   const [showSaveButton, setShowSaveButton] = useState(false);
+
   const handleSubmit = async () => {
     try {
       console.log(changedTableRows);
@@ -21,11 +17,11 @@ const Project_Escalation_Matrix_Section = ({ active }) => {
         "http://localhost:8000/project/escalation_matrix",
         [...changedTableRows]
       );
-      console.log(response);
+      toast.success("Data Saved Successfully");
       setShowSaveButton(false);
       setChangedTableRows([]);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 
@@ -34,16 +30,15 @@ const Project_Escalation_Matrix_Section = ({ active }) => {
       const response = await fetch(
         "http://localhost:8000/project/escalation_matrix"
       );
+
       const { data } = await response.json();
-      console.log(data);
       setEscalationMatrix(data);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 
   useEffect(() => {
-    alert("called");
     fetchData();
   }, []);
 
@@ -52,11 +47,9 @@ const Project_Escalation_Matrix_Section = ({ active }) => {
     escalationMatrix.forEach((element) => {
       types.add(element.escalation_type);
     });
-    console.log("set", types);
     return types;
   };
 
-  // generateColumn();
   return (
     <>
       {showSaveButton && (
@@ -76,7 +69,7 @@ const Project_Escalation_Matrix_Section = ({ active }) => {
                 );
                 return (
                   <div key={type} className="table-container">
-                    <h3 className="table-heading">{type} Escalation Matrix</h3>
+                    <h2 className="table-heading">{type} Escalation Matrix</h2>
                     <CrudTable
                       sectionTab={"escalation"}
                       changedTableRows={changedTableRows}

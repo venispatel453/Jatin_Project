@@ -3,28 +3,41 @@ import { Dropdown } from "monday-ui-react-core";
 import "monday-ui-react-core/tokens";
 import "../styling/project_scope_and_stack_section.css";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Scope_and_Stack_Section = () => {
   const [projectDetails, setProjectDetails] = useState({});
   const [changesMade, setChangesMade] = useState(false);
 
+  const handleInputFieldValidation = () => {
+    for (const key of projectDetails) {
+      if (projectDetails[key] === "") {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const handleSubmit = async () => {
     try {
+      if (handleInputFieldValidation) {
+        toast.error("Please Fill All Fields");
+        return;
+      }
       const { data } = await axios.post(
         "http://localhost:8000/project/project_details",
         {
           projectDetails,
         }
       );
+      toast.success("Data Saved Successfully");
       setChangesMade(false);
-      console.log(data);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 
   const handleInputChange = (e, field) => {
-    console.log(e, field);
     const newProjectDetails = { ...projectDetails };
     if (field === "stack") {
       console.log(e);
@@ -34,13 +47,11 @@ const Scope_and_Stack_Section = () => {
         newProjectDetails[field] = {};
         newProjectDetails[field]["label"] = e.label;
         newProjectDetails[field]["value"] = e.value;
-        console.log(newProjectDetails);
       }
     } else {
       newProjectDetails[field] = e.target.value;
     }
 
-    console.log(newProjectDetails);
     setProjectDetails(newProjectDetails);
     setChangesMade(true);
   };
@@ -52,9 +63,8 @@ const Scope_and_Stack_Section = () => {
       );
       const { data } = await response.json();
       setProjectDetails(data[0]);
-      console.log(data);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 
@@ -67,7 +77,7 @@ const Scope_and_Stack_Section = () => {
       {changesMade && (
         <div className="save-button-container">
           <button onClick={handleSubmit} className="save-button">
-            save
+            Save
           </button>
         </div>
       )}

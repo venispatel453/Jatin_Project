@@ -4,13 +4,8 @@ import "monday-ui-react-core/tokens";
 import Table from "./Table";
 import axios from "axios";
 import "../styling/project_audit_history_section.css";
+import { toast } from "react-toastify";
 
-let operational_column = ["Escalation Level", "Name", "Role"];
-let operational_rows = [
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-];
 const Project_Audit_History_Section = () => {
   const [auditHistory, setAuditHistory] = useState([]);
   const [changedTableRows, setChangedTableRows] = useState([]);
@@ -23,6 +18,7 @@ const Project_Audit_History_Section = () => {
         "http://localhost:8000/project/audit_history",
         [...changedTableRows]
       );
+      toast.success("Data Saved Successfully");
       setShowSaveButton(false);
       setChangedTableRows([]);
 
@@ -30,10 +26,8 @@ const Project_Audit_History_Section = () => {
         "http://localhost:8000/project/sendEmail",
         [...changedTableRows]
       );
-
-      console.log(sendmail_response);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 
@@ -43,10 +37,9 @@ const Project_Audit_History_Section = () => {
         "http://localhost:8000/project/audit_history"
       );
       const { data } = await response.json();
-      console.log(data);
       setAuditHistory(data);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 
@@ -59,7 +52,7 @@ const Project_Audit_History_Section = () => {
       {showSaveButton && (
         <div className="save-button-container">
           <button onClick={handleSubmit} className="save-button">
-            save
+            Save
           </button>
         </div>
       )}

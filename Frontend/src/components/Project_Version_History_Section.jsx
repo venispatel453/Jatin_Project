@@ -4,13 +4,8 @@ import "monday-ui-react-core/tokens";
 import Table from "./Table";
 import axios from "axios";
 import "../styling/project_version_history_section.css";
+import {toast} from 'react-toastify'
 
-let operational_column = ["Escalation Level", "Name", "Role"];
-let operational_rows = [
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-  { level: "Level-1", name: "Ajay", designation: "project manager" },
-];
 const Project_Version_History_Section = () => {
   const [versionHistory, setVersionHistory] = useState([]);
   const [changedTableRows, setChangedTableRows] = useState([]);
@@ -23,11 +18,11 @@ const Project_Version_History_Section = () => {
         "http://localhost:8000/project/version_history",
         [...changedTableRows]
       );
+      toast.success("Data Saved Successfully");
       setShowSaveButton(false);
       setChangedTableRows([]);
-      console.log(response);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 
@@ -37,10 +32,9 @@ const Project_Version_History_Section = () => {
         "http://localhost:8000/project/version_history"
       );
       const { data } = await response.json();
-      console.log(data);
       setVersionHistory(data);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error");
     }
   };
 
@@ -53,7 +47,7 @@ const Project_Version_History_Section = () => {
       {showSaveButton && (
         <div className="save-button-container">
           <button onClick={handleSubmit} className="save-button">
-            save
+            Save
           </button>
         </div>
       )}
