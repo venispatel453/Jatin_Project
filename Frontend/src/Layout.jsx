@@ -1,15 +1,16 @@
 import React from "react";
-import TopBar from "./components/TopBar";
-import Sidebar from "./components/Sidebar";
-import Project from "./components/Project";
-import "./styling/layout.css";
-import { Box, Flex } from "monday-ui-react-core";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import TopBar from "./components/TopBar"; // Importing the TopBar component
+import Sidebar from "./components/Sidebar"; // Importing the Sidebar component
+import Project from "./components/Project"; // Importing the Project component
+import "./styling/layout.css"; // Importing the layout styling
+import { Box, Flex } from "monday-ui-react-core"; // Importing Box and Flex components from monday-ui-react-core library
+import { ToastContainer } from "react-toastify"; // Importing ToastContainer component from react-toastify library
+import "react-toastify/dist/ReactToastify.css"; // Importing Toastify CSS
 
 const Layout = () => {
   return (
     <div>
+      {/* ToastContainer for displaying toast messages */}
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -21,21 +22,27 @@ const Layout = () => {
         pauseOnHover
         theme="light"
       />
+
+      {/* Main layout structure */}
       <Flex
         className="layout-wrapper"
         direction="Column"
         gap={20}
         justify="SpaceBetween"
       >
+        {/* TopBar component for displaying the top navigation bar */}
         <Box className="top-bar-container">
           <TopBar />
         </Box>
 
+        {/* Main content wrapper */}
         <Box className="main-content-wrapper">
           <Flex justify="SpaceBetween">
+            {/* Sidebar component for displaying the sidebar */}
             <Box className="sidebar-container">
               <Sidebar />
             </Box>
+            {/* Project component for displaying the main project content */}
             <Box className="content-container">
               <Project />
             </Box>

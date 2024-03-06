@@ -1,116 +1,28 @@
-/* .crud-table-container {
-  width: 100%;
-}
-
-.crud-table {
-  width: 98%;
-  border-collapse: collapse;
-}
-
-.crud-table th,
-.crud-table td {
-  padding: 5px;
-  text-align: left;
-  border: 1px solid #ddd;
-}
-
-.crud-table th {
-  background-color: #f2f2f2;
-  text-transform: capitalize;
-}
-
-.crud-table tbody tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-.crud-table tfoot {
-  background-color: #f2f2f2;
-}
-
-.column-names {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.column-names span {
-  flex: 1;
-  text-align: center;
-}
-
-.column-names span:not(:last-child) {
-  border-right: 1px solid #ddd;
-}
-
-.crud-table tfoot td {
-  text-align: center;
-}
-
-.crud-table tfoot button {
-  padding: 4px 16px;
-  background-color: #9fa2a5;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.crud-table tfoot button:hover {
-  background-color: #636668;
-}
-
-input[type="text"] {
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
-}
-
-button {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-
-
-.crud-table-container .column-names span {
-  width: calc(100% / (var(--column-count) + 1));
-}
-
-.action-cell {
-  display: flex;
-  padding: 0 7px;
-  gap: 16px;
-} */
-
 /* Container */
 .crud-table-container {
-  width: 100%;
-  margin: 20px 0;
+  width: 100%; /* Full width */
+  margin: 20px 0; /* Margin top and bottom */
   overflow-x: auto; /* Enable horizontal scrollbar */
 }
 
 /* Table */
 .crud-table {
-  width: 100%;
-  border-collapse: collapse;
+  width: 100%; /* Full width */
+  border-collapse: collapse; /* Collapse borders */
 }
 
 .crud-table th,
 .crud-table td {
-  padding: 8px;
-  text-align: left;
-  border: 1px solid #ddd;
+  padding: 8px; /* Padding inside cells */
+  text-align: left; /* Left-align text */
+  border: 1px solid #ddd; /* Border for cells */
 }
 
 .crud-table th {
   background-color: #f2f2f2; /* Light grey for table headings */
-  color: #333;
-  font-weight: bold;
-  text-transform: capitalize;
+  color: #333; /* Text color */
+  font-weight: bold; /* Bold font for headings */
+  text-transform: capitalize; /* Capitalize heading text */
 }
 
 .crud-table tbody tr:nth-child(even) {
@@ -120,23 +32,23 @@ button:hover {
 /* Input fields */
 input[type="text"],
 select {
-  width: 100%;
-  padding: 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  font-size: 14px;
+  width: 100%; /* Full width */
+  padding: 6px; /* Padding inside inputs */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 4px; /* Rounded corners */
+  box-sizing: border-box; /* Include border and padding in width */
+  font-size: 14px; /* Font size */
 }
 
 /* Buttons */
 button {
-  padding: 4px 8px;
-  background-color: #007bff; /* Blue for buttons */
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  padding: 4px 8px; /* Padding inside buttons */
+  background-color: #007bff; /* Blue background color */
+  color: #fff; /* White text color */
+  border: none; /* No border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Cursor style */
+  transition: background-color 0.3s ease; /* Smooth transition */
 }
 
 button:hover {
@@ -145,9 +57,9 @@ button:hover {
 
 /* Action cell */
 .action-cell {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  display: flex; /* Display as flexbox */
+  align-items: center; /* Align items vertically */
+  gap: 8px; /* Gap between items */
 }
 
 /* Scrollbar */
@@ -168,18 +80,18 @@ button:hover {
 @media screen and (max-width: 768px) {
   .crud-table th,
   .crud-table td {
-    padding: 6px;
-    font-size: 12px;
+    padding: 6px; /* Reduced padding for smaller screens */
+    font-size: 12px; /* Reduced font size */
   }
 
   input[type="text"],
   select {
-    padding: 4px;
-    font-size: 12px;
+    padding: 4px; /* Reduced padding for smaller screens */
+    font-size: 12px; /* Reduced font size */
   }
 
   button {
-    padding: 2px 4px;
-    font-size: 12px;
+    padding: 2px 4px; /* Reduced padding for smaller screens */
+    font-size: 12px; /* Reduced font size */
   }
 }

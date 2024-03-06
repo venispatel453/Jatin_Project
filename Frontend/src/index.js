@@ -1,6 +1,9 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import Layout from "./Layout";
+import ReactDOM from "react-dom/client"; // Import ReactDOM for rendering
+import Layout from "./Layout"; // Import the Layout component
 
+// Create a new React root with ReactDOM.createRoot method, targeting the element with id "root"
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// Render the Layout component into the root
 root.render(<Layout />);

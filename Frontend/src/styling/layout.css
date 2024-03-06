@@ -1,31 +1,37 @@
+/* Apply box-sizing to all elements */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* Layout wrapper */
 .layout-wrapper {
-  background-color: #f5f6f8;
-  width: 100vw;
-  height: 100vh;
+  background-color: #f5f6f8; /* Set background color */
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
 }
 
+/* Sidebar container */
 .sidebar-container {
-  width: 18%;
+  width: 18%; /* Set width to 18% of the parent container */
 }
 
+/* Content container */
 .content-container {
-  width: 80%;
-  background-color: #fff;
-  height: 90vh;
+  width: 80%; /* Set width to 80% of the parent container */
+  background-color: #fff; /* Set background color */
+  height: 90vh; /* Set height to 90% of the viewport height */
 }
 
+/* Top bar container */
 .top-bar-container {
-  height: 12vh;
-  width: 100vw;
+  height: 12vh; /* Set height to 12% of the viewport height */
+  width: 100vw; /* Full viewport width */
 }
 
+/* Main content wrapper */
 .main-content-wrapper {
-  width: 100vw;
-  height: 95vh;
+  width: 100vw; /* Full viewport width */
+  height: 95vh; /* Set height to 95% of the viewport height */
 }

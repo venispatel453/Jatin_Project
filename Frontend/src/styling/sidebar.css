@@ -1,15 +1,18 @@
+/* Apply CSS reset to ensure consistent box-sizing and zero margin/padding */
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
 }
 
+/* Styles for the sidebar wrapper */
 .sidebar-wrapper {
-  background-color: #fff;
-  height: 90vh;
-  width: 100%;
+  background-color: #fff; /* Set background color to white */
+  height: 90vh; /* Set the height of the sidebar wrapper to 90% of the viewport height */
+  width: 100%; /* Make the sidebar wrapper fill the entire width of its container */
 }
 
+/* Styles for the sidebar menu box */
 .sidebar-menu-box {
-  padding: 20px;
+  padding: 20px; /* Add padding around the sidebar menu box content */
 }

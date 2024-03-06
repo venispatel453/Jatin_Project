@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; // Importing React and useState hook
 import {
   Box,
   Flex,
@@ -6,10 +6,11 @@ import {
   Tab,
   TabPanel,
   TabPanels,
-} from "monday-ui-react-core";
-import "monday-ui-react-core/tokens";
-import "../styling/project.css";
+} from "monday-ui-react-core"; // Importing necessary components from Monday UI React Core library
+import "monday-ui-react-core/tokens"; // Importing tokens for styling
+import "../styling/project.css"; // Importing CSS styles for the component
 
+// Importing individual sections/components related to the project
 import Project_Overview_Section from "./Project_Overview_Section";
 import Project_Audit_History_Section from "./Project_Audit_History_Section";
 import Project_Version_History_Section from "./Project_Version_History_Section";
@@ -20,18 +21,22 @@ import Project_Sprint_Details_Section from "./Project_Sprint_Details_Section";
 import Project_Stakeholder_Section from "./Project_Stakeholder_Section";
 import Project_Phases_Section from "./Project_Phases_Section";
 
+// Project component definition
 const Project = () => {
+  // State variable to manage the active tab
   const [activeTab, setActiveTab] = useState(0);
 
+  // Function to handle exporting data as PDF
   const handleExportButton = async () => {
     try {
+      // Making a GET request to generate PDF
       const response = await fetch("http://localhost:8000/project/genPDF");
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
   };
 
+  // Render JSX
   return (
     <Box className="project-component-wrapper">
       <Flex
@@ -41,20 +46,26 @@ const Project = () => {
         justify="Start"
         align="Start"
       >
+        {/* Container for export button */}
         <div className="export-button-container">
-          <a href="http://localhost:8000/project/genPDF">
+          {/* Export button */}
+          <a href="http://localhost:8000/project/genPDF" download>
+            {/* Anchor tag to initiate PDF download */}
             <button className="export-button" onClick={handleExportButton}>
               Export as PDF
             </button>
           </a>
         </div>
+        {/* Container for project tabs */}
         <div className="project-tab-box">
+          {/* Tab list */}
           <TabList
             tabType="stretched"
             onTabChange={(tabId) => {
               setActiveTab(tabId);
             }}
           >
+            {/* Individual tabs */}
             <Tab>Project Overview</Tab>
             <Tab>Scope and Stack</Tab>
             <Tab>Escalation Matrix</Tab>
@@ -67,33 +78,45 @@ const Project = () => {
           </TabList>
         </div>
 
+        {/* Container for project sections */}
         <Box className="project-section-box">
+          {/* Tab panels */}
           <TabPanels activeTabId={activeTab}>
+            {/* Individual tab panels */}
             <TabPanel>
+              {/* Project Overview Section */}
               <Project_Overview_Section />
             </TabPanel>
             <TabPanel>
+              {/* Scope and Stack Section */}
               <Project_Scope_and_Stack_Section />
             </TabPanel>
             <TabPanel>
+              {/* Escalation Matrix Section */}
               <Project_Escalation_Matrix_Section />
             </TabPanel>
             <TabPanel>
+              {/* Phases Section */}
               <Project_Phases_Section />
             </TabPanel>
             <TabPanel>
+              {/* Sprint Details Section */}
               <Project_Sprint_Details_Section />
             </TabPanel>
             <TabPanel>
+              {/* Risk Profiling Section */}
               <Project_Risk_Profiling_Section />
             </TabPanel>
             <TabPanel>
+              {/* Stakeholders Section */}
               <Project_Stakeholder_Section />
             </TabPanel>
             <TabPanel>
+              {/* Version History Section */}
               <Project_Version_History_Section />
             </TabPanel>
             <TabPanel>
+              {/* Audit History Section */}
               <Project_Audit_History_Section />
             </TabPanel>
           </TabPanels>
@@ -103,4 +126,4 @@ const Project = () => {
   );
 };
 
-export default Project;
+export default Project; // Exporting the Project component

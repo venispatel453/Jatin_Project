@@ -1,91 +1,105 @@
+/* Global styles for all elements */
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-size: large;
+  box-sizing: border-box; /* Box model includes border and padding in element's total width and height */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
+  font-size: large; /* Set default font size to large */
 }
 
+/* Styles for the overview section */
 .overview-div {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  display: flex; /* Make the container a flexbox */
+  flex-direction: column; /* Arrange child elements vertically */
+  gap: 10px; /* Add 10px gap between child elements */
 }
 
+/* Wrapper for the overview section */
 .overview-section-wrapper {
-  width: 80%;
-  padding: 10px;
-
-  display: flex;
-  gap: 20px;
-  flex-direction: column;
+  width: 80%; /* Set width to 80% of the parent container */
+  padding: 10px; /* Add 10px padding */
+  display: flex; /* Make the container a flexbox */
+  gap: 20px; /* Add 20px gap between child elements */
+  flex-direction: column; /* Arrange child elements vertically */
 }
 
+/* Individual overview section item */
 .overview_section_item {
-  width: 90%;
-  height: 40%;
-  padding: 15px;
+  width: 90%; /* Set width to 90% of the parent container */
+  height: 40%; /* Set height to 40% of the parent container */
+  padding: 15px; /* Add 15px padding */
 }
 
+/* Textarea field within the overview section */
 .textarea-field {
-  height: 100%;
+  height: 100%; /* Set height to 100% */
 }
 
+/* Budget section styles */
 .budget-div {
-  display: flex;
-  width: 100%;
-  gap: 20px;
+  display: flex; /* Make the container a flexbox */
+  width: 100%; /* Set width to 100% of the parent container */
+  gap: 20px; /* Add 20px gap between child elements */
 }
 
+/* Dropdown container styles */
 .dropdown-div,
 .dropdown-input-div {
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: start;
+  width: 80%; /* Set width to 80% of the parent container */
+  display: flex; /* Make the container a flexbox */
+  flex-direction: column; /* Arrange child elements vertically */
+  gap: 10px; /* Add 10px gap between child elements */
+  align-items: start; /* Align child elements to the start */
 }
 
+/* Styles for input fields within dropdown input container */
 .dropdown-input-div input {
-  padding: 7px;
-  width: 100%;
+  padding: 7px; /* Add 7px padding */
+  width: 100%; /* Set width to 100% */
 }
 
+/* Dropdown styles */
 .dropdown-div .dropdown {
-  width: 100%;
+  width: 100%; /* Set width to 100% */
 }
 
+/* Timeline section styles */
 .timeline-div {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  display: flex; /* Make the container a flexbox */
+  flex-direction: column; /* Arrange child elements vertically */
+  gap: 10px; /* Add 10px gap between child elements */
 }
 
+/* Styles for input fields within timeline section */
 .timeline-div input {
-  width: 100%;
-  padding: 7px;
+  width: 100%; /* Set width to 100% */
+  padding: 7px; /* Add 7px padding */
 }
 
+/* Textarea styles within the overview section */
 .overview-div textarea {
-  width: 100%;
-  padding: 10px;
-  height: 4.2rem;
-  resize: none;
+  width: 100%; /* Set width to 100% */
+  padding: 10px; /* Add 10px padding */
+  height: 4.2rem; /* Set height to 4.2rem */
+  resize: none; /* Disable textarea resizing */
 }
 
+/* Save button container styles */
 .save-button-container {
-  display: flex;
-  justify-content: flex-end;
-  width: 90%;
+  display: flex; /* Make the container a flexbox */
+  justify-content: flex-end; /* Align child elements to the end */
+  width: 90%; /* Set width to 90% */
 }
 
+/* Save button styles */
 .save-button {
-  border: 0.5px solid black;
-  background-color: #007bff;
-  border-radius: 5px;
-  cursor: pointer;
-  padding: 10px;
+  border: 0.5px solid black; /* Add a thin black border */
+  background-color: #007bff; /* Set background color to blue */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Set cursor to pointer */
+  padding: 10px; /* Add 10px padding */
 }
 
+/* Hover effect for save button */
 .save-button:hover {
-  background-color: #0056b3;
+  background-color: #0056b3; /* Darker blue background color on hover */
 }

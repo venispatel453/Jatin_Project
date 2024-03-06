@@ -1,45 +1,52 @@
-import React, { useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
-import "../styling/crud-table.css";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useState, useEffect } from "react"; // Importing React and necessary hooks
+import { v4 as uuidv4 } from "uuid"; // Importing UUID library for generating unique IDs
+import "../styling/crud-table.css"; // Importing CSS styles for the CRUD table component
+import { toast } from "react-toastify"; // Importing toast notifications library
+import "react-toastify/dist/ReactToastify.css"; // Importing CSS for toast notifications
 
-const CrudTable = ({
-  data,
-  invalidColumns,
-  columnType,
-  setChangedTableRows,
-  defaultValues = {},
-  setShowSaveButton,
-  sectionTab,
+// Table component definition
+const Table = ({
+  data, // Data to be displayed in the table
+  invalidColumns, // Columns to be excluded from the table
+  columnType, // Type of each column (e.g., date, dropdown)
+  setChangedTableRows, // Function to set changed table rows
+  defaultValues = {}, // Default values for new rows
+  setShowSaveButton, // Function to toggle save button visibility
+  sectionTab, // Current section tab
 }) => {
+  // State variables for rows and columns of the table
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
 
+  // useEffect hook to initialize table rows and columns when the section tab changes
   useEffect(() => {
+    // Extracting valid columns based on the data and invalidColumns prop
     const extractedColumns = Object.keys(data[0]).filter(
       (key) => !invalidColumns.includes(key)
     );
     setColumns(extractedColumns);
 
+    // Mapping data to include unique IDs and setting initial row state
     const newData = data.map((record) => ({
       ...record,
-      _id: record._id ? record._id : uuidv4(),
-      editable: false,
+      _id: record._id ? record._id : uuidv4(), // Generating unique ID for each row
+      editable: false, // Flag for editing state
     }));
     setRows(newData);
-  }, [sectionTab]);
+  }, [sectionTab]); // Dependency on sectionTab to trigger update when it changes
 
+  // Function to validate input fields in a row
   const handleInputValidation = (id) => {
     const requiredRow = rows.filter((row) => row._id === id)[0];
     for (let key in requiredRow) {
       if (requiredRow[key] === "") {
-        return true;
+        return true; // Returns true if any field is empty
       }
     }
-    return false;
+    return false; // Returns false if all fields are filled
   };
 
+  // Function to handle changes in input fields
   const handleChange = (id, key, value) => {
     const updatedRows = rows.map((row) =>
       row._id === id ? { ...row, [key]: value } : row
@@ -47,6 +54,7 @@ const CrudTable = ({
     setRows(updatedRows);
   };
 
+  // Function to handle editing of a row
   const handleEdit = (id) => {
     const updatedRows = rows.map((row) =>
       row._id === id ? { ...row, editable: true, prevState: { ...row } } : row
@@ -54,13 +62,15 @@ const CrudTable = ({
     setRows(updatedRows);
   };
 
+  // Function to format column names for display
   const handleColumnName = (column_name) => {
-    return column_name.split("_").join(" ");
+    return column_name.split("_").join(" "); // Replaces underscores with spaces
   };
 
+  // Function to handle saving changes to a row
   const handleSave = (id) => {
     if (handleInputValidation(id)) {
-      toast.error("Please Fill All Fields");
+      toast.error("Please Fill All Fields"); // Display error toast if input validation fails
       return;
     }
     const updatedRows = rows.map((row) => {
@@ -71,22 +81,24 @@ const CrudTable = ({
         setChangedTableRows((prevChangedRows) => [
           ...prevChangedRows,
           changedRow,
-        ]);
+        ]); // Adds changed row to the list of changed table rows
       }
       return row._id === id ? { ...row, editable: false } : row;
     });
 
-    setShowSaveButton(true);
-    setRows(updatedRows);
+    setShowSaveButton(true); // Show save button after making changes
+    setRows(updatedRows); // Update rows state
   };
 
+  // Function to handle canceling edits to a row
   const handleCancel = (id) => {
     const updatedRows = rows.map((row) =>
       row._id === id ? { ...row, editable: false, ...row.prevState } : row
     );
-    setRows(updatedRows);
+    setRows(updatedRows); // Update rows state
   };
 
+  // Function to handle deleting a row
   const handleDelete = (id) => {
     const updatedRows = rows.filter((row) => {
       if (row._id === id) {
@@ -94,22 +106,24 @@ const CrudTable = ({
         setChangedTableRows((prevChangedRows) => [
           ...prevChangedRows,
           changedRow,
-        ]);
+        ]); // Adds changed row to the list of changed table rows
       }
 
       return row._id !== id;
     });
-    setShowSaveButton(true);
-    setRows(updatedRows);
+    setShowSaveButton(true); // Show save button after making changes
+    setRows(updatedRows); // Update rows state
   };
 
+  // Function to handle adding a new row
   const handleAddRow = () => {
     const newRow = {};
     columns.forEach((column) => (newRow[column] = ""));
-    const newId = uuidv4();
+    const newId = uuidv4(); // Generate unique ID for the new row
     setRows([...rows, { ...newRow, _id: newId, editable: true }]);
   };
 
+  // Function to render input fields based on column type
   const renderInputField = (column_key, row) => {
     const {
       type,
@@ -149,6 +163,7 @@ const CrudTable = ({
     }
   };
 
+  // JSX for rendering the CRUD table
   return (
     <div className="crud-table-container">
       <table className="crud-table">
@@ -208,4 +223,4 @@ const CrudTable = ({
   );
 };
 
-export default CrudTable;
+export default Table; // Exporting the Table component

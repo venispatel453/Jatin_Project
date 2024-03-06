@@ -1,42 +1,49 @@
+/* Apply CSS reset to ensure consistent box-sizing and zero margin/padding */
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  margin: 0; /* Remove default margin */
+  padding: 0; /* Remove default padding */
 }
 
+/* Styles for the top bar wrapper */
 .top-bar-wrapper {
-  background-color: #fff;
-  height: 100%;
+  background-color: #fff; /* Set background color to white */
+  height: 100%; /* Make the top bar wrapper fill the entire height of its container */
 }
 
+/* Styles for the bar container, which holds the top bar content */
 .bar-container {
-  padding: 10px;
-  gap: 10px;
+  padding: 10px; /* Add padding around the bar container */
+  gap: 10px; /* Set the gap between child elements to 10px */
 }
 
+/* Styles for the logo container */
 .logo-container {
-  height: 100%;
-  width: 30%;
+  height: 100%; /* Make the logo container fill the entire height of its parent */
+  width: 30%; /* Set the width of the logo container to 30% of its parent's width */
 }
 
+/* Styles for the company name container */
 .company-name-container {
-  width: 65%;
-  font-weight: 800;
+  width: 65%; /* Set the width of the company name container to 65% of its parent's width */
+  font-weight: 800; /* Set the font weight of the company name text to bold */
 }
 
+/* Styles for the user profile container */
 .user-profile-container {
-  gap: 10px;
+  gap: 10px; /* Set the gap between child elements to 10px */
 }
 
+/* Styles for box1, box2, and box3, which are used to position top bar elements */
 .box1 {
-  width: 12%;
-  height: 100%;
+  width: 12%; /* Set the width of box1 to 12% of its parent's width */
+  height: 100%; /* Make box1 fill the entire height of its parent */
 }
 
 .box2 {
-  width: 70%;
+  width: 70%; /* Set the width of box2 to 70% of its parent's width */
 }
 
 .box3 {
-  width: 13%;
+  width: 13%; /* Set the width of box3 to 13% of its parent's width */
 }

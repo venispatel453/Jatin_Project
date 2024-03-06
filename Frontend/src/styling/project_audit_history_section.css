@@ -1,11 +1,13 @@
+/* Save button style */
 .save-button {
-  border: 0.5px solid black;
-  background-color: #007bff;
-  border-radius: 5px;
-  cursor: pointer;
-  padding: 10px;
+  border: 0.5px solid black; /* Add a thin black border */
+  background-color: #007bff; /* Set background color to blue */
+  border-radius: 5px; /* Add rounded corners */
+  cursor: pointer; /* Set cursor to pointer */
+  padding: 10px; /* Add padding */
 }
 
+/* Hover effect for save button */
 .save-button:hover {
-  background-color: #0056b3;
+  background-color: #0056b3; /* Darker blue background color on hover */
 }

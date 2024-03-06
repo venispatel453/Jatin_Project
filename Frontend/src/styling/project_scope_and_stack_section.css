@@ -1,52 +1,61 @@
+/* Resetting default padding, margin, and box-sizing for all elements */
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+  padding: 0; /* Reset padding */
+  margin: 0; /* Reset margin */
+  box-sizing: border-box; /* Use border-box box-sizing model */
 }
 
+/* Styles for the scope and stack wrapper */
 .scope-and-stack-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  justify-content: space-around;
+  display: flex; /* Use flexbox layout */
+  flex-direction: column; /* Arrange children in a column */
+  gap: 20px; /* Set gap between child elements */
+  justify-content: space-around; /* Distribute space evenly between children */
 }
 
+/* Styles for the stack and scope wrapper */
 .stack-wrapper,
 .scope-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  display: flex; /* Use flexbox layout */
+  flex-direction: column; /* Arrange children in a column */
+  gap: 10px; /* Set gap between child elements */
 }
 
+/* Styles for the dropdown inside the stack wrapper */
 .stack-wrapper .dropdown {
-  width: 50%;
+  width: 50%; /* Set width of the dropdown to 50% of its container */
 }
 
+/* Styles for the scope wrapper */
 .scope-wrapper {
-  width: 100%;
+  width: 100%; /* Set width of the scope wrapper to 100% */
 }
 
+/* Styles for the textarea inside the scope wrapper */
 .scope-wrapper textarea {
-  width: 50%;
-  padding: 10px;
-  height: 4.2rem;
-  resize: none;
+  width: 50%; /* Set width of the textarea to 50% of its container */
+  padding: 10px; /* Add padding to the textarea */
+  height: 4.2rem; /* Set fixed height for the textarea */
+  resize: none; /* Disable resizing of the textarea */
 }
 
+/* Styles for the save button container */
 .save-button-container {
-  display: flex;
-  justify-content: flex-end;
-  width: 90%;
+  display: flex; /* Use flexbox layout */
+  justify-content: flex-end; /* Align children to the end of the container */
+  width: 90%; /* Set width of the container to 90% */
 }
 
+/* Styles for the save button */
 .save-button {
-  border: 0.5px solid black;
-  background-color: #007bff;
-  border-radius: 5px;
-  cursor: pointer;
-  padding: 10px;
+  border: 0.5px solid black; /* Add a 0.5px solid black border */
+  background-color: #007bff; /* Set the background color to a shade of blue (#007bff) */
+  border-radius: 5px; /* Apply a border radius of 5px to create rounded corners */
+  cursor: pointer; /* Set the cursor to a pointer to indicate interactivity */
+  padding: 10px; /* Add 10px of padding inside the button */
 }
 
+/* Hover effect for the save button */
 .save-button:hover {
-  background-color: #0056b3;
+  background-color: #0056b3; /* Change the background color to a darker shade of blue (#0056b3) on hover */
 }
