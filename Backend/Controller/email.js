@@ -1,5 +1,4 @@
 const nodemailer = require("nodemailer");
-const stakeholders = require("../Model/Stakeholders");
 const { formatColumnName } = require("../Utilities/utility.js");
 
 const generateEmailTemplate = (stakeholder_name, audit_history) => {
@@ -14,7 +13,6 @@ const generateEmailTemplate = (stakeholder_name, audit_history) => {
     <body>
     
     <h2>Hello ${stakeholder_name},</h2>
-    <br />
     <p>
       Please note that audit has been completed and here are the updated audit records:
     </p>
@@ -44,23 +42,20 @@ const generateEmailTemplate = (stakeholder_name, audit_history) => {
     
     </Table>
     <br />
-    <h4>Thanks and Regards,</h4>
-    <h4>Promact Infotech Pvt Ltd</h4>
+    <h3>Thanks and Regards,</h3>
+    <h3>Promact Infotech Pvt Ltd</h3>
 
     </body>
     
     </html>
   
   `;
-  console.log(email_template);
+
   return email_template;
 };
 
 const sendMail = async (req, res) => {
   try {
-    console.log("here in send mail");
-    //generateEmailTemplate("jatin", req.body);
-    console.log(req.body);
     const response = await fetch("http:localhost:8000/project/stakeholders");
     const { data } = await response.json();
 
@@ -68,34 +63,30 @@ const sendMail = async (req, res) => {
       service: "gmail",
       host: "smtp.gmail.com",
       port: 587,
-      secure: false, // Use `true` for port 465, `false` for all other ports
+      secure: false,
       auth: {
         user: "no.reply.domain11@gmail.com",
         pass: "zdki kqhb kkzq uewu",
       },
     });
 
-    // async..await is not allowed in global scope, must use a wrapper
     async function main() {
-      // send mail with defined transport object
       data.map(async (stakeholder) => {
         const info = await transporter.sendMail({
           from: {
             name: "Project Update",
             address: "no.reply.domain11@gmail.com",
-          }, // sender address
-          to: `${stakeholder.contact}`, // list of receivers
-          subject: "Audit History of Project has been Updated", // Subject line
-          html: generateEmailTemplate(stakeholder.name, req.body), // html body
+          },
+          to: `${stakeholder.contact}`,
+          subject: "Audit History of Project has been Updated",
+          html: generateEmailTemplate(stakeholder.name, req.body),
         });
-
-        console.log("Message sent: %s", info.messageId);
       });
     }
     main().catch(console.error);
     res.json({ status: "success", msg: "Emails sent successfully" });
   } catch (error) {
-    console.log(error);
+    res.json({ status: "error", msg: "Some Error Occurred" });
   }
 };
 

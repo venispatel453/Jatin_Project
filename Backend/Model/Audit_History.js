@@ -35,14 +35,3 @@ const Audit_History_Schema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Audit_History", Audit_History_Schema);
-
-
-// const default_audit_history={
-//   project_id:"",
-//   date_of_audit:"",
-//   reviewed_by:"",
-//   status:"",
-//   reviewed_section:"",
-//   comment:"",
-//   action_item:""
-// }

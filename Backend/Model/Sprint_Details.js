@@ -31,13 +31,3 @@ const Sprint_Details_Schema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Sprint_Details", Sprint_Details_Schema);
-
-
-// const default_sprint_details={
-//   project_id:"",
-//   sprint:"",
-//   start_date:"",
-//   end_date:"",
-//   status:"",
-//   comments:""
-// }

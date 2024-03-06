@@ -27,11 +27,3 @@ const Escalation_Matrix_Schema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Escalation_Matrix", Escalation_Matrix_Schema);
-
-// const default_escalation_matrix={
-//   project_id:"",
-//   level:"",
-//   escalation_type:"",
-//   member:"",
-//   designation:""
-// }

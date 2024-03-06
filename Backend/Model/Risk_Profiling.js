@@ -39,14 +39,3 @@ const Risk_Profiling_Schema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Risk_Profiling", Risk_Profiling_Schema);
-
-// const default_risk_profiling = {
-//   project_id: "",
-//   risk_type: "",
-//   description: "",
-//   severity: "",
-//   impact: "",
-//   remedial_steps: "",
-//   status: "",
-//   closure_date: "",
-// };

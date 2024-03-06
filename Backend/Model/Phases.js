@@ -39,14 +39,3 @@ const Phases_Schema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Phases", Phases_Schema);
-
-// const defaultPhase={
-//   project_id:"",
-//   title:"",
-//   start_date:"",
-//   completion_date:"",
-//   approval_date:"",
-//   status:"",
-//   revised_completion_date:"",
-//   comments:""
-// }

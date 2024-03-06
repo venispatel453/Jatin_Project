@@ -23,11 +23,3 @@ const Stakeholders_Schema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Stakeholders", Stakeholders_Schema);
-
-
-// const default_stakeholders={
-//   project_id:"",
-//   title:"",
-//   name:"",
-//   contact:""
-// }

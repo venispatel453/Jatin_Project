@@ -43,15 +43,3 @@ const Version_History_Schema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Version_History", Version_History_Schema);
-
-// const default_version_history = {
-//   project_id: "",
-//   version: "",
-//   type: "",
-//   change: "",
-//   change_reason: "",
-//   created_by: "",
-//   revision_date: "",
-//   approval_date: "",
-//   approved_by: "",
-// };

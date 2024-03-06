@@ -13,7 +13,6 @@ const getProjectDetails = async (req, res) => {
     let response = await project.find();
     res.json({ status: "success", data: response });
   } catch (error) {
-    console.log(error);
     res.json({ status: "error", msg: error });
   }
 };
@@ -44,7 +43,6 @@ const getVersionHistory = async (req, res) => {
       data = reorderArrayOfObject(data, default_version_history);
     }
 
-    console.log(data);
     res.json({ status: "success", data: data });
   } catch (error) {
     res.json({ status: "error", msg: error });
@@ -117,17 +115,16 @@ const getEscalationMatrix = async (req, res) => {
         __v: "",
       },
     ];
-    //console.log("in get escalation matrix");
+
     let data = await escalation_matrix.find();
     if (data.length == 0) {
       data = default_escalation_matrix;
     } else {
       data = reorderArrayOfObject(data, default_escalation_matrix);
     }
-    console.log(data);
+
     res.json({ status: "success", data: data });
   } catch (error) {
-    console.log(error);
     res.json({ status: "error", msg: error });
   }
 };
@@ -178,9 +175,8 @@ const getPhases = async (req, res) => {
         __v: "",
       },
     ];
-    console.log("here");
+
     let data = await phases.find();
-    console.log(data);
 
     if (data.length == 0) {
       data = defaultPhase;
@@ -189,7 +185,6 @@ const getPhases = async (req, res) => {
     }
     res.json({ status: "success", data: data });
   } catch (error) {
-    console.log(error);
     res.json({ status: "error", msg: error });
   }
 };
@@ -224,19 +219,15 @@ const getSprintDetails = async (req, res) => {
 
 const alterProjectDetails = async (req, res) => {
   try {
-    console.log("here is the body", req.body);
     const { projectDetails } = req.body;
     let response = await project.updateOne(
       { _id: projectDetails._id },
       { $set: projectDetails }
     );
 
-    console.log("updated");
-
-    res.json({ status: "success", msg: "details updated successfully" });
+    res.json({ status: "success", msg: "Details Updated Successfully" });
   } catch (error) {
-    console.log(error);
-    res.json({ msg: "some error" });
+    res.json({ status: "error", msg: "Some Error Occurred" });
   }
 };
 
@@ -248,8 +239,6 @@ const alterVersionHistory = async (req, res) => {
     const deletedRecords = req.body.filter((record) => {
       return record.action === "delete";
     });
-
-    //console.log(updatedRecords, deletedRecords);
 
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
@@ -275,7 +264,6 @@ const alterVersionHistory = async (req, res) => {
     );
     res.json({ status: "success", msg: "Data updated successfully" });
   } catch (error) {
-    console.log(error);
     res.json({ status: "error", msg: error });
   }
 };
@@ -288,8 +276,6 @@ const alterAuditHistory = async (req, res) => {
     const deletedRecords = req.body.filter((record) => {
       return record.action === "delete";
     });
-
-    //console.log(updatedRecords, deletedRecords);
 
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
@@ -315,22 +301,18 @@ const alterAuditHistory = async (req, res) => {
     );
     res.json({ status: "success", msg: "Data updated successfully" });
   } catch (error) {
-    console.log(error);
     res.json({ status: "error", msg: error });
   }
 };
 
 const alterStakeholders = async (req, res) => {
   try {
-    //console.log("here", req.body);
     const updatedRecords = req.body.filter((record) => {
       return record.action === "added/updated";
     });
     const deletedRecords = req.body.filter((record) => {
       return record.action === "delete";
     });
-
-    //console.log(updatedRecords, deletedRecords);
 
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
@@ -355,25 +337,20 @@ const alterStakeholders = async (req, res) => {
       deleteRecordOperations
     );
 
-    //console.log(updateRecordResult, deleteRecordResult);
     res.json({ status: "success", msg: "Data updated successfully" });
   } catch (error) {
-    console.log(error);
     res.json({ status: "error", msg: error });
   }
 };
 
 const alterEscalationMatrix = async (req, res) => {
   try {
-    console.log("here", req.body);
     const updatedRecords = req.body.filter((record) => {
       return record.action === "added/updated";
     });
     const deletedRecords = req.body.filter((record) => {
       return record.action === "delete";
     });
-
-    //console.log(updatedRecords, deletedRecords);
 
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
@@ -399,7 +376,6 @@ const alterEscalationMatrix = async (req, res) => {
     );
     res.json({ status: "success", msg: "Data updated successfully" });
   } catch (error) {
-    console.log(error);
     res.json({ status: "error", msg: error });
   }
 };
@@ -413,8 +389,6 @@ const alterRiskProfiling = async (req, res) => {
       return record.action === "delete";
     });
 
-    //console.log(updatedRecords, deletedRecords);
-
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
         filter: { _id: obj._id },
@@ -439,7 +413,6 @@ const alterRiskProfiling = async (req, res) => {
     );
     res.json({ status: "success", msg: "Data updated successfully" });
   } catch (error) {
-    console.log(error);
     res.json({ status: "error", msg: error });
   }
 };
@@ -453,8 +426,6 @@ const alterPhases = async (req, res) => {
       return record.action === "delete";
     });
 
-    //console.log(updatedRecords, deletedRecords);
-
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
         filter: { _id: obj._id },
@@ -479,7 +450,6 @@ const alterPhases = async (req, res) => {
     );
     res.json({ status: "success", msg: "Data updated successfully" });
   } catch (error) {
-    console.log(error);
     res.json({ status: "error", msg: error });
   }
 };
@@ -492,8 +462,6 @@ const alterSprintDetails = async (req, res) => {
     const deletedRecords = req.body.filter((record) => {
       return record.action === "delete";
     });
-
-    //console.log(updatedRecords, deletedRecords);
 
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
@@ -519,7 +487,6 @@ const alterSprintDetails = async (req, res) => {
     );
     res.json({ status: "success", msg: "Data updated successfully" });
   } catch (error) {
-    console.log(error);
     res.json({ status: "error", msg: error });
   }
 };
