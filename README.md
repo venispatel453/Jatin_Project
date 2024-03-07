@@ -48,7 +48,10 @@ cd Frontend
 npm install
 ```
 
-* Step 3: run below command to start the frontend server:
+
+* Step 3: In Frontend folder you will find one file named as **.env.sample**, rename the file to **.env**. This step is necessary as all important URL and API key used by the application are stored in this file. You can also use your own values in the file for altering the behaviour of application.
+
+* Step 4: run below command to start the frontend server:
 
 ```
 npm start
