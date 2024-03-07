@@ -13,12 +13,14 @@ const Project_Risk_Profiling_Section = () => {
   const [changedTableRows, setChangedTableRows] = useState([]); // State to manage changed table rows
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control the visibility of the save button
 
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
       // Sending changed table rows to the server for saving
       const response = await axios.post(
-        "http://localhost:8000/project/risk_profiling",
+        `${BASE_URL}/project/risk_profiling`,
         [...changedTableRows]
       );
       // Displaying success message using toast notification
@@ -35,7 +37,7 @@ const Project_Risk_Profiling_Section = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/project/risk_profiling"
+        `${BASE_URL}/project/risk_profiling`
       );
       const { data } = await response.json();
       // Setting fetched risk profiling data to state variable

@@ -12,12 +12,14 @@ const Project_Escalation_Matrix_Section = () => {
   const [changedTableRows, setChangedTableRows] = useState([]); // State for storing changed table rows
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control the visibility of the save button
 
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
       // Sending changed table rows data to the server for saving
       const response = await axios.post(
-        "http://localhost:8000/project/escalation_matrix",
+        `${BASE_URL}/project/escalation_matrix`,
         [...changedTableRows]
       );
       // Displaying success message using toast notification
@@ -36,7 +38,7 @@ const Project_Escalation_Matrix_Section = () => {
     try {
       // Fetching escalation matrix data from the server
       const response = await fetch(
-        "http://localhost:8000/project/escalation_matrix"
+        `${BASE_URL}/project/escalation_matrix`
       );
       const { data } = await response.json();
       // Setting the fetched escalation matrix data to state variable

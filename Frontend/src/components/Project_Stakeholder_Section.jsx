@@ -13,14 +13,15 @@ const Project_Stakeholder_Section = () => {
   const [changedTableRows, setChangedTableRows] = useState([]); // State to track changed table rows
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control visibility of save button
 
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
       // Sending changed table rows to the server for saving
-      const response = await axios.post(
-        "http://localhost:8000/project/stakeholders",
-        [...changedTableRows]
-      );
+      const response = await axios.post(`${BASE_URL}/project/stakeholders`, [
+        ...changedTableRows,
+      ]);
       // Displaying success message using toast notification
       toast.success("Data Saved Successfully");
       setShowSaveButton(false); // Hiding the save button after successful submission
@@ -35,9 +36,7 @@ const Project_Stakeholder_Section = () => {
   const fetchData = async () => {
     try {
       // Making a GET request to fetch stakeholders data
-      const response = await fetch(
-        "http://localhost:8000/project/stakeholders"
-      );
+      const response = await fetch(`${BASE_URL}/project/stakeholders`);
       const { data } = await response.json(); // Parsing response JSON
       // Setting fetched stakeholders data to state variable
       setStakeholders(data);

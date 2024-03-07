@@ -15,6 +15,8 @@ const Project_Overview_Section = () => {
     timeline: "",
   });
 
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
   // Function to validate input field
   const handleInputFieldValidation = () => {
     for (const key in projectDetails) {
@@ -34,7 +36,7 @@ const Project_Overview_Section = () => {
       }
       // Sending project details to the server for saving
       const { data } = await axios.post(
-        "http://localhost:8000/project/project_details",
+        `${BASE_URL}/project/project_details`,
         {
           projectDetails,
         }
@@ -68,7 +70,7 @@ const Project_Overview_Section = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/project/project_details"
+        `${BASE_URL}/project/project_details`
       );
 
       const { data } = await response.json();

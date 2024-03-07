@@ -11,6 +11,8 @@ const Scope_and_Stack_Section = () => {
   const [projectDetails, setProjectDetails] = useState({}); // State to manage project details
   const [changesMade, setChangesMade] = useState(false); // State to track changes made to project details
 
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
   // Function to validate input fields
   const handleInputFieldValidation = () => {
     for (const key in projectDetails) {
@@ -30,7 +32,7 @@ const Scope_and_Stack_Section = () => {
       }
       // Sending project details to the server for saving
       const { data } = await axios.post(
-        "http://localhost:8000/project/project_details",
+        `${BASE_URL}/project/project_details`,
         {
           projectDetails,
         }
@@ -70,7 +72,7 @@ const Scope_and_Stack_Section = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/project/project_details"
+        `${BASE_URL}/project/project_details`
       );
       const { data } = await response.json();
       // Setting fetched project details to state variable
