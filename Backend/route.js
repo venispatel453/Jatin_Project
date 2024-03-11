@@ -19,16 +19,19 @@ const {
   alterSprintDetails,
   alterStakeholders,
   alterVersionHistory,
-  getAllProjects,
+  getUserProjects,
+  addProject,
 } = require("./Controller/Project.js");
+
+const { addUser } = require("./Controller/users.js");
 
 const { generatePDF } = require("./Controller/genPDF.js"); // Importing function for generating PDF files
 const { sendMail } = require("./Controller/email.js"); // Importing function for sending emails
 
 // Routes for handling project-related data
 
-router.route("/projects").get(getAllProjects);
-
+router.route("/projects").get(getUserProjects);
+router.route("/addProject").post(addProject);
 // Route for fetching or altering project details
 router
   .route("/project/project_details")
@@ -82,6 +85,8 @@ router.route("/project/sendEmail").post(sendMail);
 
 // Route for generating PDF files
 router.route("/project/genPDF").get(generatePDF);
+
+router.route("/addUser").post(addUser);
 
 // Exporting the router module
 module.exports = router;
