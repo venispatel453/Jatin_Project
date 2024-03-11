@@ -9,13 +9,35 @@ const escalation_matrix = require("../Model/Escalation_Matrix"); // Importing Es
 const risk_profiling = require("../Model/Risk_Profiling"); // Importing Risk Profiling model
 const { reorderArrayOfObject } = require("../Utilities/utility.js"); // Importing utility function for reordering arrays of objects
 
-const getAllProjects = async () => {
+const getUserProjects = async (req, res) => {
   try {
-    const response = project.find();
+    const { id: user_id, role } = req.query;
+    console.log(req.query);
+    let response = [];
+    if (role === "Admin" || role === "Auditor") {
+      response = await project.find({});
+    } else {
+      response = await project.find({
+        associated_members: { $in: user_id },
+      });
+    }
+    console.log(response);
     res.json({ status: "success", data: response });
   } catch (error) {
     console.log(error);
     res.json({ status: "error" });
+  }
+};
+
+const addProject = async (req, res) => {
+  try {
+    //const { _id, name, associated_members } = req.body;
+    const response = await project.create({ ...req.body });
+    console.log(response);
+    res.json({ status: "success" });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "success" });
   }
 };
 
@@ -596,5 +618,6 @@ module.exports = {
   alterRiskProfiling, // Alters risk profiling data
   alterEscalationMatrix, // Alters escalation matrix data
   alterStakeholders, // Alters stakeholders data
-  getAllProjects,
+  getUserProjects,
+  addProject,
 };
