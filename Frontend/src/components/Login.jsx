@@ -1,62 +1,25 @@
-import React, { useState, useContext } from "react";
-import AuthContext from "../context/AuthProvider";
-import axios from "axios";
+import React, { useEffect } from "react";
+import useAuth from "../hooks/useAuth";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const { setAuth } = useContext(AuthContext);
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const { auth, setAuth } = useAuth();
+  const { loginWithRedirect, isAuthenticated, user } = useAuth0();
+  const location = useLocation();
+  const from = "/";
 
-  const handleSubmit = async (e) => {
-    try {
-      e.preventDefault();
-      const response = await axios.post(
-        `${BASE_URL}/login`,
-        {
-          email,
-          password,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      const { data } = response;
-
-      //tokens placeholder
-      //roles placeholder
-
-      // setAuth({email,password,tokens,roles})
-      setEmail("");
-      setPassword("");
-    } catch (error) {
-      console.log(error);
-    }
+  const handleLogin = async () => {
+    loginWithRedirect();
   };
 
   return (
-    <div>
-      <h1>Sign In</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email:</label>
-        <input
-          type="text"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button>Sign In</button>
-      </form>
-    </div>
+    <>
+      {isAuthenticated && <Navigate to="/" />}
+      {!isAuthenticated && (
+        <button onClick={() => handleLogin()}>log in </button>
+      )}
+    </>
   );
 };
 

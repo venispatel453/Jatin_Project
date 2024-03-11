@@ -6,6 +6,7 @@ import "./styling/layout.css"; // Importing the layout styling
 import { Box, Flex } from "monday-ui-react-core"; // Importing Box and Flex components from monday-ui-react-core library
 import { ToastContainer } from "react-toastify"; // Importing ToastContainer component from react-toastify library
 import "react-toastify/dist/ReactToastify.css"; // Importing Toastify CSS
+import { Outlet } from "react-router-dom";
 
 const Layout = () => {
   return (
@@ -44,7 +45,7 @@ const Layout = () => {
             </Box>
             {/* Project component for displaying the main project content */}
             <Box className="content-container">
-              <Project />
+              <Outlet />
             </Box>
           </Flex>
         </Box>

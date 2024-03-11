@@ -19,12 +19,15 @@ const {
   alterSprintDetails,
   alterStakeholders,
   alterVersionHistory,
+  getAllProjects,
 } = require("./Controller/Project.js");
 
 const { generatePDF } = require("./Controller/genPDF.js"); // Importing function for generating PDF files
 const { sendMail } = require("./Controller/email.js"); // Importing function for sending emails
 
 // Routes for handling project-related data
+
+router.route("/projects").get(getAllProjects);
 
 // Route for fetching or altering project details
 router

@@ -9,6 +9,16 @@ const escalation_matrix = require("../Model/Escalation_Matrix"); // Importing Es
 const risk_profiling = require("../Model/Risk_Profiling"); // Importing Risk Profiling model
 const { reorderArrayOfObject } = require("../Utilities/utility.js"); // Importing utility function for reordering arrays of objects
 
+const getAllProjects = async () => {
+  try {
+    const response = project.find();
+    res.json({ status: "success", data: response });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error" });
+  }
+};
+
 // Function to fetch project details
 const getProjectDetails = async (req, res) => {
   try {
@@ -586,4 +596,5 @@ module.exports = {
   alterRiskProfiling, // Alters risk profiling data
   alterEscalationMatrix, // Alters escalation matrix data
   alterStakeholders, // Alters stakeholders data
+  getAllProjects,
 };

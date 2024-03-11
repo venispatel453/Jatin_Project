@@ -3,6 +3,12 @@ const mongoose = require("mongoose");
 
 // Defining the schema for the Project collection
 const ProjectSchema = new mongoose.Schema({
+  name: {
+    type: String,
+  },
+  associated_members: {
+    type: Array,
+  },
   // Overview of the project
   overview: {
     type: String,
