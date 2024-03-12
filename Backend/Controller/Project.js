@@ -17,9 +17,13 @@ const getUserProjects = async (req, res) => {
     if (role === "Admin" || role === "Auditor") {
       response = await project.find({});
     } else {
+      console.log(typeof user_id);
       response = await project.find({
-        associated_members: { $in: user_id },
-      });
+        $or: [
+          { "associated_members.manager._id": user_id },
+          { "associated_members.clients._id": user_id }
+        ]
+      })
     }
     console.log(response);
     res.json({ status: "success", data: response });
@@ -28,6 +32,15 @@ const getUserProjects = async (req, res) => {
     res.json({ status: "error" });
   }
 };
+
+// $or: [
+//   { "associated_members.manager._id": user_id },
+//   {
+//     "associated_members.clients": {
+//       $elemMatch: { _id: user_id },
+//     },
+//   },
+// ],
 
 const addProject = async (req, res) => {
   try {

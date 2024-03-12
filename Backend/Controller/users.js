@@ -11,4 +11,12 @@ const addUser = async (req, res) => {
   }
 };
 
-module.exports = { addUser };
+const getUsers = async (req, res) => {
+  try {
+    const response = await Users.find({ designation: "Project Manager" });
+    console.log(response);
+    res.json({ status: "success", data: response });
+  } catch (error) {}
+};
+
+module.exports = { addUser, getUsers };

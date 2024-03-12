@@ -25,7 +25,10 @@ const Home = () => {
 
   return (
     <>
-      <NavigationTab data={associatedProjects} />
+      {console.log(associatedProjects)}
+      {associatedProjects?.length > 0 && (
+        <NavigationTab data={associatedProjects} />
+      )}
     </>
   );
 };

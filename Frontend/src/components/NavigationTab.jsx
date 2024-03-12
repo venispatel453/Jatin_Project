@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import "../styling/navigation-tab.css"; // Import CSS file for styling
+import { useNavigate } from "react-router-dom";
 
-const generateTable = (data) => {
-  const columns = ["name", "manager", "status"];
-  console.log(data);
+const generateTable = (data, navigate) => {
+  const columns = ["start_date", "name", "manager", "status"];
+
   return (
-    <table>
+    <table className="data-table">
       <thead>
         <tr>
           {columns.map((column, index) => (
@@ -18,7 +19,25 @@ const generateTable = (data) => {
           return (
             <tr key={index}>
               {columns.map((column, index) => {
-                return <td key={index}>{row[column]}</td>;
+                if (column === "manager") {
+                  return (
+                    <td key={index}>
+                      {row["associated_members"][column].name}
+                    </td>
+                  );
+                } else if (column === "name") {
+                  return (
+                    <td
+                      key={index}
+                      onClick={() => navigate(`/project/${row._id}`)}
+                      className="name-cell"
+                    >
+                      {row[column]}
+                    </td>
+                  );
+                } else {
+                  return <td key={index}>{row[column]}</td>;
+                }
               })}
             </tr>
           );
@@ -30,7 +49,7 @@ const generateTable = (data) => {
 
 function NavigationTab({ data }) {
   const [activeTab, setActiveTab] = useState("all");
-
+  const navigate = useNavigate();
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
   };
@@ -54,10 +73,12 @@ function NavigationTab({ data }) {
             Completed
           </li>
           <li
-            className={activeTab === "pending" ? "tab-item active" : "tab-item"}
-            onClick={() => handleTabClick("pending")}
+            className={
+              activeTab === "on-going" ? "tab-item active" : "tab-item"
+            }
+            onClick={() => handleTabClick("on-going")}
           >
-            Pending
+            On-Going
           </li>
           <li
             className={activeTab === "hold" ? "tab-item active" : "tab-item"}
@@ -69,10 +90,31 @@ function NavigationTab({ data }) {
       </nav>
       <div className="tab-content">
         {/* Content corresponding to the active tab */}
-        {activeTab === "all" && <>{generateTable(data)}</>}
-        {activeTab === "completed" && <div>completed</div>}
-        {activeTab === "pending" && <div>pending</div>}
-        {activeTab === "hold" && <div>hold</div>}
+        {activeTab === "all" && <>{generateTable(data, navigate)}</>}
+        {activeTab === "completed" && (
+          <>
+            {generateTable(
+              data.filter((row) => row.status.toLowerCase() === "completed"),
+              navigate
+            )}
+          </>
+        )}
+        {activeTab === "on-going" && (
+          <>
+            {generateTable(
+              data.filter((row) => row.status.toLowerCase() === "on-going"),
+              navigate
+            )}
+          </>
+        )}
+        {activeTab === "hold" && (
+          <>
+            {generateTable(
+              data.filter((row) => row.status.toLowerCase() === "hold"),
+              navigate
+            )}
+          </>
+        )}
       </div>
     </div>
   );

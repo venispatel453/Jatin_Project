@@ -10,7 +10,7 @@ const ProjectSchema = new mongoose.Schema({
     type: String,
   },
   associated_members: {
-    type: Array,
+    type: Object,
   },
   // Overview of the project
   overview: {
@@ -30,6 +30,12 @@ const ProjectSchema = new mongoose.Schema({
   },
   // Scope of the project
   scope: {
+    type: String,
+  },
+  start_date: {
+    type: String,
+  },
+  status: {
     type: String,
   },
 });

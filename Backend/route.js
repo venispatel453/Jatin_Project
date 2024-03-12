@@ -23,7 +23,7 @@ const {
   addProject,
 } = require("./Controller/Project.js");
 
-const { addUser } = require("./Controller/users.js");
+const { addUser, getUsers } = require("./Controller/users.js");
 
 const { generatePDF } = require("./Controller/genPDF.js"); // Importing function for generating PDF files
 const { sendMail } = require("./Controller/email.js"); // Importing function for sending emails
@@ -87,6 +87,7 @@ router.route("/project/sendEmail").post(sendMail);
 router.route("/project/genPDF").get(generatePDF);
 
 router.route("/addUser").post(addUser);
+router.route("/getUsers").get(getUsers);
 
 // Exporting the router module
 module.exports = router;

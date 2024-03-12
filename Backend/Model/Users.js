@@ -1,22 +1,20 @@
-// Importing the mongoose library
 const mongoose = require("mongoose");
 
-// Defining the schema for the Stakeholders collection
 const Users_Schema = new mongoose.Schema({
-  // Unique identifier for the stakeholder record
   _id: {
     type: "String",
   },
-  // Title or role of the stakeholder
+
   name: {
     type: String,
-    // Validation rule: Title is required
     required: [true, "please provide title"],
   },
-  // Name of the stakeholder
-  designation: {
+  email: {
     type: String,
-    // Validation rule: Name is required
+  },
+
+  role: {
+    type: String,
     required: [true, "please provide name"],
   },
 });
