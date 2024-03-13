@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 // Defining the schema for the Stakeholders collection
 const Stakeholders_Schema = new mongoose.Schema({
   // Unique identifier for the stakeholder record
+  project_id: {
+    type: String,
+  },
   _id: {
     type: "String",
   },

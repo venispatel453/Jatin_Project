@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 // Defining the schema for the Risk_Profiling collection
 const Risk_Profiling_Schema = new mongoose.Schema({
   // Unique identifier for the risk profiling record
+  project_id: {
+    type: String,
+  },
   _id: {
     type: "String",
   },

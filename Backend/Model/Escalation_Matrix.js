@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 // Defining the schema for the Escalation Matrix collection
 const Escalation_Matrix_Schema = new mongoose.Schema({
   // Unique identifier for the escalation matrix document
+  project_id: {
+    type: String,
+  },
   _id: {
     type: "String",
   },

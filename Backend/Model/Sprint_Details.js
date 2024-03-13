@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 // Defining the schema for the Sprint_Details collection
 const Sprint_Details_Schema = new mongoose.Schema({
   // Unique identifier for the sprint details record
+  project_id: {
+    type: String,
+  },
   _id: {
     type: "String",
   },

@@ -8,35 +8,43 @@ const ProjectSchema = new mongoose.Schema({
   },
   name: {
     type: String,
+    default: "",
   },
   associated_members: {
     type: Object,
+    default: { manager: {}, clients: [] },
   },
   // Overview of the project
   overview: {
     type: String,
+    default: "",
   },
   // Budget details of the project
   budget: {
     type: Object,
+    default: { type: "", type_value: "" },
   },
   // Timeline information of the project
   timeline: {
     type: String,
+    default: "",
   },
   // Technology stack used in the project
   stack: {
     type: Object,
+    default: "",
   },
   // Scope of the project
   scope: {
     type: String,
+    default: "",
   },
   start_date: {
     type: String,
   },
   status: {
     type: String,
+    default: "On-going",
   },
 });
 

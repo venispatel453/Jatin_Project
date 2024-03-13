@@ -4,8 +4,11 @@ const mongoose = require("mongoose");
 // Defining the schema for the Audit History collection
 const Audit_History_Schema = new mongoose.Schema({
   // Unique identifier for the audit history document
+  project_id: {
+    type: String,
+  },
   _id: {
-    type: "String",
+    type: String,
   },
   // Date of the audit
   date_of_audit: {

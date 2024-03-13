@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 // Defining the schema for the Phases collection
 const Phases_Schema = new mongoose.Schema({
   // Unique identifier for the phase document
+  project_id: {
+    type: String,
+  },
   _id: {
     type: "String",
   },

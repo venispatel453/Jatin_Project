@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 // Defining the schema for the Version_History collection
 const Version_History_Schema = new mongoose.Schema({
   // Unique identifier for the version history record
+  project_id: {
+    type: String,
+  },
   _id: {
     type: "String",
   },
