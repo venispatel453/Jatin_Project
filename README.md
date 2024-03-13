@@ -1,6 +1,6 @@
 # Setup Guide
 
-Follow the below steps for setting up the application and using Customer Success Portal:
+Follow below steps for setting up the application and using Customer Success Portal:
 
 ## Local Setup ##
 
