@@ -108,4 +108,41 @@ const sendMail = async (req, res) => {
   }
 };
 
-module.exports = { sendMail };
+const sendInviteEmail = (req, res) => {
+  try {
+    const { email, password } = req.body;
+    console.log(req.body);
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.APP_EMAIL_USER,
+        pass: process.env.APP_EMAIL_PASS,
+      },
+    });
+
+    async function main() {
+      const info = await transporter.sendMail({
+        // Email details
+        from: {
+          name: "Login Credentials for Customer Success",
+          address: "no.reply.domain11@gmail.com",
+        },
+        to: `${email}`,
+        subject: "Credentials for Customer Sucess",
+        // Generating email body using generateEmailTemplate function
+        html: `email:${email} password:${password}`,
+      });
+    }
+
+    main().catch(console.error);
+    res.json({ status: "success" });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error" });
+  }
+};
+
+module.exports = { sendMail, sendInviteEmail };
