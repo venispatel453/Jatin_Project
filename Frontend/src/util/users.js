@@ -89,7 +89,7 @@ export const fetchUsersByRole = async (role) => {
   }
 };
 
-export const updateRoleOfUser = async (user_id) => {
+export const fetchRoleOfUser = async (user_id) => {
   try {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -102,7 +102,7 @@ export const updateRoleOfUser = async (user_id) => {
     };
 
     const response = await fetch(
-      "https://dev-34crl0ebsqxu7bk8.us.auth0.com/api/v2/users/auth0%7C2ea3980c-56d7-4e36-9dac-62c7db829d98/roles",
+      `https://dev-34crl0ebsqxu7bk8.us.auth0.com/api/v2/users/${user_id}/roles`,
       requestOptions
     );
     const data = await response.json();
