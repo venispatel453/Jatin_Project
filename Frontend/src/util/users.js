@@ -3,6 +3,12 @@ import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 const MGMT_TOKEN = process.env.REACT_APP_MGMT_TOKEN;
+const available_roles = {
+  Admin: "rol_z4VmtqeS9aPAMfmE",
+  Auditor: "rol_LAk32QMvUbyTIiBO",
+  Client: "rol_8lxEoAVYa4EGgizG",
+  Manager: "rol_qLO42FIvSNsdZEO4",
+};
 
 function generatePassword() {
   const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
@@ -56,6 +62,54 @@ const sendInviteMail = async (user_details) => {
     console.log(data);
   } catch (error) {
     console.log("in send invite", error);
+  }
+};
+
+export const fetchUsersByRole = async (role) => {
+  try {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", `Bearer ${MGMT_TOKEN}`);
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    const response = await fetch(
+      `https://dev-34crl0ebsqxu7bk8.us.auth0.com/api/v2/roles/${available_roles[role]}/users`,
+      requestOptions
+    );
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateRoleOfUser = async (user_id) => {
+  try {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", `Bearer ${MGMT_TOKEN}`);
+
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+
+    const response = await fetch(
+      "https://dev-34crl0ebsqxu7bk8.us.auth0.com/api/v2/users/auth0%7C2ea3980c-56d7-4e36-9dac-62c7db829d98/roles",
+      requestOptions
+    );
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
   }
 };
 
