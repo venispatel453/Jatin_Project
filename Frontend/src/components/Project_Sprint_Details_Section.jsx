@@ -14,13 +14,14 @@ const Project_Sprint_Details_Section = () => {
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control visibility of save button
 
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const PATH_NAME = new URL(window.location.href).pathname;
 
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
       // Sending changed table rows to the server for saving
       const response = await axios.post(
-        `${BASE_URL}/project/sprint_details`,
+        `${BASE_URL}${PATH_NAME}/sprint_details`,
         [...changedTableRows]
       );
       // Displaying success message using toast notification
@@ -37,9 +38,7 @@ const Project_Sprint_Details_Section = () => {
   const fetchData = async () => {
     try {
       // Making a GET request to fetch sprint details
-      const response = await fetch(
-        `${BASE_URL}/project/sprint_details`
-      );
+      const response = await fetch(`${BASE_URL}${PATH_NAME}/sprint_details`);
       const { data } = await response.json(); // Parsing response JSON
       // Setting fetched sprint details to state variable
       setSprintDetails(data);

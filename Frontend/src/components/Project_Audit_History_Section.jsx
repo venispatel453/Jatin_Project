@@ -14,13 +14,13 @@ const Project_Audit_History_Section = () => {
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control the visibility of the save button
 
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-
+  const PATH_NAME = new URL(window.location.href).pathname;
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
       // Sending changed table rows data to the server for saving
       const response = await axios.post(
-        `${BASE_URL}/project/audit_history`,
+        `${BASE_URL}${PATH_NAME}/audit_history`,
         [...changedTableRows]
       );
       // Displaying success message using toast notification
@@ -31,7 +31,7 @@ const Project_Audit_History_Section = () => {
 
       // Sending email with changed table rows data
       const sendmail_response = await axios.post(
-        `${BASE_URL}/project/sendEmail`,
+        `${BASE_URL}${PATH_NAME}/sendEmail`,
         [...changedTableRows]
       );
     } catch (error) {
@@ -44,9 +44,7 @@ const Project_Audit_History_Section = () => {
   const fetchData = async () => {
     try {
       // Fetching audit history data from the server
-      const response = await fetch(
-        `${BASE_URL}/project/audit_history`
-      );
+      const response = await fetch(`${BASE_URL}${PATH_NAME}/audit_history`);
       const { data } = await response.json();
       // Setting the fetched audit history data to state variable
       setAuditHistory(data);

@@ -12,10 +12,12 @@ const Scope_and_Stack_Section = () => {
   const [changesMade, setChangesMade] = useState(false); // State to track changes made to project details
 
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const PATH_NAME = new URL(window.location.href).pathname;
 
   // Function to validate input fields
   const handleInputFieldValidation = () => {
-    for (const key in projectDetails) {
+    const columns = ["scope", "stack"];
+    for (const key in columns) {
       if (projectDetails[key] === "") {
         return true; // Return true if any field is empty
       }
@@ -32,7 +34,7 @@ const Scope_and_Stack_Section = () => {
       }
       // Sending project details to the server for saving
       const { data } = await axios.post(
-        `${BASE_URL}/project/project_details`,
+        `${BASE_URL}${PATH_NAME}/project_details`,
         {
           projectDetails,
         }
@@ -71,9 +73,7 @@ const Scope_and_Stack_Section = () => {
   // Function to fetch project details from the server
   const fetchData = async () => {
     try {
-      const response = await fetch(
-        `${BASE_URL}/project/project_details`
-      );
+      const response = await fetch(`${BASE_URL}${PATH_NAME}/project_details`);
       const { data } = await response.json();
       // Setting fetched project details to state variable
       setProjectDetails(data[0]);

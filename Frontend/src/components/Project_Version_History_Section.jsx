@@ -14,14 +14,16 @@ const Project_Version_History_Section = () => {
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control visibility of save button
 
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const PATH_NAME = new URL(window.location.href).pathname;
 
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
       // Sending changed table rows to the server for saving
-      const response = await axios.post(`${BASE_URL}/project/version_history`, [
-        ...changedTableRows,
-      ]);
+      const response = await axios.post(
+        `${BASE_URL}${PATH_NAME}/version_history`,
+        [...changedTableRows]
+      );
       // Displaying success message using toast notification
       toast.success("Data Saved Successfully");
       setShowSaveButton(false); // Hiding the save button after successful submission
@@ -36,7 +38,7 @@ const Project_Version_History_Section = () => {
   const fetchData = async () => {
     try {
       // Making a GET request to fetch version history data
-      const response = await fetch(`${BASE_URL}/project/version_history`);
+      const response = await fetch(`${BASE_URL}${PATH_NAME}/version_history`);
       const { data } = await response.json(); // Parsing response JSON
       // Setting fetched version history data to state variable
       setVersionHistory(data);

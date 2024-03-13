@@ -14,15 +14,15 @@ const Project_Phases_Section = () => {
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control the visibility of the save button
 
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const PATH_NAME = new URL(window.location.href).pathname;
 
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
       // Sending changed table rows to the server for saving
-      const response = await axios.post(
-        `${BASE_URL}/project/phases`,
-        [...changedTableRows]
-      );
+      const response = await axios.post(`${BASE_URL}${PATH_NAME}/phases`, [
+        ...changedTableRows,
+      ]);
       // Displaying success message using toast notification
       toast.success("Data Saved Successfully");
       setShowSaveButton(false); // Hiding the save button after successful submission
@@ -36,7 +36,7 @@ const Project_Phases_Section = () => {
   // Function to fetch phase history data from the server
   const fetchData = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/project/phases`);
+      const response = await fetch(`${BASE_URL}${PATH_NAME}/phases`);
       const { data } = await response.json();
       // Setting fetched phase history data to state variable
       setPhaseHistory(data);

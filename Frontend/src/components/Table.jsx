@@ -32,14 +32,17 @@ const Table = ({
       _id: record._id ? record._id : uuidv4(), // Generating unique ID for each row
       editable: false, // Flag for editing state
     }));
+    console.log(newData);
     setRows(newData);
   }, [sectionTab]); // Dependency on sectionTab to trigger update when it changes
 
   // Function to validate input fields in a row
   const handleInputValidation = (id) => {
     const requiredRow = rows.filter((row) => row._id === id)[0];
-    for (let key in requiredRow) {
+    console.log(requiredRow);
+    for (let key in columns) {
       if (requiredRow[key] === "") {
+        console.log(key);
         return true; // Returns true if any field is empty
       }
     }

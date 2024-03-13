@@ -3,6 +3,7 @@ import "../styling/create-project.css";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
+import { createNewUser } from "../util/users";
 
 const CreateProject = () => {
   const [managers, setManagers] = useState([]);
@@ -67,6 +68,9 @@ const CreateProject = () => {
       console.log(newProjectDetails);
       const response = await axios.post(`${BASE_URL}/addProject`, {
         ...newProjectDetails,
+      });
+      projectDetails.clients.forEach((client) => {
+        createNewUser(client, "Client");
       });
       navigate("/");
       console.log(response);

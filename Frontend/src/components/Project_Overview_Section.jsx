@@ -16,10 +16,12 @@ const Project_Overview_Section = () => {
   });
 
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const PATH_NAME = new URL(window.location.href).pathname;
 
   // Function to validate input field
   const handleInputFieldValidation = () => {
-    for (const key in projectDetails) {
+    const columns = ["overview", "budget", "timeline"];
+    for (const key in columns) {
       if (projectDetails[key] === "") {
         return true;
       }
@@ -36,7 +38,7 @@ const Project_Overview_Section = () => {
       }
       // Sending project details to the server for saving
       const { data } = await axios.post(
-        `${BASE_URL}/project/project_details`,
+        `${BASE_URL}${PATH_NAME}/project_details`,
         {
           projectDetails,
         }
@@ -69,12 +71,11 @@ const Project_Overview_Section = () => {
   // Function to fetch project details from the server
   const fetchData = async () => {
     try {
-      const response = await fetch(
-        `${BASE_URL}/project/project_details`
-      );
+      const response = await fetch(`${BASE_URL}${PATH_NAME}/project_details`);
 
       const { data } = await response.json();
       // Setting fetched project details to state variable
+      console.log(data[0]);
       setProjectDetails(data[0]);
     } catch (error) {
       // Displaying error message using toast notification

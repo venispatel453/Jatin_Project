@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styling/create-project.css";
 import { v4 as uuidv4 } from "uuid";
+import { createNewUser } from "../util/users.js";
 
 const CreateUser = () => {
   const [userDetails, setUserDetails] = useState({
@@ -17,6 +18,7 @@ const CreateUser = () => {
   };
 
   const handleSubmit = () => {
+    createNewUser(userDetails, userDetails.role);
     console.log(userDetails);
   };
 
@@ -51,7 +53,7 @@ const CreateUser = () => {
         >
           <option value="">Select Role</option>
           <option value="Admin">Admin</option>
-          <option value="Project Manager">Project Manager</option>
+          <option value="Manager">Project Manager</option>
           <option value="Auditor">Auditor</option>
         </select>
       </div>

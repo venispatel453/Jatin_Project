@@ -27,12 +27,12 @@ const Project = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-
+  const PATH_NAME = new URL(window.location.href).pathname;
   // Function to handle exporting data as PDF
   const handleExportButton = async () => {
     try {
       // Making a GET request to generate PDF
-      const response = await fetch(`${BASE_URL}/project/genPDF`);
+      const response = await fetch(`${BASE_URL}${PATH_NAME}/genPDF`);
     } catch (error) {
       console.log(error);
     }
@@ -51,7 +51,7 @@ const Project = () => {
         {/* Container for export button */}
         <div className="export-button-container">
           {/* Export button */}
-          <a href={`${BASE_URL}/project/genPDF`} download>
+          <a href={`${BASE_URL}${PATH_NAME}/genPDF`} download>
             {/* Anchor tag to initiate PDF download */}
             <button className="export-button" onClick={handleExportButton}>
               Export as PDF
