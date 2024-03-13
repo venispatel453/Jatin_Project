@@ -21,9 +21,9 @@ const getUserProjects = async (req, res) => {
       response = await project.find({
         $or: [
           { "associated_members.manager._id": user_id },
-          { "associated_members.clients._id": user_id }
-        ]
-      })
+          { "associated_members.clients._id": user_id },
+        ],
+      });
     }
     console.log(response);
     res.json({ status: "success", data: response });
@@ -57,7 +57,21 @@ const addProject = async (req, res) => {
 // Function to fetch project details
 const getProjectDetails = async (req, res) => {
   try {
-    let response = await project.find(); // Finding all project details from the database
+    const { id } = req.params;
+    console.log(req.params);
+    const default_project_details = {
+      _id: id,
+      overview: "",
+      budget: { type: "", type_value: "" },
+      timeline: "",
+      stack: {},
+      scope: "",
+    };
+    let response = await project.find({ _id: id }); // Finding all project details from the database
+    if (response.length == 0) {
+      response = [default_project_details];
+    }
+
     res.json({ status: "success", data: response }); // Sending success response with fetched data
   } catch (error) {
     res.json({ status: "error", msg: error }); // Sending error response if any occurs during fetching
@@ -68,9 +82,10 @@ const getProjectDetails = async (req, res) => {
 const getVersionHistory = async (req, res) => {
   try {
     // Default structure for version history in case no data is found
+    const { id } = req.params;
     const default_version_history = [
       {
-        project_id: "",
+        project_id: id,
         version: "",
         type: "",
         change: "",
@@ -84,7 +99,7 @@ const getVersionHistory = async (req, res) => {
       },
     ];
 
-    let data = await version_history.find(); // Finding version history data from the database
+    let data = await version_history.find({ project_id: id }); // Finding version history data from the database
 
     // Checking if any data is found
     if (data.length === 0) {
@@ -103,9 +118,10 @@ const getVersionHistory = async (req, res) => {
 const getAuditHistory = async (req, res) => {
   try {
     // Default structure for audit history in case no data is found
+    const { id } = req.params;
     const default_audit_history = [
       {
-        project_id: "",
+        project_id: id,
         date_of_audit: "",
         reviewed_by: "",
         status: "",
@@ -117,7 +133,7 @@ const getAuditHistory = async (req, res) => {
       },
     ];
 
-    let data = await audit_history.find(); // Finding audit history data from the database
+    let data = await audit_history.find({ project_id: id }); // Finding audit history data from the database
 
     // Checking if any data is found
     if (data.length == 0) {
@@ -136,9 +152,11 @@ const getAuditHistory = async (req, res) => {
 const getStakeholders = async (req, res) => {
   try {
     // Default structure for stakeholders in case no data is found
+
+    const { id } = req.params;
     const default_stakeholders = [
       {
-        project_id: "",
+        project_id: id,
         title: "",
         name: "",
         contact: "",
@@ -147,7 +165,7 @@ const getStakeholders = async (req, res) => {
       },
     ];
 
-    let data = await stakeholders.find(); // Finding stakeholders data from the database
+    let data = await stakeholders.find({ project_id: id }); // Finding stakeholders data from the database
 
     // Checking if any data is found
     if (data.length == 0) {
@@ -166,8 +184,10 @@ const getStakeholders = async (req, res) => {
 const getEscalationMatrix = async (req, res) => {
   try {
     // Default structure for escalation matrix in case no data is found
+    const { id } = req.params;
     const default_escalation_matrix = [
       {
+        project_id: id,
         level: "",
         escalation_type: "",
         member: "",
@@ -177,7 +197,7 @@ const getEscalationMatrix = async (req, res) => {
       },
     ];
 
-    let data = await escalation_matrix.find(); // Finding escalation matrix data from the database
+    let data = await escalation_matrix.find({ project_id: id }); // Finding escalation matrix data from the database
 
     // Checking if any data is found
     if (data.length == 0) {
@@ -196,9 +216,10 @@ const getEscalationMatrix = async (req, res) => {
 const getRiskProfiling = async (req, res) => {
   try {
     // Default structure for risk profiling in case no data is found
+    const { id } = req.params;
     const default_risk_profiling = [
       {
-        project_id: "",
+        project_id: id,
         risk_type: "",
         description: "",
         severity: "",
@@ -211,7 +232,7 @@ const getRiskProfiling = async (req, res) => {
       },
     ];
 
-    let data = await risk_profiling.find(); // Finding risk profiling data from the database
+    let data = await risk_profiling.find({ project_id: id }); // Finding risk profiling data from the database
 
     // Checking if any data is found
     if (data.length == 0) {
@@ -229,9 +250,10 @@ const getRiskProfiling = async (req, res) => {
 const getPhases = async (req, res) => {
   try {
     // Default structure for phases in case no data is found
+    const { id } = req.params;
     const defaultPhase = [
       {
-        project_id: "",
+        project_id: id,
         title: "",
         start_date: "",
         completion_date: "",
@@ -244,7 +266,7 @@ const getPhases = async (req, res) => {
       },
     ];
 
-    let data = await phases.find(); // Finding phases data from the database
+    let data = await phases.find({ project_id: id }); // Finding phases data from the database
 
     // Checking if any data is found
     if (data.length == 0) {
@@ -262,10 +284,11 @@ const getPhases = async (req, res) => {
 // Function to fetch sprint details
 const getSprintDetails = async (req, res) => {
   try {
+    const { id } = req.params;
     // Default structure for sprint details in case no data is found
     const default_sprint_details = [
       {
-        project_id: "",
+        project_id: id,
         sprint: "",
         start_date: "",
         end_date: "",
@@ -276,7 +299,7 @@ const getSprintDetails = async (req, res) => {
       },
     ];
 
-    let data = await sprint_details.find(); // Finding sprint details data from the database
+    let data = await sprint_details.find({ project_id: id }); // Finding sprint details data from the database
 
     // Checking if any data is found
     if (data.length == 0) {
@@ -294,10 +317,11 @@ const getSprintDetails = async (req, res) => {
 // Function to update project details
 const alterProjectDetails = async (req, res) => {
   try {
+    const { id } = req.params;
     const { projectDetails } = req.body; // Extracting project details from request body
     let response = await project.updateOne(
       // Updating project details in the database
-      { _id: projectDetails._id }, // Finding the project by its ID
+      { _id: id }, // Finding the project by its ID
       { $set: projectDetails } // Setting the new project details
     );
 
@@ -311,6 +335,7 @@ const alterProjectDetails = async (req, res) => {
 const alterVersionHistory = async (req, res) => {
   try {
     // Filtering records to identify added/updated and deleted records separately
+    const { id } = req.params;
     const updatedRecords = req.body.filter((record) => {
       return record.action === "added/updated";
     });
@@ -321,7 +346,7 @@ const alterVersionHistory = async (req, res) => {
     // Generating update operations for updated records
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
-        filter: { _id: obj._id }, // Filtering by ID
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
         update: { $set: obj }, // Setting new values
         upsert: true, // Creating a new document if it doesn't exist
       },
@@ -330,7 +355,7 @@ const alterVersionHistory = async (req, res) => {
     // Generating delete operations for deleted records
     const deleteRecordOperations = deletedRecords.map((obj) => ({
       deleteOne: {
-        filter: { _id: obj._id }, // Filtering by ID
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
         update: { $set: obj }, // Setting deleted document
         upsert: true, // Creating a new document if it doesn't exist
       },
@@ -354,6 +379,7 @@ const alterVersionHistory = async (req, res) => {
 const alterAuditHistory = async (req, res) => {
   try {
     // Filtering records to identify added/updated and deleted records separately
+    const { id } = req.params;
     const updatedRecords = req.body.filter((record) => {
       return record.action === "added/updated";
     });
@@ -364,7 +390,7 @@ const alterAuditHistory = async (req, res) => {
     // Generating update operations for updated records
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
-        filter: { _id: obj._id }, // Filtering by ID
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
         update: { $set: obj }, // Setting new values
         upsert: true, // Creating a new document if it doesn't exist
       },
@@ -373,7 +399,7 @@ const alterAuditHistory = async (req, res) => {
     // Generating delete operations for deleted records
     const deleteRecordOperations = deletedRecords.map((obj) => ({
       deleteOne: {
-        filter: { _id: obj._id }, // Filtering by ID
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
         update: { $set: obj }, // Setting deleted document
         upsert: true, // Creating a new document if it doesn't exist
       },
@@ -397,6 +423,7 @@ const alterAuditHistory = async (req, res) => {
 const alterStakeholders = async (req, res) => {
   try {
     // Filtering records to identify added/updated and deleted records separately
+    const { id } = req.params;
     const updatedRecords = req.body.filter((record) => {
       return record.action === "added/updated";
     });
@@ -407,7 +434,7 @@ const alterStakeholders = async (req, res) => {
     // Generating update operations for updated records
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
-        filter: { _id: obj._id }, // Filtering by ID
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
         update: { $set: obj }, // Setting new values
         upsert: true, // Creating a new document if it doesn't exist
       },
@@ -416,7 +443,7 @@ const alterStakeholders = async (req, res) => {
     // Generating delete operations for deleted records
     const deleteRecordOperations = deletedRecords.map((obj) => ({
       deleteOne: {
-        filter: { _id: obj._id }, // Filtering by ID
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
         update: { $set: obj }, // Setting deleted document
         upsert: true, // Creating a new document if it doesn't exist
       },
@@ -440,6 +467,7 @@ const alterStakeholders = async (req, res) => {
 const alterEscalationMatrix = async (req, res) => {
   try {
     // Filtering records to identify added/updated and deleted records separately
+    const { id } = req.params;
     const updatedRecords = req.body.filter((record) => {
       return record.action === "added/updated";
     });
@@ -450,7 +478,7 @@ const alterEscalationMatrix = async (req, res) => {
     // Generating update operations for updated records
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
-        filter: { _id: obj._id }, // Filtering by ID
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
         update: { $set: obj }, // Setting new values
         upsert: true, // Creating a new document if it doesn't exist
       },
@@ -459,7 +487,7 @@ const alterEscalationMatrix = async (req, res) => {
     // Generating delete operations for deleted records
     const deleteRecordOperations = deletedRecords.map((obj) => ({
       deleteOne: {
-        filter: { _id: obj._id }, // Filtering by ID
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
         update: { $set: obj }, // Setting deleted document
         upsert: true, // Creating a new document if it doesn't exist
       },
@@ -483,6 +511,7 @@ const alterEscalationMatrix = async (req, res) => {
 const alterRiskProfiling = async (req, res) => {
   try {
     // Filtering records to identify added/updated and deleted records separately
+    const { id } = req.params;
     const updatedRecords = req.body.filter((record) => {
       return record.action === "added/updated";
     });
@@ -493,7 +522,7 @@ const alterRiskProfiling = async (req, res) => {
     // Generating update operations for updated records
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
-        filter: { _id: obj._id }, // Filtering by ID
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
         update: { $set: obj }, // Setting new values
         upsert: true, // Creating a new document if it doesn't exist
       },
@@ -502,7 +531,7 @@ const alterRiskProfiling = async (req, res) => {
     // Generating delete operations for deleted records
     const deleteRecordOperations = deletedRecords.map((obj) => ({
       deleteOne: {
-        filter: { _id: obj._id }, // Filtering by ID
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
         update: { $set: obj }, // Setting deleted document
         upsert: true, // Creating a new document if it doesn't exist
       },
@@ -526,6 +555,7 @@ const alterRiskProfiling = async (req, res) => {
 const alterPhases = async (req, res) => {
   try {
     // Filter records to identify added/updated and deleted records separately
+    const { id } = req.params;
     const updatedRecords = req.body.filter((record) => {
       return record.action === "added/updated";
     });
@@ -537,7 +567,7 @@ const alterPhases = async (req, res) => {
     const updateRecordOperations = updatedRecords.map((obj) => {
       return {
         updateOne: {
-          filter: { _id: obj._id }, // Filtering by ID
+          filter: { _id: obj._id, project_id: id }, // Filtering by ID
           update: { $set: obj }, // Setting new values
           upsert: true, // Creating a new document if it doesn't exist
         },
@@ -547,7 +577,7 @@ const alterPhases = async (req, res) => {
     // Generate delete operations for deleted records
     const deleteRecordOperations = deletedRecords.map((obj) => ({
       deleteOne: {
-        filter: { _id: obj._id }, // Filtering by ID
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
         update: { $set: obj }, // Setting deleted document
         upsert: true, // Creating a new document if it doesn't exist
       },
@@ -570,6 +600,7 @@ const alterPhases = async (req, res) => {
 const alterSprintDetails = async (req, res) => {
   try {
     // Filtering records to identify added/updated and deleted records separately
+    const { id } = req.params;
     const updatedRecords = req.body.filter((record) => {
       return record.action === "added/updated";
     });
@@ -580,7 +611,7 @@ const alterSprintDetails = async (req, res) => {
     // Generating update operations for updated records
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
-        filter: { _id: obj._id }, // Filtering by ID
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
         update: { $set: obj }, // Setting new values
         upsert: true, // Creating a new document if it doesn't exist
       },
@@ -589,7 +620,7 @@ const alterSprintDetails = async (req, res) => {
     // Generating delete operations for deleted records
     const deleteRecordOperations = deletedRecords.map((obj) => ({
       deleteOne: {
-        filter: { _id: obj._id }, // Filtering by ID
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
         update: { $set: obj }, // Setting deleted document
         upsert: true, // Creating a new document if it doesn't exist
       },
