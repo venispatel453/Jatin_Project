@@ -3,22 +3,23 @@ import "../styling/create-project.css";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
-import { createNewUser } from "../util/users";
+import { createNewUser, fetchUsersByRole } from "../util/users";
 
 const CreateProject = () => {
   const [managers, setManagers] = useState([]);
   const navigate = useNavigate();
   const [projectDetails, setProjectDetails] = useState({
     name: "",
-    clients: [{ _id: uuidv4(), name: "", email: "" }],
+    clients: [{ _id: `auth0|${uuidv4()}`, name: "", email: "" }],
     manager: {},
   });
   const BASE_URL = process.env.REACT_APP_BASE_URL;
-  const fetchData = async () => {
+
+  const fetchManagers = async () => {
     try {
-      let { data: response } = await axios.get(`${BASE_URL}/getUsers`);
-      setManagers(response.data);
-      console.log(response.data);
+      const data = await fetchUsersByRole("Manager");
+      setManagers(data);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -30,7 +31,15 @@ const CreateProject = () => {
     if (attribute === "name" && !id) {
       newDetails = { ...projectDetails, name: value };
     } else if (attribute === "manager") {
-      newDetails = { ...projectDetails, manager: JSON.parse(value) };
+      const manager = JSON.parse(value);
+      newDetails = {
+        ...projectDetails,
+        manager: {
+          _id: manager.user_id,
+          name: manager.name,
+          designation: "Manager",
+        },
+      };
     } else {
       let clients = projectDetails.clients.map((client) => {
         if (client._id === id) {
@@ -69,11 +78,11 @@ const CreateProject = () => {
       const response = await axios.post(`${BASE_URL}/addProject`, {
         ...newProjectDetails,
       });
-      projectDetails.clients.forEach((client) => {
-        createNewUser(client, "Client");
+      projectDetails.clients.forEach(async (client) => {
+        await createNewUser(client, "Client");
       });
-      navigate("/");
       console.log(response);
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -84,7 +93,7 @@ const CreateProject = () => {
   }, [projectDetails]);
 
   useEffect(() => {
-    fetchData();
+    fetchManagers();
   }, []);
 
   return (
@@ -131,11 +140,7 @@ const CreateProject = () => {
         <button
           onClick={() => {
             let newDetails = { ...projectDetails };
-            let obj = {
-              name: "",
-              clients: [{ _id: uuidv4(), name: "", email: "" }],
-              manager: "",
-            };
+            let obj = { _id: `auth0|${uuidv4()}`, name: "", email: "" };
             newDetails.clients.push(obj);
             setProjectDetails(newDetails);
           }}
@@ -154,9 +159,11 @@ const CreateProject = () => {
           }}
         >
           <option value="Select Manager">Select Manager</option>
-          {managers.map((manager) => {
+          {managers.map((manager, index) => {
             return (
-              <option value={JSON.stringify(manager)}>{manager.name}</option>
+              <option key={index} value={JSON.stringify(manager)}>
+                {manager.name}
+              </option>
             );
           })}
         </select>
