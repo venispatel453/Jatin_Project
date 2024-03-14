@@ -106,7 +106,8 @@ export const fetchRoleOfUser = async (user_id, setAuth) => {
       requestOptions
     );
     const data = await response.json();
-    setAuth({ id: user_id, role: data[0].name });
+    //setAuth({ id: user_id, role: data[0].name });
+    return data;
     console.log(data);
   } catch (error) {
     console.log(error);
