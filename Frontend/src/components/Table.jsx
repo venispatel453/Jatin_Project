@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react"; // Importing React and necessary hooks
+import React, { useState, useEffect, useContext } from "react"; // Importing React and necessary hooks
 import { v4 as uuidv4 } from "uuid"; // Importing UUID library for generating unique IDs
 import "../styling/crud-table.css"; // Importing CSS styles for the CRUD table component
 import { toast } from "react-toastify"; // Importing toast notifications library
 import "react-toastify/dist/ReactToastify.css"; // Importing CSS for toast notifications
+import AuthContext from "../context/AuthProvider";
 
 // Table component definition
 const Table = ({
@@ -13,10 +14,12 @@ const Table = ({
   defaultValues = {}, // Default values for inserting into rows
   setShowSaveButton, // Function to toggle save button visibility
   sectionTab, // Current section tab
+  allowedRoles = [],
 }) => {
   // State variables for rows and columns of the table
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
+  const { auth } = useContext(AuthContext);
 
   // useEffect hook to initialize table rows and columns when the section tab changes
   useEffect(() => {
@@ -181,7 +184,7 @@ const Table = ({
                 {handleColumnName(column)}
               </th>
             ))}
-            <th>Actions</th>
+            {allowedRoles.includes(auth.role) && <th>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -192,36 +195,40 @@ const Table = ({
                   {row.editable ? renderInputField(column, row) : row[column]}
                 </td>
               ))}
-              <td>
-                {row.editable ? (
-                  <div className="action-cell">
-                    <button onClick={() => handleSave(row._id)}>
-                      <i className="fas fa-save"></i>
-                    </button>
-                    <button onClick={() => handleCancel(row._id)}>
-                      <i className="fas fa-times"></i>
-                    </button>
-                  </div>
-                ) : (
-                  <div className="action-cell">
-                    <button onClick={() => handleEdit(row._id)}>
-                      <i className="fas fa-edit"></i>
-                    </button>
-                    <button onClick={() => handleDelete(row._id)}>
-                      <i className="fas fa-trash-alt"></i>
-                    </button>
-                  </div>
-                )}
-              </td>
+              {allowedRoles.includes(auth.role) && (
+                <td>
+                  {row.editable ? (
+                    <div className="action-cell">
+                      <button onClick={() => handleSave(row._id)}>
+                        <i className="fas fa-save"></i>
+                      </button>
+                      <button onClick={() => handleCancel(row._id)}>
+                        <i className="fas fa-times"></i>
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="action-cell">
+                      <button onClick={() => handleEdit(row._id)}>
+                        <i className="fas fa-edit"></i>
+                      </button>
+                      <button onClick={() => handleDelete(row._id)}>
+                        <i className="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  )}
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
         <tfoot>
           <tr>
             <td colSpan={columns.length + 1}>
-              <button onClick={handleAddRow}>
-                <i className="fas fa-plus"></i> Add Row
-              </button>
+              {allowedRoles.includes(auth.role) && (
+                <button onClick={handleAddRow}>
+                  <i className="fas fa-plus"></i> Add Row
+                </button>
+              )}
             </td>
           </tr>
         </tfoot>
