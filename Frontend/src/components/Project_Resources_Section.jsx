@@ -3,13 +3,11 @@ import { Box } from "monday-ui-react-core"; // Importing Box component from Mond
 import "monday-ui-react-core/tokens"; // Importing tokens for styling
 import Table from "./Table"; // Importing custom Table component
 import axios from "axios"; // Importing Axios for making HTTP requests
+import "../styling/project_stakeholder_section.css"; // Importing CSS styles for the component
 import { toast } from "react-toastify"; // Importing toast notifications for displaying messages
-import "../styling/project_sprint_details_section.css"; // Importing CSS styles for the component
 
-// Project_Sprint_Details_Section component definition
-const Project_Sprint_Details_Section = () => {
-  // State variables to manage component data and behavior
-  const [sprintDetails, setSprintDetails] = useState([]); // State to manage sprint details
+const Project_Resources_Section = () => {
+  const [resources, setResources] = useState([]); // State to manage stakeholders data
   const [changedTableRows, setChangedTableRows] = useState([]); // State to track changed table rows
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control visibility of save button
 
@@ -20,10 +18,9 @@ const Project_Sprint_Details_Section = () => {
   const handleSubmit = async () => {
     try {
       // Sending changed table rows to the server for saving
-      const response = await axios.post(
-        `${BASE_URL}${PATH_NAME}/sprint_details`,
-        [...changedTableRows]
-      );
+      const response = await axios.post(`${BASE_URL}${PATH_NAME}/resources`, [
+        ...changedTableRows,
+      ]);
       // Displaying success message using toast notification
       toast.success("Data Saved Successfully");
       setShowSaveButton(false); // Hiding the save button after successful submission
@@ -34,14 +31,15 @@ const Project_Sprint_Details_Section = () => {
     }
   };
 
-  // Function to fetch sprint details from the server
+  // Function to fetch stakeholders data from the server
   const fetchData = async () => {
     try {
-      // Making a GET request to fetch sprint details
-      const response = await fetch(`${BASE_URL}${PATH_NAME}/sprint_details`);
+      // Making a GET request to fetch stakeholders data
+      const response = await fetch(`${BASE_URL}${PATH_NAME}/resources`);
       const { data } = await response.json(); // Parsing response JSON
-      // Setting fetched sprint details to state variable
-      setSprintDetails(data);
+      console.log(data);
+      // Setting fetched stakeholders data to state variable
+      setResources(data);
     } catch (error) {
       // Displaying error message using toast notification
       toast.error("Some Error");
@@ -64,29 +62,29 @@ const Project_Sprint_Details_Section = () => {
           </button>
         </div>
       )}
-      {/* Container for sprint details table */}
+      {/* Container for stakeholders table */}
       <Box className="escalation-matrix-table-container">
-        {/* Render the Table component if sprint details are available */}
-        {sprintDetails.length > 0 && (
+        {/* Render the Table component if stakeholders data is available */}
+        {resources.length > 0 && (
           <Table
-          defaultValues={{
-            project_id: sprintDetails[0].project_id,
-          }}
-            sectionTab={"sprint_details"} // Passing section tab as prop
+            defaultValues={{
+              project_id: resources[0].project_id,
+            }}
+            sectionTab={"resources"} // Passing section tab as prop
             setShowSaveButton={setShowSaveButton} // Passing setShowSaveButton function as prop
             setChangedTableRows={setChangedTableRows} // Passing setChangedTableRows function as prop
-            data={sprintDetails} // Passing sprintDetails as prop
+            data={resources} // Passing stakeholders data as prop
             invalidColumns={["project_id", "_id", "__v"]} // Specifying invalid columns for table
             columnType={[
-              // Specifying column types for table
-              { key: "start_date", type: "date" }, // Date type column
-              { key: "end_date", type: "date" }, // Date type column
               {
-                key: "status",
-                type: "dropdown", // Dropdown type column
-                options: ["Delayed", "On-Time", "Pending", "Signed-Off"], // Dropdown options
+                key: "start_date",
+                type: "date",
               },
-            ]}
+              {
+                key: "end_date",
+                type: "date",
+              },
+            ]} // Specifying column types for table
           />
         )}
       </Box>
@@ -94,4 +92,4 @@ const Project_Sprint_Details_Section = () => {
   );
 };
 
-export default Project_Sprint_Details_Section; // Exporting the component
+export default Project_Resources_Section;

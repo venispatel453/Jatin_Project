@@ -10,7 +10,7 @@ const Table = ({
   invalidColumns, // Columns to be excluded from the table
   columnType, // Type of each column (e.g., date, dropdown)
   setChangedTableRows, // Function to set changed table rows
-  defaultValues = {}, // Default values for new rows
+  defaultValues = {}, // Default values for inserting into rows
   setShowSaveButton, // Function to toggle save button visibility
   sectionTab, // Current section tab
 }) => {
@@ -35,6 +35,10 @@ const Table = ({
     console.log(newData);
     setRows(newData);
   }, [sectionTab]); // Dependency on sectionTab to trigger update when it changes
+
+  useEffect(() => {
+    console.log(sectionTab, rows);
+  }, [rows]);
 
   // Function to validate input fields in a row
   const handleInputValidation = (id) => {

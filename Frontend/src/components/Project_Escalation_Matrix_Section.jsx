@@ -96,7 +96,10 @@ const Project_Escalation_Matrix_Section = () => {
                         "escalation_type",
                         "project_id",
                       ]} // List of columns to be excluded from the table
-                      defaultValues={{ escalation_type: type }} // Default values for the new rows
+                      defaultValues={{
+                        escalation_type: type,
+                        project_id: filteredData[0].project_id,
+                      }} // Default values for the new rows
                       columnType={[]} // Column type configuration
                       setChangedTableRows={setChangedTableRows} // Function to update changed table rows state
                       setShowSaveButton={setShowSaveButton} // Function to control the visibility of the save button

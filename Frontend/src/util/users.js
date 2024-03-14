@@ -89,7 +89,7 @@ export const fetchUsersByRole = async (role) => {
   }
 };
 
-export const fetchRoleOfUser = async (user_id) => {
+export const fetchRoleOfUser = async (user_id, setAuth) => {
   try {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -106,8 +106,8 @@ export const fetchRoleOfUser = async (user_id) => {
       requestOptions
     );
     const data = await response.json();
+    setAuth({ id: user_id, role: data[0].name });
     console.log(data);
-    return data;
   } catch (error) {
     console.log(error);
   }

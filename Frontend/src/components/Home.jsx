@@ -12,7 +12,7 @@ const Home = () => {
     try {
       //console.log(`${BASE_URL}/projects`, process.env.REACT_APP_BASE_URL);
       let { data } = await axios.get(`${BASE_URL}/projects`, {
-        params: { id: auth.id },
+        params: { id: auth.id,role:auth.role },
       });
       console.log(data);
       data = data.data;

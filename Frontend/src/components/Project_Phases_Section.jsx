@@ -68,6 +68,9 @@ const Project_Phases_Section = () => {
           {/* Render the Table component if phase history data is available */}
           {phaseHistory.length > 0 ? (
             <Table
+              defaultValues={{
+                project_id: phaseHistory[0].project_id,
+              }}
               sectionTab={"phases"}
               setShowSaveButton={setShowSaveButton}
               columnType={[

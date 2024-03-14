@@ -19,9 +19,34 @@
 
 /* Styles for the project tab box */
 .project-tab-box {
-  height: fit-content; /* Adjust the height based on content */
-  padding-top: 8px; /* Add top padding */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Adjust the height based on content */
   width: 100%; /* Make the tab box fill the available width */
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px; /* Width of vertical scrollbar */
+  height: 6px; /* Height of horizontal scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #dddddd; /* Color of the scrollbar thumb */
+  border-radius: 3px; /* Rounded corners of the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8; /* Color of the scrollbar thumb on hover */
+}
+
+.tab {
+  text-wrap: nowrap;
+}
+
+.project-tab-list {
+  padding-bottom: 8px;
 }
 
 /* Styles for the project section box */

@@ -20,6 +20,11 @@ import Project_Scope_and_Stack_Section from "./Project_Scope_and_Stack_Section";
 import Project_Sprint_Details_Section from "./Project_Sprint_Details_Section";
 import Project_Stakeholder_Section from "./Project_Stakeholder_Section";
 import Project_Phases_Section from "./Project_Phases_Section";
+import Project_Project_Updates_Section from "./Project_Project_Updates_Section";
+import Project_MoMs_Section from "./Project_MoMs_Section";
+import Project_Approved_Teams_Section from "./Project_Approved_Teams_Section";
+import Project_Client_Feedback_Section from "./Project_Client_Feedback_Section";
+import Project_Resources_Section from "./Project_Resources_Section";
 
 // Project component definition
 const Project = () => {
@@ -62,21 +67,27 @@ const Project = () => {
         <div className="project-tab-box">
           {/* Tab list */}
           <TabList
+            className="project-tab-list"
             tabType="stretched"
             onTabChange={(tabId) => {
               setActiveTab(tabId);
             }}
           >
             {/* Individual tabs */}
-            <Tab>Project Overview</Tab>
-            <Tab>Scope and Stack</Tab>
-            <Tab>Escalation Matrix</Tab>
-            <Tab>Phases</Tab>
-            <Tab>Sprint Details</Tab>
-            <Tab>Risk Profiling</Tab>
-            <Tab>Stakeholders</Tab>
-            <Tab>Version History</Tab>
-            <Tab>Audit History</Tab>
+            <Tab className="tab">Project Overview</Tab>
+            <Tab className="tab">Scope and Stack</Tab>
+            <Tab className="tab">Escalation Matrix</Tab>
+            <Tab className="tab">Phases</Tab>
+            <Tab className="tab">Sprint Details</Tab>
+            <Tab className="tab">Risk Profiling</Tab>
+            <Tab className="tab">Stakeholders</Tab>
+            <Tab className="tab">Version History</Tab>
+            <Tab className="tab">Audit History</Tab>
+            <Tab className="tab">Project Updates</Tab>
+            <Tab className="tab">MoM's</Tab>
+            <Tab className="tab">Approved Teams</Tab>
+            <Tab className="tab">Client Feedback</Tab>
+            <Tab className="tab">Resources</Tab>
           </TabList>
         </div>
 
@@ -120,6 +131,21 @@ const Project = () => {
             <TabPanel>
               {/* Audit History Section */}
               <Project_Audit_History_Section />
+            </TabPanel>
+            <TabPanel>
+              <Project_Project_Updates_Section />
+            </TabPanel>
+            <TabPanel>
+              <Project_MoMs_Section />
+            </TabPanel>
+            <TabPanel>
+              <Project_Approved_Teams_Section />
+            </TabPanel>
+            <TabPanel>
+              <Project_Client_Feedback_Section />
+            </TabPanel>
+            <TabPanel>
+              <Project_Resources_Section />
             </TabPanel>
           </TabPanels>
         </Box>

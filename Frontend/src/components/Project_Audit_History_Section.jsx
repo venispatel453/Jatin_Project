@@ -74,6 +74,9 @@ const Project_Audit_History_Section = () => {
       <Box className="escalation-matrix-table-container">
         {auditHistory.length > 0 && (
           <Table
+            defaultValues={{
+              project_id: auditHistory[0].project_id,
+            }}
             sectionTab={"audit_history"} // Identifier for the table section
             setShowSaveButton={setShowSaveButton} // Function to control the visibility of the save button
             data={auditHistory} // Audit history data to be displayed in the table

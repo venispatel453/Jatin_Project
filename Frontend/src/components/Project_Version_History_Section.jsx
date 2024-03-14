@@ -69,6 +69,9 @@ const Project_Version_History_Section = () => {
         {/* Render the Table component if version history data is available */}
         {versionHistory.length > 0 && (
           <Table
+            defaultValues={{
+              project_id: versionHistory[0].project_id,
+            }}
             sectionTab={"version_history"} // Passing section tab as prop
             setShowSaveButton={setShowSaveButton} // Passing setShowSaveButton function as prop
             setChangedTableRows={setChangedTableRows} // Passing setChangedTableRows function as prop

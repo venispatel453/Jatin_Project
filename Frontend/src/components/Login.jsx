@@ -4,7 +4,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Login = () => {
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
   const { loginWithRedirect, isAuthenticated, user } = useAuth0();
   const location = useLocation();
   const from = "/";
@@ -12,6 +12,8 @@ const Login = () => {
   const handleLogin = async () => {
     loginWithRedirect();
   };
+
+
 
   return (
     <>
