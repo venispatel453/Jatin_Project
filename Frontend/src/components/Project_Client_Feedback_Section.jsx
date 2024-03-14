@@ -71,6 +71,7 @@ const Project_Client_Feedback_Section = () => {
             defaultValues={{
               project_id: clientFeedback[0].project_id,
             }}
+            allowedRoles={["Admin", "Manager"]}
             sectionTab={"client_feedback"} // Passing section tab as prop
             setShowSaveButton={setShowSaveButton} // Passing setShowSaveButton function as prop
             setChangedTableRows={setChangedTableRows} // Passing setChangedTableRows function as prop

@@ -77,6 +77,7 @@ const Project_Audit_History_Section = () => {
             defaultValues={{
               project_id: auditHistory[0].project_id,
             }}
+            allowedRoles={["Auditor"]}
             sectionTab={"audit_history"} // Identifier for the table section
             setShowSaveButton={setShowSaveButton} // Function to control the visibility of the save button
             data={auditHistory} // Audit history data to be displayed in the table

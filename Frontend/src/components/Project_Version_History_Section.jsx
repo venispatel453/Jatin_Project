@@ -72,6 +72,7 @@ const Project_Version_History_Section = () => {
             defaultValues={{
               project_id: versionHistory[0].project_id,
             }}
+            allowedRoles={["Admin", "Manager"]}
             sectionTab={"version_history"} // Passing section tab as prop
             setShowSaveButton={setShowSaveButton} // Passing setShowSaveButton function as prop
             setChangedTableRows={setChangedTableRows} // Passing setChangedTableRows function as prop

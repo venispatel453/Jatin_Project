@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react"; // Importing necessary dependencies from React
+import React, { useEffect, useState, useContext } from "react"; // Importing necessary dependencies from React
 import { Dropdown } from "monday-ui-react-core"; // Importing Dropdown component from Monday UI React Core library
 import "monday-ui-react-core/tokens"; // Importing tokens for styling
 import "../styling/project_overview_section.css"; // Importing CSS styles for the component
 import axios from "axios"; // Importing Axios for making HTTP requests
 import { toast } from "react-toastify"; // Importing toast notifications for displaying messages
+import AuthContext from "../context/AuthProvider";
 
 // Project_Overview_Section component definition
 const Project_Overview_Section = () => {
@@ -14,7 +15,8 @@ const Project_Overview_Section = () => {
     budget: {},
     timeline: "",
   });
-
+  const { auth } = useContext(AuthContext);
+  const allowed_roles = ["Admin", "Manager"];
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const PATH_NAME = new URL(window.location.href).pathname;
 
@@ -107,6 +109,7 @@ const Project_Overview_Section = () => {
           <textarea
             value={projectDetails?.overview}
             onChange={(e) => handleInputChange(e, "overview")}
+            readOnly={allowed_roles.includes(auth.role) ? false : true}
           ></textarea>
         </div>
         <div className="budget-div">
@@ -114,6 +117,7 @@ const Project_Overview_Section = () => {
           <div className="dropdown-div">
             <label>Project Budget</label>
             <Dropdown
+              readOnly={allowed_roles.includes(auth.role) ? false : true}
               className="dropdown"
               value={[
                 {
@@ -144,6 +148,7 @@ const Project_Overview_Section = () => {
                   <label>Duration (in Months)</label>
                   {/* Input field for entering duration */}
                   <input
+                    readOnly={allowed_roles.includes(auth.role) ? false : true}
                     type="text"
                     onChange={(e) => handleInputChange(e, "Fixed")}
                     value={
@@ -158,6 +163,7 @@ const Project_Overview_Section = () => {
                   <label>Budgeted Hours</label>
                   {/* Input field for entering budgeted hours */}
                   <input
+                    readOnly={allowed_roles.includes(auth.role) ? false : true}
                     type="text"
                     onChange={(e) => handleInputChange(e, "Monthly")}
                     value={
@@ -174,6 +180,7 @@ const Project_Overview_Section = () => {
         <div className="timeline-div">
           <label>Timeline</label>
           <input
+            readOnly={allowed_roles.includes(auth.role) ? false : true}
             value={projectDetails.timeline}
             type="text"
             onChange={(e) => handleInputChange(e, "timeline")}

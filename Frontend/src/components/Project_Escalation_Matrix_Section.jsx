@@ -90,6 +90,7 @@ const Project_Escalation_Matrix_Section = () => {
                       sectionTab={"escalation"} // Identifier for the table section
                       changedTableRows={changedTableRows} // State for changed table rows
                       data={filteredData} // Data to be displayed in the table
+                      allowedRoles={["Admin", "Manager"]}
                       invalidColumns={[
                         "_id",
                         "__v",

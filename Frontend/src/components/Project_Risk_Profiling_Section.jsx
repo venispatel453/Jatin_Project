@@ -71,6 +71,7 @@ const Project_Risk_Profiling_Section = () => {
             defaultValues={{
               project_id: riskProfiling[0].project_id,
             }}
+            allowedRoles={["Admin", "Manager"]}
             sectionTab={"risk_profilling"} // Pass section tab as prop to the Table component
             setShowSaveButton={setShowSaveButton} // Pass function to control the visibility of the save button
             data={riskProfiling} // Pass risk profiling data to the Table component

@@ -71,6 +71,7 @@ const Project_Phases_Section = () => {
               defaultValues={{
                 project_id: phaseHistory[0].project_id,
               }}
+              allowedRoles={["Admin", "Manager"]}
               sectionTab={"phases"}
               setShowSaveButton={setShowSaveButton}
               columnType={[

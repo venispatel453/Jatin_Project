@@ -70,6 +70,7 @@ const Project_MoMs_Section = () => {
             defaultValues={{
               project_id: MoMs[0].project_id,
             }}
+            allowedRoles={["Admin", "Manager"]}
             sectionTab={"MoMs"} // Passing section tab as prop
             setShowSaveButton={setShowSaveButton} // Passing setShowSaveButton function as prop
             setChangedTableRows={setChangedTableRows} // Passing setChangedTableRows function as prop

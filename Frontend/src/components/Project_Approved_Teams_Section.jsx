@@ -122,6 +122,7 @@ const Project_Approved_Teams_Section = () => {
                       defaultValues={{
                         project_id: approvedTeams[0].project_id,
                       }}
+                      allowedRoles={["Admin", "Manager"]}
                       setShowSaveButton={setShowSaveButton}
                       setChangedTableRows={setChangedTableRows}
                       data={approvedTeams.filter(

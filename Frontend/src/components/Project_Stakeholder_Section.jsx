@@ -72,6 +72,7 @@ const Project_Stakeholder_Section = () => {
             defaultValues={{
               project_id: stakeholders[0].project_id,
             }}
+            allowedRoles={["Admin", "Manager"]}
             sectionTab={"stakeholder"} // Passing section tab as prop
             setShowSaveButton={setShowSaveButton} // Passing setShowSaveButton function as prop
             setChangedTableRows={setChangedTableRows} // Passing setChangedTableRows function as prop

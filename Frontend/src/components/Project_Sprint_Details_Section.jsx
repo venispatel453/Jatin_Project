@@ -69,9 +69,10 @@ const Project_Sprint_Details_Section = () => {
         {/* Render the Table component if sprint details are available */}
         {sprintDetails.length > 0 && (
           <Table
-          defaultValues={{
-            project_id: sprintDetails[0].project_id,
-          }}
+            defaultValues={{
+              project_id: sprintDetails[0].project_id,
+            }}
+            allowedRoles={["Admin", "Manager"]}
             sectionTab={"sprint_details"} // Passing section tab as prop
             setShowSaveButton={setShowSaveButton} // Passing setShowSaveButton function as prop
             setChangedTableRows={setChangedTableRows} // Passing setChangedTableRows function as prop

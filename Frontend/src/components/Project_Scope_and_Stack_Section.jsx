@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react"; // Importing React and necessary hooks
+import React, { useEffect, useState, useContext } from "react"; // Importing React and necessary hooks
 import { Dropdown } from "monday-ui-react-core"; // Importing Dropdown component from Monday UI React Core library
 import "monday-ui-react-core/tokens"; // Importing tokens for styling
 import "../styling/project_scope_and_stack_section.css"; // Importing CSS styles for the component
 import axios from "axios"; // Importing Axios for making HTTP requests
 import { toast } from "react-toastify"; // Importing toast notifications for displaying messages
+import AuthContext from "../context/AuthProvider";
 
 // Scope_and_Stack_Section component definition
 const Scope_and_Stack_Section = () => {
   // State variables to manage component data and behavior
   const [projectDetails, setProjectDetails] = useState({}); // State to manage project details
   const [changesMade, setChangesMade] = useState(false); // State to track changes made to project details
+  const allowed_roles = ["Admin", "Manager"];
+  const { auth } = useContext(AuthContext);
 
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const PATH_NAME = new URL(window.location.href).pathname;
@@ -106,6 +109,7 @@ const Scope_and_Stack_Section = () => {
           <label>Select Project's Technology</label>
           {/* Dropdown component for selecting stack */}
           <Dropdown
+            readOnly={allowed_roles.includes(auth.role) ? false : true}
             searchable={false}
             className="dropdown"
             value={{
@@ -130,6 +134,7 @@ const Scope_and_Stack_Section = () => {
           <label>Scope</label>
           {/* Textarea for entering project scope */}
           <textarea
+            readOnly={allowed_roles.includes(auth.role) ? false : true}
             value={projectDetails?.scope}
             onChange={(e) => handleInputChange(e, "scope")}
           ></textarea>

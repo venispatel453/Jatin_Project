@@ -74,6 +74,7 @@ const Project_Project_Updates_Section = () => {
             defaultValues={{
               project_id: projectUpdates[0].project_id,
             }}
+            allowedRoles={["Admin", "Manager"]}
             columnType={[
               // Specifying column types for table
               {
