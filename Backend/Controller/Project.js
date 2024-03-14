@@ -8,6 +8,11 @@ const phases = require("../Model/Phases"); // Importing Phases model
 const escalation_matrix = require("../Model/Escalation_Matrix"); // Importing Escalation Matrix model
 const risk_profiling = require("../Model/Risk_Profiling"); // Importing Risk Profiling model
 const { reorderArrayOfObject } = require("../Utilities/utility.js"); // Importing utility function for reordering arrays of objects
+const resources = require("../Model/Resources.js");
+const client_feedback = require("../Model/Client_Feedback.js");
+const approved_team = require("../Model/Approved_Team.js");
+const mom = require("../Model/MoMs.js");
+const project_updates = require("../Model/Project_Updates.js");
 
 const getUserProjects = async (req, res) => {
   try {
@@ -295,7 +300,6 @@ const getSprintDetails = async (req, res) => {
         status: "",
         comments: "",
         _id: "",
-        __v: "",
       },
     ];
 
@@ -311,6 +315,148 @@ const getSprintDetails = async (req, res) => {
     res.json({ status: "success", data: data }); // Sending success response with fetched data
   } catch (error) {
     res.json({ status: "error", msg: error }); // Sending error response if any occurs during fetching
+  }
+};
+
+const getResources = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const default_resource = [
+      {
+        _id: "",
+        project_id: id,
+        resource_name: "",
+        role: "",
+        start_date: "",
+        end_date: "",
+        comment: "",
+      },
+    ];
+
+    let data = await resources.find({ project_id: id });
+    // Checking if any data is found
+    if (data.length == 0) {
+      data = default_resource; // Setting default sprint details structure if no data found
+    } else {
+      data = reorderArrayOfObject(data, default_resource); // Reordering sprint details data
+    }
+
+    res.json({ status: "success", data: data }); // Sending success response with fetched data
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error" });
+  }
+};
+const getMoMs = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const default_mom = [
+      {
+        _id: "",
+        project_id: id,
+        date: "",
+        duration: "",
+        mom_link: "",
+        comments: "",
+      },
+    ];
+
+    let data = await mom.find({ project_id: id });
+    // Checking if any data is found
+    if (data.length == 0) {
+      data = default_mom; // Setting default sprint details structure if no data found
+    } else {
+      data = reorderArrayOfObject(data, default_mom); // Reordering sprint details data
+    }
+
+    res.json({ status: "success", data: data }); // Sending success response with fetched data
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error" });
+  }
+};
+const getApprovedTeams = async (req, res) => {
+  const { id } = req.params;
+  const default_approved_team = [
+    {
+      _id: "",
+      project_id: id,
+      no_of_resources: "",
+      role: "",
+      availability: "",
+      duration: "",
+      category: "Phase 1",
+    },
+  ];
+
+  let data = await approved_team.find({ project_id: id });
+  // Checking if any data is found
+  if (data.length == 0) {
+    data = default_approved_team; // Setting default sprint details structure if no data found
+  } else {
+    data = reorderArrayOfObject(data, default_approved_team); // Reordering sprint details data
+  }
+
+  res.json({ status: "success", data: data }); // Sending success response with fetched data
+  try {
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error" });
+  }
+};
+const getClientFeedback = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const default_client_feedback = [
+      {
+        _id: "",
+        project_id: id,
+        feedback_type: "",
+        date_received: "",
+        detailed_feedback: "",
+        action_taken: "",
+        closure_date: "",
+      },
+    ];
+
+    let data = await client_feedback.find({ project_id: id });
+    // Checking if any data is found
+    if (data.length == 0) {
+      data = default_client_feedback; // Setting default sprint details structure if no data found
+    } else {
+      data = reorderArrayOfObject(data, default_client_feedback); // Reordering sprint details data
+    }
+
+    res.json({ status: "success", data: data }); // Sending success response with fetched data
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error" });
+  }
+};
+const getProjectUpdates = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const default_project_updates = [
+      {
+        _id: "",
+        project_id: id,
+        date: "",
+        general_updates: "",
+      },
+    ];
+
+    let data = await project_updates.find({ project_id: id });
+    // Checking if any data is found
+    if (data.length == 0) {
+      data = default_project_updates; // Setting default sprint details structure if no data found
+    } else {
+      data = reorderArrayOfObject(data, default_project_updates); // Reordering sprint details data
+    }
+
+    res.json({ status: "success", data: data }); // Sending success response with fetched data
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "error" });
   }
 };
 
@@ -640,6 +786,216 @@ const alterSprintDetails = async (req, res) => {
   }
 };
 
+const alterResources = async (req, res) => {
+  try {
+    // Filtering records to identify added/updated and deleted records separately
+    const { id } = req.params;
+    const updatedRecords = req.body.filter((record) => {
+      return record.action === "added/updated";
+    });
+    const deletedRecords = req.body.filter((record) => {
+      return record.action === "delete";
+    });
+
+    // Generating update operations for updated records
+    const updateRecordOperations = updatedRecords.map((obj) => ({
+      updateOne: {
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
+        update: { $set: obj }, // Setting new values
+        upsert: true, // Creating a new document if it doesn't exist
+      },
+    }));
+
+    // Generating delete operations for deleted records
+    const deleteRecordOperations = deletedRecords.map((obj) => ({
+      deleteOne: {
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
+        update: { $set: obj }, // Setting deleted document
+        upsert: true, // Creating a new document if it doesn't exist
+      },
+    }));
+
+    // Performing bulk write operation to update and delete records
+    const updateRecordResult = await resources.bulkWrite(
+      updateRecordOperations
+    );
+    const deleteRecordResult = await resources.bulkWrite(
+      deleteRecordOperations
+    );
+
+    res.json({ status: "success", msg: "Data updated successfully" }); // Sending success response
+  } catch (error) {
+    res.json({ status: "error", msg: error }); // Sending error response if any error occurs
+  }
+};
+
+const alterApprovedTeams = async (req, res) => {
+  try {
+    // Filtering records to identify added/updated and deleted records separately
+    const { id } = req.params;
+    const updatedRecords = req.body.filter((record) => {
+      return record.action === "added/updated";
+    });
+    const deletedRecords = req.body.filter((record) => {
+      return record.action === "delete";
+    });
+
+    // Generating update operations for updated records
+    const updateRecordOperations = updatedRecords.map((obj) => ({
+      updateOne: {
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
+        update: { $set: obj }, // Setting new values
+        upsert: true, // Creating a new document if it doesn't exist
+      },
+    }));
+
+    // Generating delete operations for deleted records
+    const deleteRecordOperations = deletedRecords.map((obj) => ({
+      deleteOne: {
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
+        update: { $set: obj }, // Setting deleted document
+        upsert: true, // Creating a new document if it doesn't exist
+      },
+    }));
+
+    // Performing bulk write operation to update and delete records
+    const updateRecordResult = await approved_team.bulkWrite(
+      updateRecordOperations
+    );
+    const deleteRecordResult = await approved_team.bulkWrite(
+      deleteRecordOperations
+    );
+
+    res.json({ status: "success", msg: "Data updated successfully" }); // Sending success response
+  } catch (error) {
+    res.json({ status: "error", msg: error }); // Sending error response if any error occurs
+  }
+};
+
+const alterClientFeedback = async (req, res) => {
+  try {
+    // Filtering records to identify added/updated and deleted records separately
+    const { id } = req.params;
+    const updatedRecords = req.body.filter((record) => {
+      return record.action === "added/updated";
+    });
+    const deletedRecords = req.body.filter((record) => {
+      return record.action === "delete";
+    });
+
+    // Generating update operations for updated records
+    const updateRecordOperations = updatedRecords.map((obj) => ({
+      updateOne: {
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
+        update: { $set: obj }, // Setting new values
+        upsert: true, // Creating a new document if it doesn't exist
+      },
+    }));
+
+    // Generating delete operations for deleted records
+    const deleteRecordOperations = deletedRecords.map((obj) => ({
+      deleteOne: {
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
+        update: { $set: obj }, // Setting deleted document
+        upsert: true, // Creating a new document if it doesn't exist
+      },
+    }));
+
+    // Performing bulk write operation to update and delete records
+    const updateRecordResult = await client_feedback.bulkWrite(
+      updateRecordOperations
+    );
+    const deleteRecordResult = await client_feedback.bulkWrite(
+      deleteRecordOperations
+    );
+
+    res.json({ status: "success", msg: "Data updated successfully" }); // Sending success response
+  } catch (error) {
+    res.json({ status: "error", msg: error }); // Sending error response if any error occurs
+  }
+};
+
+const alterMoMs = async (req, res) => {
+  try {
+    // Filtering records to identify added/updated and deleted records separately
+    const { id } = req.params;
+    const updatedRecords = req.body.filter((record) => {
+      return record.action === "added/updated";
+    });
+    const deletedRecords = req.body.filter((record) => {
+      return record.action === "delete";
+    });
+
+    // Generating update operations for updated records
+    const updateRecordOperations = updatedRecords.map((obj) => ({
+      updateOne: {
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
+        update: { $set: obj }, // Setting new values
+        upsert: true, // Creating a new document if it doesn't exist
+      },
+    }));
+
+    // Generating delete operations for deleted records
+    const deleteRecordOperations = deletedRecords.map((obj) => ({
+      deleteOne: {
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
+        update: { $set: obj }, // Setting deleted document
+        upsert: true, // Creating a new document if it doesn't exist
+      },
+    }));
+
+    // Performing bulk write operation to update and delete records
+    const updateRecordResult = await mom.bulkWrite(updateRecordOperations);
+    const deleteRecordResult = await mom.bulkWrite(deleteRecordOperations);
+
+    res.json({ status: "success", msg: "Data updated successfully" }); // Sending success response
+  } catch (error) {
+    res.json({ status: "error", msg: error }); // Sending error response if any error occurs
+  }
+};
+
+const alterProjectUpdates = async (req, res) => {
+  try {
+    // Filtering records to identify added/updated and deleted records separately
+    const { id } = req.params;
+    const updatedRecords = req.body.filter((record) => {
+      return record.action === "added/updated";
+    });
+    const deletedRecords = req.body.filter((record) => {
+      return record.action === "delete";
+    });
+
+    // Generating update operations for updated records
+    const updateRecordOperations = updatedRecords.map((obj) => ({
+      updateOne: {
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
+        update: { $set: obj }, // Setting new values
+        upsert: true, // Creating a new document if it doesn't exist
+      },
+    }));
+
+    // Generating delete operations for deleted records
+    const deleteRecordOperations = deletedRecords.map((obj) => ({
+      deleteOne: {
+        filter: { _id: obj._id, project_id: id }, // Filtering by ID
+        update: { $set: obj }, // Setting deleted document
+        upsert: true, // Creating a new document if it doesn't exist
+      },
+    }));
+
+    // Performing bulk write operation to update and delete records
+    const updateRecordResult = await project_updates.bulkWrite(
+      updateRecordOperations
+    );
+    const deleteRecordResult = await project_updates.bulkWrite(
+      deleteRecordOperations
+    );
+
+    res.json({ status: "success", msg: "Data updated successfully" }); // Sending success response
+  } catch (error) {
+    res.json({ status: "error", msg: error }); // Sending error response if any error occurs
+  }
+};
 // Exporting the functions to be used in other parts of the application
 
 module.exports = {
@@ -652,6 +1008,11 @@ module.exports = {
   getRiskProfiling, // Retrieves risk profiling data
   getEscalationMatrix, // Retrieves escalation matrix data
   getStakeholders, // Retrieves stakeholders data
+  getApprovedTeams,
+  getClientFeedback,
+  getMoMs,
+  getProjectUpdates,
+  getResources,
 
   // Functions to alter data
   alterProjectDetails, // Alters project details
@@ -664,4 +1025,9 @@ module.exports = {
   alterStakeholders, // Alters stakeholders data
   getUserProjects,
   addProject,
+  alterResources,
+  alterApprovedTeams,
+  alterClientFeedback,
+  alterMoMs,
+  alterProjectUpdates,
 };
