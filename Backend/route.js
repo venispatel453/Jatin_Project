@@ -21,6 +21,16 @@ const {
   alterVersionHistory,
   getUserProjects,
   addProject,
+  getApprovedTeams,
+  getClientFeedback,
+  getMoMs,
+  getProjectUpdates,
+  getResources,
+  alterResources,
+  alterApprovedTeams,
+  alterClientFeedback,
+  alterMoMs,
+  alterProjectUpdates,
 } = require("./Controller/Project.js");
 
 const { addUser, getUsers } = require("./Controller/users.js");
@@ -90,6 +100,31 @@ router.route("/addUser").post(addUser);
 router.route("/getUsers").get(getUsers);
 
 router.route("/sendEmail/invite").post(sendInviteEmail);
+
+router
+  .route("/project/:id/approved_teams")
+  .get(getApprovedTeams) // GET request to fetch project details
+  .post(alterApprovedTeams); // POST request to alter project details
+
+router
+  .route("/project/:id/resources")
+  .get(getResources) // GET request to fetch project details
+  .post(alterResources); // POST request to alter project details
+
+router
+  .route("/project/:id/client_feedback")
+  .get(getClientFeedback) // GET request to fetch project details
+  .post(alterClientFeedback); // POST request to alter project details
+
+router
+  .route("/project/:id/mom")
+  .get(getMoMs) // GET request to fetch project details
+  .post(alterMoMs); // POST request to alter project details
+
+router
+  .route("/project/:id/project_updates")
+  .get(getProjectUpdates) // GET request to fetch project details
+  .post(alterProjectUpdates); // POST request to alter project details
 
 // Exporting the router module
 module.exports = router;
