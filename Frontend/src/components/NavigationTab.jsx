@@ -1,9 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "../styling/navigation-tab.css"; // Import CSS file for styling
 import { useNavigate } from "react-router-dom";
 import { fetchUsersByRole } from "../util/users";
+import axios from "axios";
+import AuthContext from "../context/AuthProvider";
 
-const generateTable = (data, navigate, editIndex, setEditIndex, managers) => {
+const generateTable = (
+  data,
+  navigate,
+  editIndex,
+  setEditIndex,
+  managers,
+  handleChange,
+  handleSave,
+  auth
+) => {
   const columns = [
     { key: "start_date", type: "date" },
     { key: "name", type: "text" },
@@ -15,12 +26,17 @@ const generateTable = (data, navigate, editIndex, setEditIndex, managers) => {
     },
     ,
   ];
-  console.log(data);
+  console.log("data", data);
+
+  const handleColumnName = (column_name) => {
+    return column_name.split("_").join(" "); // Replaces underscores with spaces
+  };
+
   const handleDelete = () => {};
   const handleCancel = () => {
     setEditIndex(null);
   };
-  const handleSave = () => {};
+
   const handleEdit = (index) => {
     setEditIndex(index);
   };
@@ -30,9 +46,9 @@ const generateTable = (data, navigate, editIndex, setEditIndex, managers) => {
       <thead>
         <tr>
           {columns.map((column, index) => (
-            <th key={index}>{column.key}</th>
+            <th key={index}>{handleColumnName(column.key)}</th>
           ))}
-          <th>Actions</th>
+          {auth.role !== "Client" && <th>Actions</th>}
         </tr>
       </thead>
       <tbody>
@@ -52,14 +68,18 @@ const generateTable = (data, navigate, editIndex, setEditIndex, managers) => {
                     >
                       {editIndex === rowIndex ? (
                         <select
-                          name=""
-                          id=""
                           value={JSON.stringify(row[column.key])}
+                          onChange={(e) => {
+                            handleChange("manager", e.target.value, rowIndex);
+                          }}
                         >
-                          {column.options.map((option) => {
+                          {column.options.map((option, index) => {
                             console.log(option);
                             return (
-                              <option value={JSON.stringify(option)}>
+                              <option
+                                value={JSON.stringify(option)}
+                                key={index}
+                              >
                                 {option.name}
                               </option>
                             );
@@ -67,30 +87,6 @@ const generateTable = (data, navigate, editIndex, setEditIndex, managers) => {
                         </select>
                       ) : (
                         row["associated_members"][column.key].name
-                      )}
-                    </td>
-                  );
-                } else if (column.key === "name") {
-                  return (
-                    <td
-                      key={colIndex}
-                      className="name-cell"
-                      onClick={() =>
-                        editIndex === rowIndex
-                          ? null
-                          : navigate(`/project/${row._id}`)
-                      }
-                    >
-                      {editIndex === rowIndex ? (
-                        <input
-                          type={column.type}
-                          value={row[column.key]}
-                          onChange={(e) => {
-                            // Implement change functionality here if needed
-                          }}
-                        />
-                      ) : (
-                        row[column.key]
                       )}
                     </td>
                   );
@@ -105,9 +101,20 @@ const generateTable = (data, navigate, editIndex, setEditIndex, managers) => {
                       }
                     >
                       {editIndex === rowIndex ? (
-                        <select name="" id="" value={row[column.key]}>
-                          {column.options.map((option) => {
-                            return <option value={option}>{option}</option>;
+                        <select
+                          name=""
+                          id=""
+                          value={row[column.key]}
+                          onChange={(e) => {
+                            handleChange("status", e.target.value, rowIndex);
+                          }}
+                        >
+                          {column.options.map((option, index) => {
+                            return (
+                              <option value={option} key={index}>
+                                {option}
+                              </option>
+                            );
                           })}
                         </select>
                       ) : (
@@ -130,7 +137,7 @@ const generateTable = (data, navigate, editIndex, setEditIndex, managers) => {
                           type={column.type}
                           value={row[column.key]}
                           onChange={(e) => {
-                            // Implement change functionality here if needed
+                            handleChange(column.key, e.target.value, rowIndex);
                           }}
                         />
                       ) : (
@@ -140,27 +147,29 @@ const generateTable = (data, navigate, editIndex, setEditIndex, managers) => {
                   );
                 }
               })}
-              <td>
-                {editIndex === rowIndex ? (
-                  <>
-                    <button onClick={() => handleSave()}>
-                      <i className="fas fa-save"></i>
-                    </button>
-                    <button onClick={() => handleCancel()}>
-                      <i className="fas fa-times"></i>
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button onClick={() => handleEdit(rowIndex)}>
-                      <i className="fas fa-edit"></i>
-                    </button>
-                    <button onClick={() => handleDelete(rowIndex)}>
-                      <i className="fas fa-trash-alt"></i>
-                    </button>
-                  </>
-                )}
-              </td>
+              {auth.role !== "Client" && (
+                <td className="action-cell">
+                  {editIndex === rowIndex ? (
+                    <>
+                      <button onClick={() => handleSave(row)}>
+                        <i className="fas fa-save"></i>
+                      </button>
+                      <button onClick={() => handleCancel()}>
+                        <i className="fas fa-times"></i>
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button onClick={() => handleEdit(rowIndex)}>
+                        <i className="fas fa-edit"></i>
+                      </button>
+                      <button onClick={() => handleDelete(rowIndex)}>
+                        <i className="fas fa-trash-alt"></i>
+                      </button>
+                    </>
+                  )}
+                </td>
+              )}
             </tr>
           );
         })}
@@ -173,11 +182,55 @@ function NavigationTab({ data }) {
   const [activeTab, setActiveTab] = useState("all");
   const [editIndex, setEditIndex] = useState(null);
   const [managers, setManagers] = useState([]);
+  const [rows, setRows] = useState(data);
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const { auth } = useContext(AuthContext);
+
+  const handleChange = (attribute, value, rowIndex) => {
+    let newRows = [...rows];
+    console.log(attribute, value);
+    newRows = rows.map((row, index) => {
+      if (index === rowIndex) {
+        if (attribute === "manager") {
+          row["associated_members"][attribute] = JSON.parse(value);
+        } else if (attribute === "status") {
+          row[attribute] = value;
+        } else {
+          row[attribute] = value;
+        }
+      }
+      return row;
+    });
+    setRows(newRows);
+  };
+  const handleSave = async (row) => {
+    try {
+      console.log(row);
+      console.log(`${BASE_URL}/${row._id}/project_details`);
+      const response = await axios.post(
+        `${BASE_URL}/project/${row._id}/project_details`,
+        {
+          projectDetails: row,
+        }
+      );
+      setEditIndex(null);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const fetchManagers = async () => {
     try {
-      const data = await fetchUsersByRole("Manager");
-      setManagers(data);
+      let response = await fetchUsersByRole("Manager");
+      response = response.map((manager) => {
+        return {
+          _id: manager.user_id,
+          name: manager.name,
+          designation: "Manager",
+        };
+      });
+      setManagers(response);
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -230,7 +283,16 @@ function NavigationTab({ data }) {
         {/* Content corresponding to the active tab */}
         {activeTab === "all" && (
           <>
-            {generateTable(data, navigate, editIndex, setEditIndex, managers)}
+            {generateTable(
+              data,
+              navigate,
+              editIndex,
+              setEditIndex,
+              managers,
+              handleChange,
+              handleSave,
+              auth
+            )}
           </>
         )}
         {activeTab === "completed" && (
@@ -240,7 +302,10 @@ function NavigationTab({ data }) {
               navigate,
               editIndex,
               setEditIndex,
-              managers
+              managers,
+              handleChange,
+              handleSave,
+              auth
             )}
           </>
         )}
@@ -251,7 +316,10 @@ function NavigationTab({ data }) {
               navigate,
               editIndex,
               setEditIndex,
-              managers
+              managers,
+              handleChange,
+              handleSave,
+              auth
             )}
           </>
         )}
@@ -262,7 +330,10 @@ function NavigationTab({ data }) {
               navigate,
               editIndex,
               setEditIndex,
-              managers
+              managers,
+              handleChange,
+              handleSave,
+              auth
             )}
           </>
         )}

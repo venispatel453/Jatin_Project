@@ -5,8 +5,10 @@ import AuthContext from "../context/AuthProvider";
 
 const Home = () => {
   const [associatedProjects, setAssociatedProjects] = useState([]);
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const { auth } = useContext(AuthContext);
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+ 
+
 
   const fetchData = async () => {
     try {

@@ -16,3 +16,23 @@
 .sidebar-menu-box {
   padding: 20px; /* Add padding around the sidebar menu box content */
 }
+
+.menu-button {
+  padding: 10px;
+  width: 100%;
+  text-transform: capitalize;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.menu-button-container {
+  width: 100%;
+  text-decoration: none;
+}
+
+.menu-button label {
+  padding-top: 3px;
+  padding-left: 2px;
+}

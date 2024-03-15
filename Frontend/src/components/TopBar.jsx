@@ -32,7 +32,10 @@ const TopBar = () => {
         </Box>
         {/* Box 3: User profile */}
         <Box className="box3">
-          <button onClick={() => logout()}>Logout</button>
+          <button onClick={() => logout()} className="logout-button">
+            <i class="fas fa-sign-out-alt" style={{ color: "#ffffff" }}></i>
+            Logout
+          </button>
         </Box>
       </Flex>
     </div>
