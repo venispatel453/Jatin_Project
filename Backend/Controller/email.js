@@ -63,6 +63,31 @@ const generateEmailTemplate = (stakeholder_name, audit_history) => {
   return email_template;
 };
 
+const generateInviteEmailTemplate = (email, password) => {
+  let email_template = `
+  <html>
+    
+    <body>
+    
+    <h3>Hello,</h3>
+
+    <h4> Below are your login credentials for Customer Success:</h4>
+    <b>Email:</b> ${email}
+    <br>
+    <b>Password:</b> ${password}
+    <br>
+    <br>
+    <h3>Thanks and Regards,</h3>
+    <h3>Promact Infotech Pvt Ltd</h3>
+
+    </body>
+    
+    </html>
+  
+  `;
+  return email_template;
+};
+
 // Function to send emails to stakeholders
 const sendMail = async (req, res) => {
   try {
@@ -133,7 +158,7 @@ const sendInviteEmail = (req, res) => {
         to: `${email}`,
         subject: "Credentials for Customer Sucess",
         // Generating email body using generateEmailTemplate function
-        html: `email:${email} password:${password}`,
+        html: generateInviteEmailTemplate(email, password),
       });
     }
 
