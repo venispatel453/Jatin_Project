@@ -13,7 +13,9 @@ const Project_Phases_Section = () => {
   const [changedTableRows, setChangedTableRows] = useState([]); // State to manage changed table rows
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control the visibility of the save button
 
+  // Retrieve the base URL from environment variables
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  // Extract the current pathname from the URL of the window
   const PATH_NAME = new URL(window.location.href).pathname;
 
   // Function to handle form submission
@@ -68,14 +70,18 @@ const Project_Phases_Section = () => {
           {/* Render the Table component if phase history data is available */}
           {phaseHistory.length > 0 ? (
             <Table
+              // Default values for the table
               defaultValues={{
                 project_id: phaseHistory[0].project_id,
               }}
+              // Roles allowed to access this table
               allowedRoles={["Admin", "Manager"]}
+              // Identifier for the table section
               sectionTab={"phases"}
+              // Function to control the visibility of the save button
               setShowSaveButton={setShowSaveButton}
+              // Configuration for column types, e.g., date formatting and dropdown options
               columnType={[
-                // Define column types for rendering
                 {
                   key: "start_date",
                   type: "date",
@@ -98,9 +104,12 @@ const Project_Phases_Section = () => {
                   options: ["Delayed", "On-Time", "Pending", "Signed-Off"],
                 },
               ]}
-              data={phaseHistory} // Pass phase history data to the Table component
-              invalidColumns={["project_id", "_id", "__v"]} // Define invalid columns to exclude from rendering
-              setChangedTableRows={setChangedTableRows} // Pass function to manage changed table rows
+              // Data to be displayed in the table
+              data={phaseHistory}
+              // List of columns to be excluded from the table
+              invalidColumns={["project_id", "_id", "__v"]}
+              // Function to update changed table rows state
+              setChangedTableRows={setChangedTableRows}
             />
           ) : (
             "" // Render nothing if phase history data is not available

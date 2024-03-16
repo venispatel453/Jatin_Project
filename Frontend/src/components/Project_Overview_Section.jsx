@@ -23,8 +23,8 @@ const Project_Overview_Section = () => {
   // Function to validate input field
   const handleInputFieldValidation = () => {
     const columns = ["overview", "budget", "timeline"];
-    for (const key in columns) {
-      if (projectDetails[key] === "") {
+    for (const column of columns) {
+      if (projectDetails[column] === "") {
         return true;
       }
     }
@@ -50,6 +50,7 @@ const Project_Overview_Section = () => {
       setChangesMade(false); // Resetting changesMade state after successful submission
     } catch (error) {
       // Displaying error message using toast notification
+      console.log(error);
       toast.error("Some Error");
     }
   };

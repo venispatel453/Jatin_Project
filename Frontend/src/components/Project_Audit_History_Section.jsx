@@ -13,8 +13,11 @@ const Project_Audit_History_Section = () => {
   const [changedTableRows, setChangedTableRows] = useState([]); // State for storing changed table rows
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control the visibility of the save button
 
+  // Base URL for API requests
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  // Path name extracted from the current window location
   const PATH_NAME = new URL(window.location.href).pathname;
+
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
@@ -74,16 +77,24 @@ const Project_Audit_History_Section = () => {
       <Box className="escalation-matrix-table-container">
         {auditHistory.length > 0 && (
           <Table
+            // Set default values for the table
             defaultValues={{
-              project_id: auditHistory[0].project_id,
+              project_id: auditHistory[0].project_id, // Set project_id based on the first item in auditHistory array
             }}
+            // Define roles allowed to access this table
             allowedRoles={["Auditor"]}
-            sectionTab={"audit_history"} // Identifier for the table section
-            setShowSaveButton={setShowSaveButton} // Function to control the visibility of the save button
-            data={auditHistory} // Audit history data to be displayed in the table
-            columnType={[{ key: "date_of_audit", type: "date" }]} // Configuration for date column formatting
-            invalidColumns={["project_id", "_id", "__v"]} // List of columns to be excluded from the table
-            setChangedTableRows={setChangedTableRows} // Function to update changed table rows state
+            // Identifier for the table section
+            sectionTab={"audit_history"}
+            // Function to control the visibility of the save button
+            setShowSaveButton={setShowSaveButton}
+            // Audit history data to be displayed in the table
+            data={auditHistory}
+            // Configuration for column types, e.g., date formatting
+            columnType={[{ key: "date_of_audit", type: "date" }]}
+            // List of columns to be excluded from the table
+            invalidColumns={["project_id", "_id", "__v"]}
+            // Function to update changed table rows state
+            setChangedTableRows={setChangedTableRows}
           />
         )}
       </Box>

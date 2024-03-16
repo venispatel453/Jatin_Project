@@ -1,0 +1,39 @@
+/* Resetting default margin, padding, and box-sizing for all elements */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Styling for the container of project metrics */
+.project-metrics {
+  display: flex; /* Displaying as a flex container */
+  height: 25%; /* Setting height */
+  width: 100%; /* Setting width */
+  gap: 10px; /* Adding gap between child elements */
+  padding: 5px; /* Adding padding */
+}
+
+/* Styling for individual metrics boxes */
+.metrics-box {
+  border: 1px solid rgb(182, 181, 181); /* Adding border */
+  width: 95%; /* Setting width */
+  border-radius: 6px; /* Adding border radius */
+  display: flex; /* Displaying as a flex container */
+  gap: 5px; /* Adding gap between child elements */
+  justify-content: center; /* Centering content horizontally */
+  align-items: center; /* Centering content vertically */
+  flex-direction: column; /* Setting flex direction to column */
+}
+
+/* Styling for heading inside metrics boxes */
+.metrics-box h1 {
+  font-weight: 700; /* Setting font weight */
+  font-size: xx-large; /* Setting font size */
+}
+
+/* Styling for label inside metrics boxes */
+.metrics-box label {
+  text-transform: capitalize; /* Capitalizing text */
+  font-weight: 400; /* Setting font weight */
+}

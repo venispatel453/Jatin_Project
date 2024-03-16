@@ -1,0 +1,9 @@
+/* Styling for the container of the loading spinner */
+.loading-spinner-container {
+  width: 100vw; /* Setting width to the full viewport width */
+  height: 100vh; /* Setting height to the full viewport height */
+  display: flex; /* Displaying as a flex container */
+  justify-content: center; /* Centering content horizontally */
+  align-items: center; /* Centering content vertically */
+  background-color: rgb(41, 41, 41); /* Setting background color */
+}

@@ -20,12 +20,12 @@ const Scope_and_Stack_Section = () => {
   // Function to validate input fields
   const handleInputFieldValidation = () => {
     const columns = ["scope", "stack"];
-    for (const key in columns) {
-      if (projectDetails[key] === "") {
-        return true; // Return true if any field is empty
+    for (const column of columns) {
+      if (projectDetails[column] === "") {
+        return true;
       }
     }
-    return false; // Return false if all fields are filled
+    return false;
   };
 
   // Function to handle form submission

@@ -7,19 +7,25 @@ import "../styling/project_approved_teams_section.css"; // Importing CSS styles 
 import { toast } from "react-toastify"; // Importing toast notifications for displaying messages
 
 const Project_Approved_Teams_Section = () => {
-  const [approvedTeams, setApprovedTeams] = useState([]); // State to manage stakeholders data
-  const [changedTableRows, setChangedTableRows] = useState([]); // State to track changed table rows
-  const [showSaveButton, setShowSaveButton] = useState(false); // State to control visibility of save button
+  // State variable to store the approved teams data
+  const [approvedTeams, setApprovedTeams] = useState([]);
+  // State variable to store the changed table rows
+  const [changedTableRows, setChangedTableRows] = useState([]);
+  // State variable to control the visibility of the save button
+  const [showSaveButton, setShowSaveButton] = useState(false);
+  // State variable to store the categories for filtering
   const [categories, setCategories] = useState([]);
+  // State variable to manage the active accordion section
   const [activeAccordion, setActiveAccordion] = useState([]);
 
+  // Constant storing the base URL obtained from environment variables
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  // Constant storing the current pathname extracted from the window's URL
   const PATH_NAME = new URL(window.location.href).pathname;
 
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
-      // Sending changed table rows to the server for saving
       const response = await axios.post(
         `${BASE_URL}${PATH_NAME}/client_feedback`,
         [...changedTableRows]
@@ -80,17 +86,6 @@ const Project_Approved_Teams_Section = () => {
       )}
       {/* Container for stakeholders table */}
       <Box className="escalation-matrix-table-container">
-        {/* Render the Table component if stakeholders data is available */}
-        {/* {categories.length > 0 && (
-          <Table
-            sectionTab={"approved_teams"} // Passing section tab as prop
-            setShowSaveButton={setShowSaveButton} // Passing setShowSaveButton function as prop
-            setChangedTableRows={setChangedTableRows} // Passing setChangedTableRows function as prop
-            data={approvedTeams} // Passing stakeholders data as prop
-            invalidColumns={["project_id", "_id", "__v"]} // Specifying invalid columns for table
-            columnType={[]} // Specifying column types for table
-          />
-        )} */}
         <div>
           {console.log("lengrth", categories.length)}
           {categories.length > 0 &&

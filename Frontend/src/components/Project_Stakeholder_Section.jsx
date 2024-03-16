@@ -13,7 +13,9 @@ const Project_Stakeholder_Section = () => {
   const [changedTableRows, setChangedTableRows] = useState([]); // State to track changed table rows
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control visibility of save button
 
+  // Retrieve the base URL from environment variables
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  // Extract the current pathname from the URL of the window
   const PATH_NAME = new URL(window.location.href).pathname;
 
   // Function to handle form submission
@@ -69,16 +71,24 @@ const Project_Stakeholder_Section = () => {
         {/* Render the Table component if stakeholders data is available */}
         {stakeholders.length > 0 && (
           <Table
+            // Default values for the table
             defaultValues={{
               project_id: stakeholders[0].project_id,
             }}
+            // Roles allowed to access this table
             allowedRoles={["Admin", "Manager"]}
-            sectionTab={"stakeholder"} // Passing section tab as prop
-            setShowSaveButton={setShowSaveButton} // Passing setShowSaveButton function as prop
-            setChangedTableRows={setChangedTableRows} // Passing setChangedTableRows function as prop
-            data={stakeholders} // Passing stakeholders data as prop
-            invalidColumns={["project_id", "_id", "__v"]} // Specifying invalid columns for table
-            columnType={[]} // Specifying column types for table
+            // Identifier for the table section
+            sectionTab={"stakeholder"}
+            // Function to control the visibility of the save button
+            setShowSaveButton={setShowSaveButton}
+            // Function to update changed table rows state
+            setChangedTableRows={setChangedTableRows}
+            // Data to be displayed in the table
+            data={stakeholders}
+            // List of columns to be excluded from the table
+            invalidColumns={["project_id", "_id", "__v"]}
+            // Configuration for column types, e.g., date formatting or dropdown options
+            columnType={[]}
           />
         )}
       </Box>

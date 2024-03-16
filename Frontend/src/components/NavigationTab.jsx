@@ -1,61 +1,72 @@
+// Import necessary modules and files
 import React, { useEffect, useState, useContext } from "react";
 import "../styling/navigation-tab.css"; // Import CSS file for styling
-import { useNavigate } from "react-router-dom";
-import { fetchUsersByRole } from "../util/users";
-import axios from "axios";
-import AuthContext from "../context/AuthProvider";
+import { useNavigate } from "react-router-dom"; // Navigation hook for routing
+import { fetchUsersByRole } from "../util/users"; // Function to fetch users by role
+import axios from "axios"; // HTTP client for making requests
+import AuthContext from "../context/AuthProvider"; // Context for authentication
+import { toast } from "react-toastify"; // Toast notifications
 
+// Function to generate table based on data
 const generateTable = (
-  data,
-  navigate,
-  editIndex,
-  setEditIndex,
-  managers,
-  handleChange,
-  handleSave,
-  auth
+  data, // Data for the table
+  navigate, // Function to navigate
+  editIndex, // Index of row being edited
+  setEditIndex, // Function to set edit index
+  managers, // Array of managers
+  handleChange, // Function to handle changes in data
+  handleSave, // Function to handle saving data
+  auth // Authentication context
 ) => {
+  // Define table columns
   const columns = [
-    { key: "start_date", type: "date" },
-    { key: "name", type: "text" },
-    { key: "manager", options: managers, type: "dropdown" },
+    { key: "start_date", type: "date" }, // Column for start date
+    { key: "name", type: "text" }, // Column for name
+    { key: "manager", options: managers, type: "dropdown" }, // Column for manager with dropdown options
     {
-      key: "status",
-      options: ["On-Going", "Completed", "Hold", "In-Progress"],
-      type: "dropdown",
+      key: "status", // Column for status
+      options: ["On-Going", "Completed", "Hold"], // Options for status dropdown
+      type: "dropdown", // Type of input
     },
-    ,
   ];
-  console.log("data", data);
 
+  // Function to handle column name display
   const handleColumnName = (column_name) => {
     return column_name.split("_").join(" "); // Replaces underscores with spaces
   };
 
+  // Placeholder functions for handling delete and cancel actions
   const handleDelete = () => {};
   const handleCancel = () => {
     setEditIndex(null);
   };
 
+  // Function to handle editing a row
   const handleEdit = (index) => {
     setEditIndex(index);
   };
 
+  // JSX for rendering the table
   return (
     <table className="data-table">
       <thead>
         <tr>
+          {/* Render table headers */}
           {columns.map((column, index) => (
             <th key={index}>{handleColumnName(column.key)}</th>
           ))}
+          {/* Render actions column if user is not a client */}
           {auth.role !== "Client" && <th>Actions</th>}
         </tr>
       </thead>
       <tbody>
+        {/* Render table rows */}
         {data.map((row, rowIndex) => {
           return (
             <tr key={rowIndex} className="table-row">
+              {/* Render cells for each column */}
               {columns.map((column, colIndex) => {
+                // Handle special cases for manager and status columns
                 if (column.key === "manager") {
                   return (
                     <td
@@ -66,6 +77,7 @@ const generateTable = (
                           : navigate(`/project/${row._id}`)
                       }
                     >
+                      {/* Render dropdown for editing manager */}
                       {editIndex === rowIndex ? (
                         <select
                           value={JSON.stringify(row[column.key])}
@@ -74,13 +86,12 @@ const generateTable = (
                           }}
                         >
                           {column.options.map((option, index) => {
-                            console.log(option);
                             return (
                               <option
                                 value={JSON.stringify(option)}
                                 key={index}
                               >
-                                {option.name}
+                                {option?.name}
                               </option>
                             );
                           })}
@@ -100,6 +111,7 @@ const generateTable = (
                           : navigate(`/project/${row._id}`)
                       }
                     >
+                      {/* Render dropdown for editing status */}
                       {editIndex === rowIndex ? (
                         <select
                           name=""
@@ -118,11 +130,16 @@ const generateTable = (
                           })}
                         </select>
                       ) : (
-                        row[column.key]
+                        <label
+                          className={`status ${row[column.key].toLowerCase()}`}
+                        >
+                          {row[column.key]}
+                        </label>
                       )}
                     </td>
                   );
                 } else {
+                  // Render input fields for other columns
                   return (
                     <td
                       key={colIndex}
@@ -147,6 +164,7 @@ const generateTable = (
                   );
                 }
               })}
+              {/* Render action buttons if user is not a client */}
               {auth.role !== "Client" && (
                 <td className="action-cell">
                   {editIndex === rowIndex ? (
@@ -178,7 +196,9 @@ const generateTable = (
   );
 };
 
-function NavigationTab({ data }) {
+// NavigationTab component
+function NavigationTab({ data, setData }) {
+  // State variables
   const [activeTab, setActiveTab] = useState("all");
   const [editIndex, setEditIndex] = useState(null);
   const [managers, setManagers] = useState([]);
@@ -186,9 +206,9 @@ function NavigationTab({ data }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const { auth } = useContext(AuthContext);
 
+  // Function to handle changes in data
   const handleChange = (attribute, value, rowIndex) => {
     let newRows = [...rows];
-    console.log(attribute, value);
     newRows = rows.map((row, index) => {
       if (index === rowIndex) {
         if (attribute === "manager") {
@@ -203,10 +223,10 @@ function NavigationTab({ data }) {
     });
     setRows(newRows);
   };
+
+  // Function to handle saving data
   const handleSave = async (row) => {
     try {
-      console.log(row);
-      console.log(`${BASE_URL}/${row._id}/project_details`);
       const response = await axios.post(
         `${BASE_URL}/project/${row._id}/project_details`,
         {
@@ -214,12 +234,14 @@ function NavigationTab({ data }) {
         }
       );
       setEditIndex(null);
-      console.log(response);
+      setData(rows);
+      toast.success("Data Updated Successfully");
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error Occurred");
     }
   };
 
+  // Function to fetch managers
   const fetchManagers = async () => {
     try {
       let response = await fetchUsersByRole("Manager");
@@ -231,22 +253,29 @@ function NavigationTab({ data }) {
         };
       });
       setManagers(response);
-      console.log(data);
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error Occurred");
     }
   };
+
+  // Navigation hook
   const navigate = useNavigate();
+
+  // Function to handle tab click
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
   };
 
+  // Fetch managers and set initial rows on component mount
   useEffect(() => {
     fetchManagers();
+    setRows(data);
   }, []);
 
+  // Render component JSX
   return (
     <div className="navigation-tab">
+      {/* Render navigation tabs */}
       <nav>
         <ul className="tab-list">
           <li
@@ -279,10 +308,11 @@ function NavigationTab({ data }) {
           </li>
         </ul>
       </nav>
+      {/* Render tab content */}
       <div className="tab-content">
-        {/* Content corresponding to the active tab */}
         {activeTab === "all" && (
           <>
+            {/* Render table for all projects */}
             {generateTable(
               data,
               navigate,
@@ -297,6 +327,7 @@ function NavigationTab({ data }) {
         )}
         {activeTab === "completed" && (
           <>
+            {/* Render table for completed projects */}
             {generateTable(
               data.filter((row) => row.status.toLowerCase() === "completed"),
               navigate,
@@ -311,6 +342,7 @@ function NavigationTab({ data }) {
         )}
         {activeTab === "on-going" && (
           <>
+            {/* Render table for ongoing projects */}
             {generateTable(
               data.filter((row) => row.status.toLowerCase() === "on-going"),
               navigate,
@@ -325,6 +357,7 @@ function NavigationTab({ data }) {
         )}
         {activeTab === "hold" && (
           <>
+            {/* Render table for projects on hold */}
             {generateTable(
               data.filter((row) => row.status.toLowerCase() === "hold"),
               navigate,
@@ -342,4 +375,5 @@ function NavigationTab({ data }) {
   );
 }
 
+// Export NavigationTab component
 export default NavigationTab;

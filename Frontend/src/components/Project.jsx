@@ -31,8 +31,11 @@ const Project = () => {
   // State variable to manage the active tab
   const [activeTab, setActiveTab] = useState(0);
 
+  // Retrieve the base URL from environment variables
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  // Extract the current pathname from the URL of the window
   const PATH_NAME = new URL(window.location.href).pathname;
+
   // Function to handle exporting data as PDF
   const handleExportButton = async () => {
     try {

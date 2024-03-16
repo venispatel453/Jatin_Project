@@ -1,5 +1,5 @@
 import React from "react"; // Importing React library
-import { Flex, Box, Search, Avatar } from "monday-ui-react-core"; // Importing UI components from Monday UI library
+import { Flex, Box, Search } from "monday-ui-react-core"; // Importing UI components from Monday UI library
 import "monday-ui-react-core/tokens"; // Importing tokens for styling
 import "../styling/topbar.css"; // Importing CSS styles for the top bar component
 import { useAuth0 } from "@auth0/auth0-react";

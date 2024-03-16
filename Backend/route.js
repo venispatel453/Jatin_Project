@@ -3,45 +3,45 @@ const express = require("express");
 const router = express.Router();
 const {
   // Importing controller functions for handling project data
-  getProjectDetails,
-  getAuditHistory,
-  getEscalationMatrix,
-  getPhases,
-  getRiskProfiling,
-  getSprintDetails,
-  getStakeholders,
-  getVersionHistory,
-  alterProjectDetails,
-  alterEscalationMatrix,
-  alterAuditHistory,
-  alterPhases,
-  alterRiskProfiling,
-  alterSprintDetails,
-  alterStakeholders,
-  alterVersionHistory,
-  getUserProjects,
-  addProject,
-  getApprovedTeams,
-  getClientFeedback,
-  getMoMs,
-  getProjectUpdates,
-  getResources,
-  alterResources,
-  alterApprovedTeams,
-  alterClientFeedback,
-  alterMoMs,
-  alterProjectUpdates,
+  getProjectDetails, // Retrieves project details
+  getAuditHistory, // Retrieves audit history
+  getEscalationMatrix, // Retrieves escalation matrix
+  getPhases, // Retrieves phases
+  getRiskProfiling, // Retrieves risk profiling data
+  getSprintDetails, // Retrieves sprint details
+  getStakeholders, // Retrieves stakeholders data
+  getVersionHistory, // Retrieves version history
+  alterProjectDetails, // Alters project details
+  alterEscalationMatrix, // Alters escalation matrix
+  alterAuditHistory, // Alters audit history
+  alterPhases, // Alters phases
+  alterRiskProfiling, // Alters risk profiling data
+  alterSprintDetails, // Alters sprint details
+  alterStakeholders, // Alters stakeholders data
+  alterVersionHistory, // Alters version history
+  getUserProjects, // Retrieves user projects data
+  addProject, // Adds a new project
+  getApprovedTeams, // Retrieves approved teams data
+  getClientFeedback, // Retrieves client feedback data
+  getMoMs, // Retrieves minutes of meeting data
+  getProjectUpdates, // Retrieves project updates data
+  getResources, // Retrieves resources data
+  alterResources, // Alters resources data
+  alterApprovedTeams, // Alters approved teams data
+  alterClientFeedback, // Alters client feedback data
+  alterMoMs, // Alters minutes of meeting data
+  alterProjectUpdates, // Alters project updates data
 } = require("./Controller/Project.js");
-
-const { addUser, getUsers } = require("./Controller/users.js");
 
 const { generatePDF } = require("./Controller/genPDF.js"); // Importing function for generating PDF files
 const { sendMail, sendInviteEmail } = require("./Controller/email.js"); // Importing function for sending emails
 
 // Routes for handling project-related data
 
+// Route for fetching or altering user projects data
 router.route("/projects").get(getUserProjects);
 router.route("/addProject").post(addProject);
+
 // Route for fetching or altering project details
 router
   .route("/project/:id/project_details")
@@ -96,35 +96,38 @@ router.route("/project/:id/sendEmail").post(sendMail);
 // Route for generating PDF files
 router.route("/project/:id/genPDF").get(generatePDF);
 
-router.route("/addUser").post(addUser);
-router.route("/getUsers").get(getUsers);
-
+// Route for sending invitation emails
 router.route("/sendEmail/invite").post(sendInviteEmail);
 
+// Routes for fetching or altering approved teams data
 router
   .route("/project/:id/approved_teams")
-  .get(getApprovedTeams) // GET request to fetch project details
-  .post(alterApprovedTeams); // POST request to alter project details
+  .get(getApprovedTeams) // GET request to fetch approved teams data
+  .post(alterApprovedTeams); // POST request to alter approved teams data
 
+// Routes for fetching or altering resources data
 router
   .route("/project/:id/resources")
-  .get(getResources) // GET request to fetch project details
-  .post(alterResources); // POST request to alter project details
+  .get(getResources) // GET request to fetch resources data
+  .post(alterResources); // POST request to alter resources data
 
+// Routes for fetching or altering client feedback data
 router
   .route("/project/:id/client_feedback")
-  .get(getClientFeedback) // GET request to fetch project details
-  .post(alterClientFeedback); // POST request to alter project details
+  .get(getClientFeedback) // GET request to fetch client feedback data
+  .post(alterClientFeedback); // POST request to alter client feedback data
 
+// Routes for fetching or altering minutes of meeting data
 router
   .route("/project/:id/mom")
-  .get(getMoMs) // GET request to fetch project details
-  .post(alterMoMs); // POST request to alter project details
+  .get(getMoMs) // GET request to fetch minutes of meeting data
+  .post(alterMoMs); // POST request to alter minutes of meeting data
 
+// Routes for fetching or altering project updates data
 router
   .route("/project/:id/project_updates")
-  .get(getProjectUpdates) // GET request to fetch project details
-  .post(alterProjectUpdates); // POST request to alter project details
+  .get(getProjectUpdates) // GET request to fetch project updates data
+  .post(alterProjectUpdates); // POST request to alter project updates data
 
 // Exporting the router module
 module.exports = router;

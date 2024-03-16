@@ -1,79 +1,107 @@
-/* Main container */
+/* Styling for the main container */
 .navigation-tab {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  height: 98%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; /* Setting font family */
+  border-radius: 8px; /* Applying border radius */
+  overflow: hidden; /* Hiding overflow */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Applying box shadow */
+  height: 75%; /* Setting height */
 }
 
-/* Navigation bar */
+/* Styling for the navigation bar */
 .navigation-tab nav {
-  background-color: #f8f9fa;
-  padding: 10px 15px;
-  border-bottom: 1px solid #ccc;
+  background: transparent; /* Transparent background */
+  padding: 10px 15px; /* Padding for the navigation bar */
 }
 
-/* List of tabs */
+/* Styling for the list of tabs */
 .tab-list {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
+  list-style-type: none; /* Removing list-style */
+  margin: 0; /* Resetting margin */
+  padding: 0; /* Resetting padding */
+  display: flex; /* Displaying as flex */
 }
 
-/* Individual tab */
+/* Styling for individual tab */
 .tab-item {
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: color 0.3s ease;
-  color: #555;
-  font-weight: 600;
-  font-size: 14px;
-  border-radius: 8px 8px 0 0;
+  padding: 10px 20px; /* Padding for the tab */
+  cursor: pointer; /* Setting cursor to pointer */
+  transition: color 0.3s ease; /* Transition effect for color */
+  color: #555; /* Default color */
+  font-weight: 600; /* Setting font weight */
+  font-size: 14px; /* Setting font size */
+  border-radius: 8px 8px 0 0; /* Border radius */
   border-bottom: 2px solid transparent; /* Initially transparent border */
 }
 
-/* Active tab */
+/* Styling for active tab */
 .tab-item.active {
-  color: #007bff;
+  color: #007bff; /* Color for active tab */
   border-bottom-color: #007bff; /* Blue border for active tab */
 }
 
-/* Tab content */
+/* Styling for tab content */
 .tab-content {
-  padding: 15px;
+  padding: 15px; /* Padding for tab content */
 }
 
+/* Styling for the data table */
 .data-table {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 8px;
-  overflow: hidden;
+  width: 100%; /* Full width */
+  border-collapse: collapse; /* Collapsing table borders */
+  border-radius: 8px; /* Border radius */
+  overflow: hidden; /* Hiding overflow */
 }
 
-/* Table header and data cells */
+/* Styling for table header and data cells */
 .data-table th,
 .data-table td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: left;
+  border: 1px solid #ddd; /* Border style */
+  padding: 12px; /* Padding for cells */
+  text-align: left; /* Text alignment */
 }
 
-/* Table header */
+/* Styling for table header */
 .data-table th {
-  background-color: #007bff;
-  color: #fff;
-  font-weight: 500;
-  text-transform: capitalize;
+  background-color: #007bff; /* Background color */
+  color: #fff; /* Text color */
+  font-weight: 500; /* Font weight */
+  text-transform: capitalize; /* Capitalize text */
 }
 
-/* Table row hover effect */
+/* Styling for table row hover effect */
 .data-table tbody tr:hover {
-  background-color: #f0f0f0;
+  background-color: #f0f0f0; /* Background color on hover */
 }
 
+/* Styling for table row */
 .table-row {
-  cursor: pointer;
+  cursor: pointer; /* Cursor style */
+}
+
+/* Styling for status indicators */
+.status.on-going {
+  background-color: rgb(
+    47,
+    145,
+    47
+  ); /* Background color for 'on-going' status */
+  padding: 5px; /* Padding */
+  border-radius: 4px; /* Border radius */
+  color: #fff; /* Text color */
+}
+.status.completed {
+  background-color: rgb(
+    175,
+    70,
+    70
+  ); /* Background color for 'completed' status */
+  padding: 5px; /* Padding */
+  border-radius: 4px; /* Border radius */
+  color: #fff; /* Text color */
+}
+.status.hold {
+  background-color: rgb(77, 70, 70); /* Background color for 'hold' status */
+  padding: 5px; /* Padding */
+  border-radius: 4px; /* Border radius */
+  color: #fff; /* Text color */
 }

@@ -12,7 +12,9 @@ const Project_Escalation_Matrix_Section = () => {
   const [changedTableRows, setChangedTableRows] = useState([]); // State for storing changed table rows
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control the visibility of the save button
 
+  // Retrieve the base URL from environment variables
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  // Extract the current pathname from the URL of the window
   const PATH_NAME = new URL(window.location.href).pathname;
 
   // Function to handle form submission

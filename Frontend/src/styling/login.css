@@ -1,0 +1,13 @@
+/* Styling for the login button */
+.login-button {
+  padding: 10px; /* Setting padding for the button */
+  text-transform: capitalize; /* Transforming text to capitalize */
+}
+
+/* Styling for the container of the login button */
+.login-button-container {
+  display: flex; /* Displaying as a flex container */
+  justify-content: center; /* Centering content horizontally */
+  align-items: center; /* Centering content vertically */
+  height: 100vh; /* Setting height to the full viewport height */
+}

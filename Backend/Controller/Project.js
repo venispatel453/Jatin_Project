@@ -14,48 +14,44 @@ const approved_team = require("../Model/Approved_Team.js");
 const mom = require("../Model/MoMs.js");
 const project_updates = require("../Model/Project_Updates.js");
 
+// Function to fetch projects associated with a user
 const getUserProjects = async (req, res) => {
   try {
+    // Destructuring user_id and role from request query parameters
     const { id: user_id, role } = req.query;
-    console.log(req.query);
     let response = [];
+
+    // Check if the user is an Admin or Auditor
     if (role === "Admin" || role === "Auditor") {
+      // If Admin or Auditor, fetch all projects
       response = await project.find({});
     } else {
-      console.log(typeof user_id);
+      // If not Admin or Auditor, fetch projects associated with the user
       response = await project.find({
         $or: [
-          { "associated_members.manager._id": user_id },
-          { "associated_members.clients._id": user_id },
+          { "associated_members.manager._id": user_id }, // Check if user is a manager of any project
+          { "associated_members.clients._id": user_id }, // Check if user is a client of any project
         ],
       });
     }
-    console.log(response);
+    // Send response with fetched projects
     res.json({ status: "success", data: response });
   } catch (error) {
-    console.log(error);
-    res.json({ status: "error" });
+    // If an error occurs, send error response
+    res.json({ status: "error", message: "Internal Server Error" });
   }
 };
 
-// $or: [
-//   { "associated_members.manager._id": user_id },
-//   {
-//     "associated_members.clients": {
-//       $elemMatch: { _id: user_id },
-//     },
-//   },
-// ],
-
+// Function to add a new project
 const addProject = async (req, res) => {
   try {
-    //const { _id, name, associated_members } = req.body;
+    // Create a new project using data from the request body
     const response = await project.create({ ...req.body });
-    console.log(response);
+    // Send success response
     res.json({ status: "success" });
   } catch (error) {
-    console.log(error);
-    res.json({ status: "success" });
+    // If an error occurs, send error response
+    res.json({ status: "success", message: "Internal Server Error" });
   }
 };
 
@@ -63,7 +59,6 @@ const addProject = async (req, res) => {
 const getProjectDetails = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(req.params);
     const default_project_details = {
       _id: id,
       overview: "",
@@ -86,8 +81,9 @@ const getProjectDetails = async (req, res) => {
 // Function to fetch version history
 const getVersionHistory = async (req, res) => {
   try {
-    // Default structure for version history in case no data is found
     const { id } = req.params;
+
+    // Default structure for version history in case no data is found
     const default_version_history = [
       {
         project_id: id,
@@ -122,8 +118,9 @@ const getVersionHistory = async (req, res) => {
 // Function to fetch audit history
 const getAuditHistory = async (req, res) => {
   try {
-    // Default structure for audit history in case no data is found
     const { id } = req.params;
+
+    // Default structure for audit history in case no data is found
     const default_audit_history = [
       {
         project_id: id,
@@ -156,9 +153,9 @@ const getAuditHistory = async (req, res) => {
 // Function to fetch stakeholders data
 const getStakeholders = async (req, res) => {
   try {
-    // Default structure for stakeholders in case no data is found
-
     const { id } = req.params;
+
+    // Default structure for stakeholders in case no data is found
     const default_stakeholders = [
       {
         project_id: id,
@@ -188,8 +185,9 @@ const getStakeholders = async (req, res) => {
 // Function to fetch escalation matrix data
 const getEscalationMatrix = async (req, res) => {
   try {
-    // Default structure for escalation matrix in case no data is found
     const { id } = req.params;
+
+    // Default structure for escalation matrix in case no data is found
     const default_escalation_matrix = [
       {
         project_id: id,
@@ -220,8 +218,9 @@ const getEscalationMatrix = async (req, res) => {
 // Function to fetch risk profiling data
 const getRiskProfiling = async (req, res) => {
   try {
-    // Default structure for risk profiling in case no data is found
     const { id } = req.params;
+
+    // Default structure for risk profiling in case no data is found
     const default_risk_profiling = [
       {
         project_id: id,
@@ -254,8 +253,9 @@ const getRiskProfiling = async (req, res) => {
 // Function to fetch phases data
 const getPhases = async (req, res) => {
   try {
-    // Default structure for phases in case no data is found
     const { id } = req.params;
+
+    // Default structure for phases in case no data is found
     const defaultPhase = [
       {
         project_id: id,
@@ -290,6 +290,7 @@ const getPhases = async (req, res) => {
 const getSprintDetails = async (req, res) => {
   try {
     const { id } = req.params;
+
     // Default structure for sprint details in case no data is found
     const default_sprint_details = [
       {
@@ -318,9 +319,13 @@ const getSprintDetails = async (req, res) => {
   }
 };
 
+// Function to get resources for a specific project
 const getResources = async (req, res) => {
   try {
+    // Extract project id from request parameters
     const { id } = req.params;
+
+    // Define a default resource object structure
     const default_resource = [
       {
         _id: "",
@@ -333,23 +338,32 @@ const getResources = async (req, res) => {
       },
     ];
 
+    // Find resources associated with the project id
     let data = await resources.find({ project_id: id });
-    // Checking if any data is found
+
+    // If no resources are found, use the default resource structure
     if (data.length == 0) {
-      data = default_resource; // Setting default sprint details structure if no data found
+      data = default_resource;
     } else {
-      data = reorderArrayOfObject(data, default_resource); // Reordering sprint details data
+      // Reorder the array of objects based on default resource structure
+      data = reorderArrayOfObject(data, default_resource);
     }
 
-    res.json({ status: "success", data: data }); // Sending success response with fetched data
+    // Send success response with the retrieved data
+    res.json({ status: "success", data: data });
   } catch (error) {
-    console.log(error);
+    // Log error and send error response
     res.json({ status: "error" });
   }
 };
+
+// Function to get Minutes of Meetings (MoMs) for a specific project
 const getMoMs = async (req, res) => {
   try {
+    // Extract project id from request parameters
     const { id } = req.params;
+
+    // Define a default MoM object structure
     const default_mom = [
       {
         _id: "",
@@ -361,52 +375,68 @@ const getMoMs = async (req, res) => {
       },
     ];
 
+    // Find MoMs associated with the project id
     let data = await mom.find({ project_id: id });
-    // Checking if any data is found
+
+    // If no MoMs are found, use the default MoM structure
     if (data.length == 0) {
-      data = default_mom; // Setting default sprint details structure if no data found
+      data = default_mom; // Setting default MoM structure if no data found
     } else {
-      data = reorderArrayOfObject(data, default_mom); // Reordering sprint details data
+      data = reorderArrayOfObject(data, default_mom); // Reordering MoM data
     }
 
-    res.json({ status: "success", data: data }); // Sending success response with fetched data
+    // Send success response with the retrieved data
+    res.json({ status: "success", data: data });
   } catch (error) {
-    console.log(error);
+    // Send error response if an error occurs
     res.json({ status: "error" });
   }
 };
+
+// Function to get approved teams for a specific project
 const getApprovedTeams = async (req, res) => {
-  const { id } = req.params;
-  const default_approved_team = [
-    {
-      _id: "",
-      project_id: id,
-      no_of_resources: "",
-      role: "",
-      availability: "",
-      duration: "",
-      category: "Phase 1",
-    },
-  ];
-
-  let data = await approved_team.find({ project_id: id });
-  // Checking if any data is found
-  if (data.length == 0) {
-    data = default_approved_team; // Setting default sprint details structure if no data found
-  } else {
-    data = reorderArrayOfObject(data, default_approved_team); // Reordering sprint details data
-  }
-
-  res.json({ status: "success", data: data }); // Sending success response with fetched data
   try {
+    // Extract project id from request parameters
+    const { id } = req.params;
+
+    // Define a default approved team object structure
+    const default_approved_team = [
+      {
+        _id: "",
+        project_id: id,
+        no_of_resources: "",
+        role: "",
+        availability: "",
+        duration: "",
+        category: "Phase 1",
+      },
+    ];
+
+    // Find approved teams associated with the project id
+    let data = await approved_team.find({ project_id: id });
+
+    // If no approved teams are found, use the default approved team structure
+    if (data.length == 0) {
+      data = default_approved_team; // Setting default approved team structure if no data found
+    } else {
+      data = reorderArrayOfObject(data, default_approved_team); // Reordering approved team data
+    }
+
+    // Send success response with the retrieved data
+    res.json({ status: "success", data: data });
   } catch (error) {
-    console.log(error);
+    // Send error response if an error occurs
     res.json({ status: "error" });
   }
 };
+
+// Function to get client feedback for a specific project
 const getClientFeedback = async (req, res) => {
   try {
+    // Extract project id from request parameters
     const { id } = req.params;
+
+    // Define a default client feedback object structure
     const default_client_feedback = [
       {
         _id: "",
@@ -419,23 +449,31 @@ const getClientFeedback = async (req, res) => {
       },
     ];
 
+    // Find client feedback associated with the project id
     let data = await client_feedback.find({ project_id: id });
-    // Checking if any data is found
+
+    // If no client feedback is found, use the default client feedback structure
     if (data.length == 0) {
-      data = default_client_feedback; // Setting default sprint details structure if no data found
+      data = default_client_feedback; // Setting default client feedback structure if no data found
     } else {
-      data = reorderArrayOfObject(data, default_client_feedback); // Reordering sprint details data
+      data = reorderArrayOfObject(data, default_client_feedback); // Reordering client feedback data
     }
 
-    res.json({ status: "success", data: data }); // Sending success response with fetched data
+    // Send success response with the retrieved data
+    res.json({ status: "success", data: data });
   } catch (error) {
-    console.log(error);
+    // Send error response if an error occurs
     res.json({ status: "error" });
   }
 };
+
+// Function to get project updates for a specific project
 const getProjectUpdates = async (req, res) => {
   try {
+    // Extract project id from request parameters
     const { id } = req.params;
+
+    // Define a default project updates object structure
     const default_project_updates = [
       {
         _id: "",
@@ -445,17 +483,20 @@ const getProjectUpdates = async (req, res) => {
       },
     ];
 
+    // Find project updates associated with the project id
     let data = await project_updates.find({ project_id: id });
-    // Checking if any data is found
+
+    // If no project updates are found, use the default project updates structure
     if (data.length == 0) {
-      data = default_project_updates; // Setting default sprint details structure if no data found
+      data = default_project_updates; // Setting default project updates structure if no data found
     } else {
-      data = reorderArrayOfObject(data, default_project_updates); // Reordering sprint details data
+      data = reorderArrayOfObject(data, default_project_updates); // Reordering project updates data
     }
 
-    res.json({ status: "success", data: data }); // Sending success response with fetched data
+    // Send success response with the retrieved data
+    res.json({ status: "success", data: data });
   } catch (error) {
-    console.log(error);
+    // Send error response if an error occurs
     res.json({ status: "error" });
   }
 };
@@ -745,8 +786,9 @@ const alterPhases = async (req, res) => {
 // Function to handle alterations in sprint details records
 const alterSprintDetails = async (req, res) => {
   try {
-    // Filtering records to identify added/updated and deleted records separately
     const { id } = req.params;
+
+    // Filtering records to identify added/updated and deleted records separately
     const updatedRecords = req.body.filter((record) => {
       return record.action === "added/updated";
     });
@@ -788,8 +830,8 @@ const alterSprintDetails = async (req, res) => {
 
 const alterResources = async (req, res) => {
   try {
-    // Filtering records to identify added/updated and deleted records separately
     const { id } = req.params;
+    // Filtering records to identify added/updated and deleted records separately
     const updatedRecords = req.body.filter((record) => {
       return record.action === "added/updated";
     });
@@ -1008,11 +1050,12 @@ module.exports = {
   getRiskProfiling, // Retrieves risk profiling data
   getEscalationMatrix, // Retrieves escalation matrix data
   getStakeholders, // Retrieves stakeholders data
-  getApprovedTeams,
-  getClientFeedback,
-  getMoMs,
-  getProjectUpdates,
-  getResources,
+  getApprovedTeams, // Retrieves approved teams data
+  getClientFeedback, // Retrieves client feedback data
+  getMoMs, // Retrieves minutes of meeting data
+  getProjectUpdates, // Retrieves project updates data
+  getResources, // Retrieves resources data
+  getUserProjects, // Retrieves user projects data
 
   // Functions to alter data
   alterProjectDetails, // Alters project details
@@ -1023,11 +1066,10 @@ module.exports = {
   alterRiskProfiling, // Alters risk profiling data
   alterEscalationMatrix, // Alters escalation matrix data
   alterStakeholders, // Alters stakeholders data
-  getUserProjects,
-  addProject,
-  alterResources,
-  alterApprovedTeams,
-  alterClientFeedback,
-  alterMoMs,
-  alterProjectUpdates,
+  alterApprovedTeams, // Alters approved teams data
+  alterClientFeedback, // Alters client feedback data
+  alterMoMs, // Alters minutes of meeting data
+  alterProjectUpdates, // Alters project updates data
+  alterResources, // Alters resources data
+  addProject, // Adds a new project
 };

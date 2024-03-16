@@ -1,25 +1,28 @@
-import React, { useEffect } from "react";
-import useAuth from "../hooks/useAuth";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import React from "react";
+import { useAuth0 } from "@auth0/auth0-react"; // Import Auth0 hook for authentication
+import "../styling/login.css"; // Import CSS file for styling
 
+// Login component
 const Login = () => {
-  const { setAuth, auth } = useAuth();
-  const { loginWithRedirect, isAuthenticated, user } = useAuth0();
-  const location = useLocation();
-  const from = "/";
+  const { loginWithRedirect, isAuthenticated } = useAuth0(); // Destructure Auth0 hook for login and authentication
 
+  // Function to handle login
   const handleLogin = async () => {
-    loginWithRedirect();
+    loginWithRedirect(); // Redirect user to Auth0 login page
   };
 
   return (
     <>
+      {/* Render login button if user is not authenticated */}
       {!isAuthenticated && (
-        <button onClick={() => handleLogin()}>log in </button>
+        <div className="login-button-container">
+          <button className="login-button" onClick={() => handleLogin()}>
+            log in with auth0
+          </button>
+        </div>
       )}
     </>
   );
 };
 
-export default Login;
+export default Login; // Export Login component

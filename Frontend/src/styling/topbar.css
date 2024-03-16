@@ -48,8 +48,9 @@
   width: 13%; /* Set the width of box3 to 13% of its parent's width */
 }
 
+/* Styling for logout buttons */
 .logout-button {
-  display: flex;
-  gap: 6px;
-  padding: 8px;
+  display: flex; /* Displaying as flex */
+  gap: 6px; /* Gap between elements */
+  padding: 8px; /* Padding for the button */
 }

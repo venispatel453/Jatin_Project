@@ -8,17 +8,24 @@ import Project from "./components/Project";
 import CreateProject from "./components/CreateProject";
 import CreateUser from "./components/CreateUser";
 
+// Main component defining the application routes
 const App = () => {
   return (
     <Routes>
+      {/* Route for login page */}
       <Route path="/login" element={<Login />}></Route>
 
-      {/* protected routes */}
+      {/* Protected routes */}
       <Route path="/" element={<ProtectedRoute />}>
+        {/* Layout component containing navigation */}
         <Route path="/" element={<Layout />}>
+          {/* Route for home page */}
           <Route path="/" element={<Home />}></Route>
+          {/* Route for adding a new project */}
           <Route path="/addProject" element={<CreateProject />}></Route>
+          {/* Route for adding a new user */}
           <Route path="/addUser" element={<CreateUser />}></Route>
+          {/* Route for displaying project details */}
           <Route path="/project/:id" element={<Project />}></Route>
         </Route>
       </Route>

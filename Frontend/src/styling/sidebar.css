@@ -17,22 +17,25 @@
   padding: 20px; /* Add padding around the sidebar menu box content */
 }
 
+/* Styling for menu buttons */
 .menu-button {
-  padding: 10px;
-  width: 100%;
-  text-transform: capitalize;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
+  padding: 10px; /* Padding for the button */
+  width: 100%; /* Full width */
+  text-transform: capitalize; /* Capitalize text */
+  display: flex; /* Displaying as flex */
+  justify-content: center; /* Centering content horizontally */
+  align-items: center; /* Centering content vertically */
+  gap: 6px; /* Gap between elements */
 }
 
+/* Styling for menu button containers */
 .menu-button-container {
-  width: 100%;
-  text-decoration: none;
+  width: 100%; /* Full width */
+  text-decoration: none; /* Removing default text decoration */
 }
 
+/* Styling for labels within menu buttons */
 .menu-button label {
-  padding-top: 3px;
-  padding-left: 2px;
+  padding-top: 3px; /* Top padding */
+  padding-left: 2px; /* Left padding */
 }

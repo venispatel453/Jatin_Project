@@ -1,8 +1,10 @@
 import { v4 as uuidv4 } from "uuid"; // Importing UUID library for generating unique IDs
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
-const MGMT_TOKEN = process.env.REACT_APP_MGMT_TOKEN;
+const BASE_URL = process.env.REACT_APP_BASE_URL; // Base URL for API requests
+const MGMT_TOKEN = process.env.REACT_APP_MGMT_TOKEN; // Management token for authorization
+
+// Object containing available roles with corresponding role IDs
 const available_roles = {
   Admin: "rol_z4VmtqeS9aPAMfmE",
   Auditor: "rol_LAk32QMvUbyTIiBO",
@@ -10,6 +12,7 @@ const available_roles = {
   Manager: "rol_qLO42FIvSNsdZEO4",
 };
 
+// Function to generate a random password
 function generatePassword() {
   const lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
   const uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -18,22 +21,16 @@ function generatePassword() {
 
   let password = "";
 
-  // Add at least one lowercase character
+  // Add at least one character from each character set
   password += lowercaseChars.charAt(
     Math.floor(Math.random() * lowercaseChars.length)
   );
-
-  // Add at least one uppercase character
   password += uppercaseChars.charAt(
     Math.floor(Math.random() * uppercaseChars.length)
   );
-
-  // Add at least one number
   password += numericChars.charAt(
     Math.floor(Math.random() * numericChars.length)
   );
-
-  // Add at least one special character
   password += specialChars.charAt(
     Math.floor(Math.random() * specialChars.length)
   );
@@ -54,17 +51,18 @@ function generatePassword() {
   return password;
 }
 
+// Function to send an invitation email to the new user
 const sendInviteMail = async (user_details) => {
   try {
     const data = await axios.post(`${BASE_URL}/sendEmail/invite`, {
       ...user_details,
     });
-    console.log(data);
   } catch (error) {
     console.log("in send invite", error);
   }
 };
 
+// Function to fetch users by role from Auth0
 export const fetchUsersByRole = async (role) => {
   try {
     var myHeaders = new Headers();
@@ -82,14 +80,14 @@ export const fetchUsersByRole = async (role) => {
       requestOptions
     );
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const fetchRoleOfUser = async (user_id, setAuth) => {
+// Function to fetch the role of a user from Auth0
+export const fetchRoleOfUser = async (user_id) => {
   try {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -106,22 +104,15 @@ export const fetchRoleOfUser = async (user_id, setAuth) => {
       requestOptions
     );
     const data = await response.json();
-    //setAuth({ id: user_id, role: data[0].name });
     return data;
-    console.log(data);
   } catch (error) {
     console.log(error);
   }
 };
 
+// Function to assign a role to a user in Auth0
 const assignRoleToUser = async (user_id, user_role) => {
   try {
-    const available_roles = {
-      Admin: "rol_z4VmtqeS9aPAMfmE",
-      Auditor: "rol_LAk32QMvUbyTIiBO",
-      Client: "rol_8lxEoAVYa4EGgizG",
-      Manager: "rol_qLO42FIvSNsdZEO4",
-    };
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", `Bearer ${MGMT_TOKEN}`);
@@ -141,18 +132,15 @@ const assignRoleToUser = async (user_id, user_role) => {
       `https://dev-34crl0ebsqxu7bk8.us.auth0.com/api/v2/users/${user_id}/roles`,
       requestOptions
     );
-    //const assigned_role = await response.json();
-
-    console.log(response);
   } catch (error) {
-    console.log("in assign Role to user", error);
-    alert(error.message);
+    console.log(error);
   }
 };
 
+// Function to create a new user in Auth0
 export const createNewUser = async (user, role) => {
   try {
-    const user_password = generatePassword();
+    const user_password = generatePassword(); // Generate a random password
     console.log(user_password);
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -169,9 +157,9 @@ export const createNewUser = async (user, role) => {
       family_name: "string",
       name: user.name,
       nickname: "string",
-      user_id: `${uuidv4()}`,
+      user_id: `${uuidv4()}`, // Generate a unique user ID
       connection: "Username-Password-Authentication",
-      password: user_password,
+      password: user_password, // Set the generated password
       verify_email: false,
     });
 
@@ -186,16 +174,14 @@ export const createNewUser = async (user, role) => {
       "https://dev-34crl0ebsqxu7bk8.us.auth0.com/api/v2/users",
       requestOptions
     );
-    if (response.status == 409) {
-      alert("email already present");
-      return;
+    if (response.status === 409) {
+      return { status: "error", message: "Email Already Present" };
     }
     const created_user = await response.json();
-    //console.log("user created", created_user, created_user.user_id);
-    assignRoleToUser(created_user.user_id, role);
-    sendInviteMail({ email: user.email, password: user_password });
+    assignRoleToUser(created_user.user_id, role); // Assign role to the created user
+    sendInviteMail({ email: user.email, password: user_password }); // Send invitation email to the user
+    return { status: "success", message: "User Created Successfully" };
   } catch (error) {
     console.log(error);
-    alert(error.message);
   }
 };

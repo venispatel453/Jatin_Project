@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid"; // Importing UUID library for generating un
 import "../styling/crud-table.css"; // Importing CSS styles for the CRUD table component
 import { toast } from "react-toastify"; // Importing toast notifications library
 import "react-toastify/dist/ReactToastify.css"; // Importing CSS for toast notifications
-import AuthContext from "../context/AuthProvider";
+import AuthContext from "../context/AuthProvider"; //Importing Context for Authentication
 
 // Table component definition
 const Table = ({
@@ -14,11 +14,13 @@ const Table = ({
   defaultValues = {}, // Default values for inserting into rows
   setShowSaveButton, // Function to toggle save button visibility
   sectionTab, // Current section tab
-  allowedRoles = [],
+  allowedRoles = [], //Default Values for allowed roles
 }) => {
   // State variables for rows and columns of the table
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
+
+  //State variable for authentication
   const { auth } = useContext(AuthContext);
 
   // useEffect hook to initialize table rows and columns when the section tab changes
@@ -35,25 +37,18 @@ const Table = ({
       _id: record._id ? record._id : uuidv4(), // Generating unique ID for each row
       editable: false, // Flag for editing state
     }));
-    console.log(newData);
     setRows(newData);
   }, [sectionTab]); // Dependency on sectionTab to trigger update when it changes
-
-  useEffect(() => {
-    console.log(sectionTab, rows);
-  }, [rows]);
 
   // Function to validate input fields in a row
   const handleInputValidation = (id) => {
     const requiredRow = rows.filter((row) => row._id === id)[0];
-    console.log(requiredRow);
-    for (let key in columns) {
-      if (requiredRow[key] === "") {
-        console.log(key);
-        return true; // Returns true if any field is empty
+    for (const column of columns) {
+      if (requiredRow[column] === "") {
+        return true;
       }
     }
-    return false; // Returns false if all fields are filled
+    return false;
   };
 
   // Function to handle changes in input fields

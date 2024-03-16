@@ -1,35 +1,37 @@
 import React, { useState, useEffect } from "react";
 import "../styling/create-project.css";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid"; // Import UUID generator
 import { useNavigate } from "react-router-dom";
-import { createNewUser, fetchUsersByRole } from "../util/users";
+import { createNewUser, fetchUsersByRole } from "../util/users"; // Import utility functions
+import { toast } from "react-toastify"; // Import toast notifications
 
 const CreateProject = () => {
-  const [managers, setManagers] = useState([]);
-  const navigate = useNavigate();
+  const [managers, setManagers] = useState([]); // State for managers
+  const navigate = useNavigate(); // Hook for navigation
   const [projectDetails, setProjectDetails] = useState({
-    name: "",
-    clients: [{ _id: `auth0|${uuidv4()}`, name: "", email: "" }],
-    manager: {},
+    // State for project details
+    name: "", // Name of the project
+    clients: [{ _id: `auth0|${uuidv4()}`, name: "", email: "" }], // Array of clients with initial empty client
+    manager: {}, // Project manager
   });
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
+  const BASE_URL = process.env.REACT_APP_BASE_URL; // Base URL for API requests
 
+  // Function to fetch managers
   const fetchManagers = async () => {
     try {
-      const data = await fetchUsersByRole("Manager");
-      setManagers(data);
-      console.log(data);
+      const data = await fetchUsersByRole("Manager"); // Fetch managers using utility function
+      setManagers(data); // Set fetched managers to state
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error Occurred"); // Notify user in case of error
     }
   };
 
+  // Function to handle input changes
   const handleInputChange = (attribute, value, id) => {
     let newDetails = {};
-    console.log(attribute, value);
     if (attribute === "name" && !id) {
-      newDetails = { ...projectDetails, name: value };
+      newDetails = { ...projectDetails, name: value }; // Update project name
     } else if (attribute === "manager") {
       const manager = JSON.parse(value);
       newDetails = {
@@ -39,68 +41,91 @@ const CreateProject = () => {
           name: manager.name,
           designation: "Manager",
         },
-      };
+      }; // Update project manager
     } else {
       let clients = projectDetails.clients.map((client) => {
         if (client._id === id) {
-          console.log(client["name"]);
-          client[attribute] = value;
+          client[attribute] = value; // Update client name/email
           return client;
         } else {
           return client;
         }
       });
-      newDetails = { ...projectDetails, clients };
+      newDetails = { ...projectDetails, clients }; // Update clients array
     }
-    setProjectDetails(newDetails);
+    setProjectDetails(newDetails); // Set updated project details to state
   };
 
+  // Function to validate input fields
+  const validateInput = () => {
+    let keys = Object.keys(projectDetails);
+    for (const key of keys) {
+      if (key === "clients") {
+        const clients = projectDetails.clients;
+        for (const client of clients) {
+          if (client.name === "" || client.email === "") return true; // Check if client name/email is empty
+        }
+      } else {
+        if (projectDetails[key] === "") {
+          return true; // Check if other project details are empty
+        }
+      }
+    }
+    return false;
+  };
+
+  // Function to handle adding a new project
   const handleAddProject = async () => {
     try {
-      const date = new Date();
+      const input_validation = validateInput(); // Validate input fields
+      if (input_validation) {
+        toast.error("Please Fill All Fields"); // Notify user if fields are not filled
+        return;
+      }
+
+      const date = new Date(); // Get current date
 
       let day = date.getDate();
       let month = date.getMonth() + 1;
       let year = date.getFullYear();
-      let currentDate = `${day}-${month}-${year}`;
+      let currentDate = `${year}-${month}-${day}`; // Format current date
 
       let newProjectDetails = {
-        _id: uuidv4(),
-        name: projectDetails.name,
+        _id: uuidv4(), // Generate UUID for project
+        name: projectDetails.name, // Project name
         associated_members: {
           manager: projectDetails.manager,
           clients: projectDetails.clients,
         },
-        status: "On-Going",
-        start_date: currentDate,
+        status: "On-Going", // Initial project status
+        start_date: currentDate, // Start date of project
       };
-      console.log(newProjectDetails);
       const response = await axios.post(`${BASE_URL}/addProject`, {
+        // Send POST request to add project
         ...newProjectDetails,
       });
       projectDetails.clients.forEach(async (client) => {
-        await createNewUser(client, "Client");
+        await createNewUser(client, "Client"); // Create new user for each client
       });
-      console.log(response);
-      navigate("/");
+      toast.success("Project Created Successfully"); // Notify user on successful project creation
+      navigate("/"); // Redirect to home page
     } catch (error) {
-      console.log(error);
+      toast.error("Some Error Occurred"); // Notify user in case of error
     }
   };
 
   useEffect(() => {
-    console.log(projectDetails);
-  }, [projectDetails]);
-
-  useEffect(() => {
-    fetchManagers();
+    fetchManagers(); // Fetch managers on component mount
   }, []);
 
+  // Render component JSX
   return (
     <div className="new-project-wrapper">
+      {/* Project Details Form */}
       <div className="heading">
         <h1>Project Details</h1>
       </div>
+      {/* Project Name Input */}
       <div className="box box1">
         <label>Project Name:</label>
         <input
@@ -111,8 +136,10 @@ const CreateProject = () => {
         />
       </div>
 
+      {/* Invite Client Section */}
       <div className="box box2">
         <h2>Invite Client:</h2>
+        {/* Mapping over clients */}
         {projectDetails.clients.map((client, index) => {
           return (
             <>
@@ -137,20 +164,23 @@ const CreateProject = () => {
             </>
           );
         })}
+        {/* Button to add new client */}
         <button
           onClick={() => {
             let newDetails = { ...projectDetails };
             let obj = { _id: `auth0|${uuidv4()}`, name: "", email: "" };
-            newDetails.clients.push(obj);
-            setProjectDetails(newDetails);
+            newDetails.clients.push(obj); // Add new client to clients array
+            setProjectDetails(newDetails); // Set updated project details to state
           }}
         >
           Add Client
         </button>
       </div>
 
+      {/* Project Manager Selection */}
       <div className="box box3">
         <label>Project Manager</label>
+        {/* Dropdown for selecting project manager */}
         <select
           className="input-box"
           value={JSON.stringify(projectDetails?.manager)}
@@ -159,6 +189,7 @@ const CreateProject = () => {
           }}
         >
           <option value="Select Manager">Select Manager</option>
+          {/* Mapping over managers */}
           {managers.map((manager, index) => {
             return (
               <option key={index} value={JSON.stringify(manager)}>
@@ -168,6 +199,8 @@ const CreateProject = () => {
           })}
         </select>
       </div>
+
+      {/* Button to add project */}
       <div className="project-save-button">
         <button onClick={handleAddProject}>Add Project</button>
       </div>

@@ -13,7 +13,9 @@ const Project_Risk_Profiling_Section = () => {
   const [changedTableRows, setChangedTableRows] = useState([]); // State to manage changed table rows
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control the visibility of the save button
 
+  // Retrieve the base URL from environment variables
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  // Extract the current pathname from the URL of the window
   const PATH_NAME = new URL(window.location.href).pathname;
 
   // Function to handle form submission
@@ -68,17 +70,24 @@ const Project_Risk_Profiling_Section = () => {
         {/* Render the Table component if risk profiling data is available */}
         {riskProfiling.length > 0 && (
           <Table
+            // Default values for the table
             defaultValues={{
               project_id: riskProfiling[0].project_id,
             }}
+            // Roles allowed to access this table
             allowedRoles={["Admin", "Manager"]}
-            sectionTab={"risk_profilling"} // Pass section tab as prop to the Table component
-            setShowSaveButton={setShowSaveButton} // Pass function to control the visibility of the save button
-            data={riskProfiling} // Pass risk profiling data to the Table component
-            setChangedTableRows={setChangedTableRows} // Pass function to manage changed table rows
-            invalidColumns={["project_id", "_id", "__v"]} // Define invalid columns to exclude from rendering
+            // Identifier for the table section
+            sectionTab={"risk_profilling"}
+            // Function to control the visibility of the save button
+            setShowSaveButton={setShowSaveButton}
+            // Data to be displayed in the table
+            data={riskProfiling}
+            // Function to update changed table rows state
+            setChangedTableRows={setChangedTableRows}
+            // List of columns to be excluded from the table
+            invalidColumns={["project_id", "_id", "__v"]}
+            // Configuration for column types, e.g., dropdown options and date formatting
             columnType={[
-              // Define column types for rendering
               {
                 key: "risk_type",
                 type: "dropdown",

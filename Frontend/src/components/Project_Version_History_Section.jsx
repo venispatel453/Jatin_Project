@@ -13,7 +13,9 @@ const Project_Version_History_Section = () => {
   const [changedTableRows, setChangedTableRows] = useState([]); // State to track changed table rows
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control visibility of save button
 
+  // Retrieve the base URL from environment variables
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  // Extract the current pathname from the URL of the window
   const PATH_NAME = new URL(window.location.href).pathname;
 
   // Function to handle form submission
@@ -69,25 +71,26 @@ const Project_Version_History_Section = () => {
         {/* Render the Table component if version history data is available */}
         {versionHistory.length > 0 && (
           <Table
+            // Default values for the table
             defaultValues={{
               project_id: versionHistory[0].project_id,
             }}
+            // Roles allowed to access this table
             allowedRoles={["Admin", "Manager"]}
-            sectionTab={"version_history"} // Passing section tab as prop
-            setShowSaveButton={setShowSaveButton} // Passing setShowSaveButton function as prop
-            setChangedTableRows={setChangedTableRows} // Passing setChangedTableRows function as prop
-            data={versionHistory} // Passing version history data as prop
-            invalidColumns={["project_id", "_id", "__v"]} // Specifying invalid columns for table
+            // Identifier for the table section
+            sectionTab={"version_history"}
+            // Function to control the visibility of the save button
+            setShowSaveButton={setShowSaveButton}
+            // Function to update changed table rows state
+            setChangedTableRows={setChangedTableRows}
+            // Data to be displayed in the table
+            data={versionHistory}
+            // List of columns to be excluded from the table
+            invalidColumns={["project_id", "_id", "__v"]}
+            // Configuration for column types, e.g., date formatting
             columnType={[
-              // Specifying column types for table
-              {
-                key: "revision_date",
-                type: "date",
-              },
-              {
-                key: "approval_date",
-                type: "date",
-              },
+              { key: "revision_date", type: "date" },
+              { key: "approval_date", type: "date" },
             ]}
           />
         )}

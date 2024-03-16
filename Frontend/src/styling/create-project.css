@@ -1,45 +1,54 @@
+/* Resetting default margin, padding, and box-sizing */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* Styling for a container box */
 .box {
-  width: 80%;
-  margin: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  width: 80%; /* Setting width */
+  margin: 20px; /* Setting margin */
+  display: flex; /* Making it a flex container */
+  flex-direction: column; /* Setting flex direction to column */
+  gap: 10px; /* Adding gap between child elements */
 }
 
+/* Styling for input boxes inside the container */
 .box .input-box {
-  padding: 8px;
-  font-size: 14px;
-  border-radius: 4px;
-  border: 1px solid;
+  padding: 8px; /* Setting padding */
+  font-size: 14px; /* Setting font size */
+  border-radius: 4px; /* Adding border radius */
+  border: 1px solid; /* Adding border */
 }
 
+/* Styling for heading */
 .heading h1 {
-  font-size: x-large;
+  font-size: x-large; /* Setting font size */
 }
 
+/* Styling for heading container */
 .heading {
-  margin: 20px;
+  margin: 20px; /* Setting margin */
 }
 
+/* Styling for buttons inside box2 */
 .box2 button {
-  width: fit-content;
+  width: fit-content; /* Making button width fit its content */
 }
 
+/* Styling for project save button container */
 .project-save-button {
-  margin: 20px;
-  width: fit-content;
+  margin: 20px; /* Setting margin */
+  width: fit-content; /* Making container width fit its content */
 }
 
+/* Styling for buttons inside project save button container */
 .project-save-button button {
-  padding: 10px;
+  padding: 10px; /* Setting padding */
 }
 
+/* Styling for select dropdown inside box3 */
 .box3 select {
-  width: 35%;
+  width: 35%; /* Setting width */
 }

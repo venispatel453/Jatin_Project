@@ -13,7 +13,9 @@ const Project_Sprint_Details_Section = () => {
   const [changedTableRows, setChangedTableRows] = useState([]); // State to track changed table rows
   const [showSaveButton, setShowSaveButton] = useState(false); // State to control visibility of save button
 
+  // Retrieve the base URL from environment variables
   const BASE_URL = process.env.REACT_APP_BASE_URL;
+  // Extract the current pathname from the URL of the window
   const PATH_NAME = new URL(window.location.href).pathname;
 
   // Function to handle form submission
@@ -69,23 +71,33 @@ const Project_Sprint_Details_Section = () => {
         {/* Render the Table component if sprint details are available */}
         {sprintDetails.length > 0 && (
           <Table
+            // Default values for the table
             defaultValues={{
               project_id: sprintDetails[0].project_id,
             }}
+            // Roles allowed to access this table
             allowedRoles={["Admin", "Manager"]}
-            sectionTab={"sprint_details"} // Passing section tab as prop
-            setShowSaveButton={setShowSaveButton} // Passing setShowSaveButton function as prop
-            setChangedTableRows={setChangedTableRows} // Passing setChangedTableRows function as prop
-            data={sprintDetails} // Passing sprintDetails as prop
-            invalidColumns={["project_id", "_id", "__v"]} // Specifying invalid columns for table
+            // Identifier for the table section
+            sectionTab={"sprint_details"}
+            // Function to control the visibility of the save button
+            setShowSaveButton={setShowSaveButton}
+            // Function to update changed table rows state
+            setChangedTableRows={setChangedTableRows}
+            // Data to be displayed in the table
+            data={sprintDetails}
+            // List of columns to be excluded from the table
+            invalidColumns={["project_id", "_id", "__v"]}
+            // Configuration for column types, e.g., dropdown options and date formatting
             columnType={[
-              // Specifying column types for table
-              { key: "start_date", type: "date" }, // Date type column
-              { key: "end_date", type: "date" }, // Date type column
+              // Date type column
+              { key: "start_date", type: "date" },
+              // Date type column
+              { key: "end_date", type: "date" },
+              // Dropdown type column with specified options
               {
                 key: "status",
-                type: "dropdown", // Dropdown type column
-                options: ["Delayed", "On-Time", "Pending", "Signed-Off"], // Dropdown options
+                type: "dropdown",
+                options: ["Delayed", "On-Time", "Pending", "Signed-Off"],
               },
             ]}
           />
