@@ -97,7 +97,7 @@ const generateTable = (
                           })}
                         </select>
                       ) : (
-                        row["associated_members"][column.key].name
+                        row["associated_manager"].name
                       )}
                     </td>
                   );
@@ -212,7 +212,7 @@ function NavigationTab({ data, setData }) {
     newRows = rows.map((row, index) => {
       if (index === rowIndex) {
         if (attribute === "manager") {
-          row["associated_members"][attribute] = JSON.parse(value);
+          row["associated_manager"] = JSON.parse(value);
         } else if (attribute === "status") {
           row[attribute] = value;
         } else {
