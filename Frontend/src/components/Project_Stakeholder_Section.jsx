@@ -76,7 +76,7 @@ const Project_Stakeholder_Section = () => {
               project_id: stakeholders[0].project_id,
             }}
             // Roles allowed to access this table
-            allowedRoles={["Admin", "Manager"]}
+            allowedRoles={["Admin", "Auditor"]}
             // Identifier for the table section
             sectionTab={"stakeholder"}
             // Function to control the visibility of the save button
