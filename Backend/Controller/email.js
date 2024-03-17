@@ -62,7 +62,7 @@ const generateEmailTemplate = (stakeholder_name, audit_history) => {
 
   return email_template;
 };
-
+//Function to generate user invitation mail
 const generateInviteEmailTemplate = (email, password) => {
   let email_template = `
   <html>
@@ -77,6 +77,7 @@ const generateInviteEmailTemplate = (email, password) => {
     <b>Password:</b> ${password}
     <br>
     <br>
+    <h4><a href="http://localhost:3000/">Navigate to Customer Success</a></h4>
     <h3>Thanks and Regards,</h3>
     <h3>Promact Infotech Pvt Ltd</h3>
 
@@ -92,9 +93,11 @@ const generateInviteEmailTemplate = (email, password) => {
 const sendMail = async (req, res) => {
   try {
     // Fetching stakeholders data
-    const response = await fetch("http:localhost:8000/project/stakeholders");
+    const { id } = req.params;
+    const response = await fetch(
+      `http:localhost:8000/project/${id}/stakeholders`
+    );
     const { data } = await response.json();
-
     // Creating nodemailer transporter
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -116,7 +119,7 @@ const sendMail = async (req, res) => {
             name: "Project Update",
             address: "no.reply.domain11@gmail.com",
           },
-          to: `${stakeholder.contact}`,
+          to: `${stakeholder.email}`,
           subject: "Audit History of Project has been Updated",
           // Generating email body using generateEmailTemplate function
           html: generateEmailTemplate(stakeholder.name, req.body),
@@ -133,6 +136,7 @@ const sendMail = async (req, res) => {
   }
 };
 
+//Function to send User Invitation Mail
 const sendInviteEmail = (req, res) => {
   try {
     const { email, password } = req.body;
@@ -157,16 +161,18 @@ const sendInviteEmail = (req, res) => {
         },
         to: `${email}`,
         subject: "Credentials for Customer Sucess",
-        // Generating email body using generateEmailTemplate function
+        // Generating email body using generateInviteEmailTemplate function
         html: generateInviteEmailTemplate(email, password),
       });
     }
 
     main().catch(console.error);
-    res.json({ status: "success" });
+
+    res
+      .status(200)
+      .json({ status: "success", message: "Emails Sent Successfully" });
   } catch (error) {
-    console.log(error);
-    res.json({ status: "error" });
+    res.status(500).json({ status: "error", message: "Internal Server Error" });
   }
 };
 
