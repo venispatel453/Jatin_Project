@@ -20,20 +20,24 @@ const getUserProjects = async (req, res) => {
     // Destructuring user_id and role from request query parameters
     const { id: user_id, role } = req.query;
     let response = [];
-
     // Check if the user is an Admin or Auditor
     if (role === "Admin" || role === "Auditor") {
       // If Admin or Auditor, fetch all projects
       response = await project.find({});
+    } else if (role === "Client") {
+      let client_projects = await stakeholders.find({ _id: user_id });
+      console.log(client_projects, user_id);
+      client_projects = client_projects.map((project) => project.project_id);
+      response = await project.find({
+        _id: { $in: client_projects },
+      });
     } else {
       // If not Admin or Auditor, fetch projects associated with the user
       response = await project.find({
-        $or: [
-          { "associated_members.manager._id": user_id }, // Check if user is a manager of any project
-          { "associated_members.clients._id": user_id }, // Check if user is a client of any project
-        ],
+        "associated_manager._id": user_id, // Check if user is associated with manager's _id
       });
     }
+    console.log(role, response);
     // Send response with fetched projects
     res.json({ status: "success", data: response });
   } catch (error) {
@@ -161,7 +165,7 @@ const getStakeholders = async (req, res) => {
         project_id: id,
         title: "",
         name: "",
-        contact: "",
+        email: "",
         _id: "",
         __v: "",
       },
@@ -511,7 +515,6 @@ const alterProjectDetails = async (req, res) => {
       { _id: id }, // Finding the project by its ID
       { $set: projectDetails } // Setting the new project details
     );
-
     res.json({ status: "success", msg: "Details Updated Successfully" }); // Sending success response
   } catch (error) {
     res.json({ status: "error", msg: "Some Error Occurred" }); // Sending error response if any error occurs during updating
@@ -609,13 +612,26 @@ const alterAuditHistory = async (req, res) => {
 // Function to handle alterations in stakeholders records
 const alterStakeholders = async (req, res) => {
   try {
-    // Filtering records to identify added/updated and deleted records separately
     const { id } = req.params;
-    const updatedRecords = req.body.filter((record) => {
+    const { data } = req.body;
+
+    // Filtering records to identify added/updated and deleted records separately
+    let updatedRecords = data.filter((record) => {
       return record.action === "added/updated";
     });
-    const deletedRecords = req.body.filter((record) => {
+
+    let deletedRecords = data.filter((record) => {
       return record.action === "delete";
+    });
+
+    updatedRecords = updatedRecords.map((record) => {
+      delete record.action;
+      return record;
+    });
+
+    deletedRecords = deletedRecords.map((record) => {
+      delete record.action;
+      return record;
     });
 
     // Generating update operations for updated records
@@ -653,13 +669,24 @@ const alterStakeholders = async (req, res) => {
 // Function to handle alterations in escalation matrix records
 const alterEscalationMatrix = async (req, res) => {
   try {
-    // Filtering records to identify added/updated and deleted records separately
     const { id } = req.params;
+
+    // Filtering records to identify added/updated and deleted records separately
     const updatedRecords = req.body.filter((record) => {
       return record.action === "added/updated";
     });
     const deletedRecords = req.body.filter((record) => {
       return record.action === "delete";
+    });
+
+    updatedRecords = updatedRecords.map((record) => {
+      delete record.action;
+      return record;
+    });
+
+    deletedRecords = deletedRecords.map((record) => {
+      delete record.action;
+      return record;
     });
 
     // Generating update operations for updated records
@@ -706,6 +733,16 @@ const alterRiskProfiling = async (req, res) => {
       return record.action === "delete";
     });
 
+    updatedRecords = updatedRecords.map((record) => {
+      delete record.action;
+      return record;
+    });
+
+    deletedRecords = deletedRecords.map((record) => {
+      delete record.action;
+      return record;
+    });
+
     // Generating update operations for updated records
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
@@ -748,6 +785,16 @@ const alterPhases = async (req, res) => {
     });
     const deletedRecords = req.body.filter((record) => {
       return record.action === "delete";
+    });
+
+    updatedRecords = updatedRecords.map((record) => {
+      delete record.action;
+      return record;
+    });
+
+    deletedRecords = deletedRecords.map((record) => {
+      delete record.action;
+      return record;
     });
 
     // Generate update operations for updated records
@@ -796,6 +843,16 @@ const alterSprintDetails = async (req, res) => {
       return record.action === "delete";
     });
 
+    updatedRecords = updatedRecords.map((record) => {
+      delete record.action;
+      return record;
+    });
+
+    deletedRecords = deletedRecords.map((record) => {
+      delete record.action;
+      return record;
+    });
+
     // Generating update operations for updated records
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
@@ -837,6 +894,16 @@ const alterResources = async (req, res) => {
     });
     const deletedRecords = req.body.filter((record) => {
       return record.action === "delete";
+    });
+
+    updatedRecords = updatedRecords.map((record) => {
+      delete record.action;
+      return record;
+    });
+
+    deletedRecords = deletedRecords.map((record) => {
+      delete record.action;
+      return record;
     });
 
     // Generating update operations for updated records
@@ -882,6 +949,16 @@ const alterApprovedTeams = async (req, res) => {
       return record.action === "delete";
     });
 
+    updatedRecords = updatedRecords.map((record) => {
+      delete record.action;
+      return record;
+    });
+
+    deletedRecords = deletedRecords.map((record) => {
+      delete record.action;
+      return record;
+    });
+
     // Generating update operations for updated records
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
@@ -923,6 +1000,16 @@ const alterClientFeedback = async (req, res) => {
     });
     const deletedRecords = req.body.filter((record) => {
       return record.action === "delete";
+    });
+
+    updatedRecords = updatedRecords.map((record) => {
+      delete record.action;
+      return record;
+    });
+
+    deletedRecords = deletedRecords.map((record) => {
+      delete record.action;
+      return record;
     });
 
     // Generating update operations for updated records
@@ -968,6 +1055,16 @@ const alterMoMs = async (req, res) => {
       return record.action === "delete";
     });
 
+    updatedRecords = updatedRecords.map((record) => {
+      delete record.action;
+      return record;
+    });
+
+    deletedRecords = deletedRecords.map((record) => {
+      delete record.action;
+      return record;
+    });
+
     // Generating update operations for updated records
     const updateRecordOperations = updatedRecords.map((obj) => ({
       updateOne: {
@@ -1005,6 +1102,16 @@ const alterProjectUpdates = async (req, res) => {
     });
     const deletedRecords = req.body.filter((record) => {
       return record.action === "delete";
+    });
+
+    updatedRecords = updatedRecords.map((record) => {
+      delete record.action;
+      return record;
+    });
+
+    deletedRecords = deletedRecords.map((record) => {
+      delete record.action;
+      return record;
     });
 
     // Generating update operations for updated records
