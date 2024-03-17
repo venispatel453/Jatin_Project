@@ -10,9 +10,8 @@ const ProjectSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  associated_members: {
+  associated_manager: {
     type: Object,
-    default: { manager: {}, clients: [] },
   },
   // Overview of the project
   overview: {
