@@ -12,7 +12,14 @@ const CreateProject = () => {
   const [projectDetails, setProjectDetails] = useState({
     // State for project details
     name: "", // Name of the project
-    clients: [{ _id: `auth0|${uuidv4()}`, name: "", email: "" }], // Array of clients with initial empty client
+    clients: [
+      {
+        _id: `auth0|${uuidv4()}`,
+        name: "",
+        email: "",
+        action: "added/updated",
+      },
+    ], // Array of clients with initial empty client
     manager: {}, // Project manager
   });
   const BASE_URL = process.env.REACT_APP_BASE_URL; // Base URL for API requests
@@ -20,7 +27,14 @@ const CreateProject = () => {
   // Function to fetch managers
   const fetchManagers = async () => {
     try {
-      const data = await fetchUsersByRole("Manager"); // Fetch managers using utility function
+      let data = await fetchUsersByRole("Manager"); // Fetch managers using utility function
+      data = data.map((manager) => {
+        return {
+          _id: manager.user_id,
+          name: manager.name,
+          designation: "Manager",
+        };
+      });
       setManagers(data); // Set fetched managers to state
     } catch (error) {
       toast.error("Some Error Occurred"); // Notify user in case of error
@@ -36,11 +50,7 @@ const CreateProject = () => {
       const manager = JSON.parse(value);
       newDetails = {
         ...projectDetails,
-        manager: {
-          _id: manager.user_id,
-          name: manager.name,
-          designation: "Manager",
-        },
+        manager,
       }; // Update project manager
     } else {
       let clients = projectDetails.clients.map((client) => {
@@ -90,20 +100,29 @@ const CreateProject = () => {
       let year = date.getFullYear();
       let currentDate = `${year}-${month}-${day}`; // Format current date
 
+      const project_id = uuidv4();
       let newProjectDetails = {
-        _id: uuidv4(), // Generate UUID for project
+        _id: project_id, // Generate UUID for project
         name: projectDetails.name, // Project name
-        associated_members: {
-          manager: projectDetails.manager,
-          clients: projectDetails.clients,
-        },
+        associated_manager: projectDetails.manager,
         status: "On-Going", // Initial project status
         start_date: currentDate, // Start date of project
       };
-      const response = await axios.post(`${BASE_URL}/addProject`, {
+      const project_response = await axios.post(`${BASE_URL}/addProject`, {
         // Send POST request to add project
         ...newProjectDetails,
       });
+
+      const clients = projectDetails.clients.map((client) => {
+        return { ...client, project_id };
+      });
+      const stakeholder_response = await axios.post(
+        `${BASE_URL}/project/${project_id}/stakeholders`,
+        {
+          data: [...clients],
+        }
+      );
+
       projectDetails.clients.forEach(async (client) => {
         await createNewUser(client, "Client"); // Create new user for each client
       });
@@ -168,7 +187,12 @@ const CreateProject = () => {
         <button
           onClick={() => {
             let newDetails = { ...projectDetails };
-            let obj = { _id: `auth0|${uuidv4()}`, name: "", email: "" };
+            let obj = {
+              _id: `auth0|${uuidv4()}`,
+              name: "",
+              email: "",
+              action: "added/updated",
+            };
             newDetails.clients.push(obj); // Add new client to clients array
             setProjectDetails(newDetails); // Set updated project details to state
           }}
