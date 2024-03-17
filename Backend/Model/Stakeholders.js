@@ -10,12 +10,6 @@ const Stakeholders_Schema = new mongoose.Schema({
   _id: {
     type: "String",
   },
-  // Title or role of the stakeholder
-  title: {
-    type: String,
-    // Validation rule: Title is required
-    required: [true, "please provide title"],
-  },
   // Name of the stakeholder
   name: {
     type: String,
@@ -23,7 +17,7 @@ const Stakeholders_Schema = new mongoose.Schema({
     required: [true, "please provide name"],
   },
   // Contact information of the stakeholder
-  contact: {
+  email: {
     type: String,
     // Validation rule: Contact information is required
     required: [true, "please provide contact"],
