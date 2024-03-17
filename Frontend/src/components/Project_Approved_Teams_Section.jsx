@@ -26,41 +26,46 @@ const Project_Approved_Teams_Section = () => {
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
+      // Sending POST request to save changed table rows
       const response = await axios.post(
-        `${BASE_URL}${PATH_NAME}/client_feedback`,
+        `${BASE_URL}${PATH_NAME}/approved_teams`,
         [...changedTableRows]
       );
       // Displaying success message using toast notification
       toast.success("Data Saved Successfully");
-      setShowSaveButton(false); // Hiding the save button after successful submission
-      setChangedTableRows([]); // Clearing the changed table rows
+      // Hiding the save button after successful submission
+      setShowSaveButton(false);
+      // Clearing the changed table rows
+      setChangedTableRows([]);
     } catch (error) {
       // Displaying error message using toast notification
       toast.error("Some Error");
     }
   };
 
+  // Function to filter categories from approved teams data
   const filterCategories = () => {
     const uniqueCategories = new Set();
     approvedTeams.forEach((row) => {
       uniqueCategories.add(row.category);
     });
-    console.log(Array.from(uniqueCategories));
+    // Setting the filtered categories
     setCategories(Array.from(uniqueCategories));
   };
 
+  // Effect hook to filter categories when approvedTeams state changes
   useEffect(() => {
     filterCategories();
   }, [approvedTeams]);
 
-  // Function to fetch stakeholders data from the server
+  // Function to fetch data from server
   const fetchData = async () => {
     try {
-      // Making a GET request to fetch stakeholders data
+      // Fetching approved teams data from server
       const response = await fetch(`${BASE_URL}${PATH_NAME}/approved_teams`);
-      const { data } = await response.json(); // Parsing response JSON
-      console.log(data);
-      // Setting fetched stakeholders data to state variable
+      // Parsing response JSON
+      const { data } = await response.json();
+      // Setting approved teams data
       setApprovedTeams(data);
     } catch (error) {
       // Displaying error message using toast notification
@@ -68,9 +73,10 @@ const Project_Approved_Teams_Section = () => {
     }
   };
 
-  // Hook to fetch data when the component mounts
+  // Effect hook to fetch data when the component mounts
   useEffect(() => {
-    fetchData(); // Calling the fetchData function
+    // Calling the fetchData function
+    fetchData();
   }, []);
 
   // Render JSX
@@ -84,11 +90,11 @@ const Project_Approved_Teams_Section = () => {
           </button>
         </div>
       )}
-      {/* Container for stakeholders table */}
+      {/* Container for displaying approved teams in accordion */}
       <Box className="escalation-matrix-table-container">
         <div>
-          {console.log("lengrth", categories.length)}
           {categories.length > 0 &&
+            // Mapping over categories to render accordion sections
             categories.map((category, index) => (
               <div key={index} className="approved_team_accordian">
                 {/* Accordion header */}
@@ -99,6 +105,7 @@ const Project_Approved_Teams_Section = () => {
                   }
                 >
                   {category}
+                  {/* Toggle arrow icon based on active accordion */}
                   {activeAccordion === index ? (
                     <i className="fas fa-angle-up"></i>
                   ) : (
@@ -112,6 +119,7 @@ const Project_Approved_Teams_Section = () => {
                       activeAccordion === index ? "active" : ""
                     }`}
                   >
+                    {/* Render Table component */}
                     <Table
                       sectionTab={category} // Pass category as section tab
                       defaultValues={{
@@ -120,9 +128,10 @@ const Project_Approved_Teams_Section = () => {
                       allowedRoles={["Admin", "Manager"]}
                       setShowSaveButton={setShowSaveButton}
                       setChangedTableRows={setChangedTableRows}
+                      // Filter data based on category
                       data={approvedTeams.filter(
                         (team) => team.category === category
-                      )} // Filter data based on category
+                      )}
                       invalidColumns={["project_id", "_id", "__v"]}
                       columnType={[]}
                     />
