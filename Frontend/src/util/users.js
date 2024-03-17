@@ -58,7 +58,7 @@ const sendInviteMail = async (user_details) => {
       ...user_details,
     });
   } catch (error) {
-    console.log("in send invite", error);
+    console.log(error);
   }
 };
 
@@ -141,7 +141,6 @@ const assignRoleToUser = async (user_id, user_role) => {
 export const createNewUser = async (user, role) => {
   try {
     const user_password = generatePassword(); // Generate a random password
-    console.log(user_password);
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Accept", "application/json");
@@ -157,7 +156,7 @@ export const createNewUser = async (user, role) => {
       family_name: "string",
       name: user.name,
       nickname: "string",
-      user_id: `${uuidv4()}`, // Generate a unique user ID
+      user_id: `${user._id ? user._id.split("|")[1] : uuidv4()}`, // Generate a unique user ID
       connection: "Username-Password-Authentication",
       password: user_password, // Set the generated password
       verify_email: false,
