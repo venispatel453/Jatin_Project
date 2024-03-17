@@ -38,7 +38,6 @@ const Project_Client_Feedback_Section = () => {
       // Making a GET request to fetch stakeholders data
       const response = await fetch(`${BASE_URL}${PATH_NAME}/client_feedback`);
       const { data } = await response.json(); // Parsing response JSON
-      console.log(data);
       // Setting fetched stakeholders data to state variable
       setClientFeedback(data);
     } catch (error) {
@@ -71,7 +70,7 @@ const Project_Client_Feedback_Section = () => {
             defaultValues={{
               project_id: clientFeedback[0].project_id,
             }}
-            allowedRoles={["Admin", "Manager"]}
+            allowedRoles={["Client"]}
             sectionTab={"client_feedback"} // Passing section tab as prop
             setShowSaveButton={setShowSaveButton} // Passing setShowSaveButton function as prop
             setChangedTableRows={setChangedTableRows} // Passing setChangedTableRows function as prop
