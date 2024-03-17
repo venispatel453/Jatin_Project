@@ -216,17 +216,17 @@ const Table = ({
             </tr>
           ))}
         </tbody>
-        <tfoot>
-          <tr>
-            <td colSpan={columns.length + 1}>
-              {allowedRoles.includes(auth.role) && (
+        {allowedRoles.includes(auth.role) && (
+          <tfoot>
+            <tr>
+              <td colSpan={columns.length + 1}>
                 <button onClick={handleAddRow}>
                   <i className="fas fa-plus"></i> Add Row
                 </button>
-              )}
-            </td>
-          </tr>
-        </tfoot>
+              </td>
+            </tr>
+          </tfoot>
+        )}
       </table>
     </div>
   );
