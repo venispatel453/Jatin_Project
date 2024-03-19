@@ -7,7 +7,12 @@ const router = require("./route"); // Importing the router module defined in the
 const connectDB = require("./DB/connect.js"); // Function for connecting to the database
 
 // Middleware setup
-app.use(cors()); // Adding CORS middleware to enable cross-origin requests
+app.use(
+  cors({
+    origin: process.env.APP_CLIENT_URL,
+    credentials: true,
+  })
+); // Adding CORS middleware to enable cross-origin requests
 app.use(express.json()); // Parsing incoming request bodies in JSON format
 app.use(express.urlencoded({ extended: true })); // Parsing URL-encoded request bodies
 
