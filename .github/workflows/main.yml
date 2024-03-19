@@ -91,7 +91,7 @@ jobs:
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
 
-      # Deploying frontend task definition of backend 
+      # Deploying frontend task definition of backend
       - name: Deploy Amazon ECS Task Definitions for Backend
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
