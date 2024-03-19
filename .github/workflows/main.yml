@@ -44,7 +44,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: latest
-          REPOSITORY: backend-repo
+          REPOSITORY: jatin-backend
         run: |
           docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG -f server/Dockerfile .
           docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
@@ -56,7 +56,7 @@ jobs:
         env: 
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: latest
-          REPOSITORY: frontend-repo
+          REPOSITORY: jatin-frontend
         run: |
           docker build -t $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG -f client/Dockerfile .
           docker push $ECR_REGISTRY/$REPOSITORY:$IMAGE_TAG
