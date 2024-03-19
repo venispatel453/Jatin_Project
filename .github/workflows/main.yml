@@ -4,7 +4,7 @@ on:
     branches:
       - main
 
-# Environment Variables
+# Environment Variables 
 env:
   AWS_REGION: ap-south-1
   ECS_SERVICE_FRONTEND: Project-frontend-service
