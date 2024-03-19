@@ -17,7 +17,7 @@ root.render(
       clientId="x4hI5wRq4QrNbFaxKLtRYqpUXFIWPQdl"
       audience="https://dev-34crl0ebsqxu7bk8.us.auth0.com/api/v2/"
       authorizationParams={{
-        redirect_uri: "http://localhost:3000/",
+        redirect_uri: "https://ec2-13-200-207-76.ap-south-1.compute.amazonaws.com:3000/",
       }}
     >
       {/* AuthProvider for managing authentication context */}
